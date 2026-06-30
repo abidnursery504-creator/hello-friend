@@ -54,6 +54,20 @@ export function Navbar() {
         </div>
       </div>
 
+      {/* Mobile promo strip — sits above the header */}
+      <div className="bg-[#0E3A18] text-white lg:hidden">
+        <div className="flex items-center justify-center gap-2 px-3 py-1.5">
+          <span className="font-bn inline-flex items-center gap-1.5 rounded-full border border-gold/60 px-3 py-1 text-[11px] font-medium">
+            <Leaf className="size-3 text-gold" />
+            সারা বাংলাদেশে হোম ডেলিভারি
+          </span>
+          <span className="font-bn inline-flex items-center gap-1.5 rounded-full border border-gold/60 px-3 py-1 text-[11px] font-medium">
+            <Leaf className="size-3 text-gold" />
+            ক্যাশ অন ডেলিভারির সুবিধা
+          </span>
+        </div>
+      </div>
+
       <header
         className={cn(
           "sticky top-0 z-50 transition-all duration-300",
