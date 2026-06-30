@@ -1,0 +1,172 @@
+import { Link, useRouterState } from "@tanstack/react-router";
+import { Heart, Leaf, Menu, Search, ShoppingBag, User, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
+import { ThemeToggle } from "./ThemeToggle";
+import { cn } from "@/lib/utils";
+import { site } from "@/data/site";
+
+const nav = [
+  { to: "/", label: "Home", labelBn: "হোম" },
+  { to: "/shop", label: "Shop", labelBn: "শপ" },
+  { to: "/categories", label: "Categories", labelBn: "বিভাগ" },
+  { to: "/blog", label: "Blog", labelBn: "ব্লগ" },
+  { to: "/care-guide", label: "Care Guide", labelBn: "গাইড" },
+  { to: "/about", label: "About", labelBn: "আমরা" },
+  { to: "/contact", label: "Contact", labelBn: "যোগাযোগ" },
+] as const;
+
+export function Navbar() {
+  const cart = useCart();
+  const wish = useWishlist();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => { setOpen(false); }, [pathname]);
+
+  return (
+    <>
+      {/* Top promo bar */}
+      <div className="hidden bg-primary-dark text-primary-foreground sm:block">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2 text-xs sm:px-6 lg:px-8">
+          <p className="font-bn opacity-90">৳{site.shipping.freeAbove}+ অর্ডারে ফ্রি ডেলিভারি · ৬৪ জেলায় ক্যাশ অন ডেলিভারি</p>
+          <div className="flex items-center gap-4 opacity-90">
+            <a href={`tel:${site.phone}`} className="hover:text-gold">{site.phone}</a>
+            <span className="opacity-40">|</span>
+            <Link to="/account" className="hover:text-gold">Track order</Link>
+          </div>
+        </div>
+      </div>
+
+      <header
+        className={cn(
+          "sticky top-0 z-50 transition-all duration-300",
+          scrolled ? "glass-strong shadow-soft" : "bg-background/0",
+        )}
+      >
+        <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">
+          {/* Logo */}
+          <Link to="/" className="flex min-w-0 items-center gap-2.5">
+            <span className="grid size-10 shrink-0 place-items-center rounded-2xl gradient-primary text-primary-foreground shadow-soft">
+              <Leaf className="size-5" />
+            </span>
+            <span className="hidden flex-col leading-tight sm:flex">
+              <span className="font-display text-base font-bold text-foreground">All Tree BD</span>
+              <span className="font-bn -mt-0.5 text-[11px] text-muted-foreground">গাছের চারা বিক্রয়</span>
+            </span>
+          </Link>
+
+          {/* Desktop nav */}
+          <nav className="hidden items-center justify-center gap-1 lg:flex">
+            {nav.map((n) => {
+              const active = n.to === "/" ? pathname === "/" : pathname.startsWith(n.to);
+              return (
+                <Link
+                  key={n.to}
+                  to={n.to}
+                  className={cn(
+                    "relative rounded-full px-4 py-2 text-sm font-medium transition",
+                    active ? "text-primary" : "text-foreground/80 hover:text-primary",
+                  )}
+                >
+                  {n.label}
+                  {active && (
+                    <motion.span
+                      layoutId="nav-active"
+                      className="absolute inset-0 -z-10 rounded-full bg-primary/10"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Actions */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Link to="/search" aria-label="Search" className="hidden size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent sm:grid">
+              <Search className="size-4" />
+            </Link>
+            <ThemeToggle className="hidden sm:grid" />
+            <Link to="/account/wishlist" aria-label="Wishlist" className="relative grid size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent">
+              <Heart className="size-4" />
+              {wish.slugs.length > 0 && (
+                <span className="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
+                  {wish.slugs.length}
+                </span>
+              )}
+            </Link>
+            <Link to="/cart" aria-label="Cart" className="relative grid size-10 place-items-center rounded-full gradient-primary text-primary-foreground shadow-soft transition hover:shadow-elegant">
+              <ShoppingBag className="size-4" />
+              {cart.totalQty > 0 && (
+                <span className="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-gold text-[10px] font-bold text-gold-foreground">
+                  {cart.totalQty}
+                </span>
+              )}
+            </Link>
+            <Link to="/login" aria-label="Account" className="hidden size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent md:grid">
+              <User className="size-4" />
+            </Link>
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              className="grid size-10 place-items-center rounded-full border border-border bg-card text-foreground lg:hidden"
+              aria-label="Toggle menu"
+              aria-expanded={open}
+            >
+              {open ? <X className="size-4" /> : <Menu className="size-4" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25 }}
+              className="overflow-hidden border-t border-border bg-background lg:hidden"
+            >
+              <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6">
+                {nav.map((n) => {
+                  const active = n.to === "/" ? pathname === "/" : pathname.startsWith(n.to);
+                  return (
+                    <Link
+                      key={n.to}
+                      to={n.to}
+                      className={cn(
+                        "flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium transition",
+                        active ? "bg-primary/10 text-primary" : "text-foreground hover:bg-accent",
+                      )}
+                    >
+                      <span>{n.label}</span>
+                      <span className="font-bn text-xs text-muted-foreground">{n.labelBn}</span>
+                    </Link>
+                  );
+                })}
+                <div className="mt-2 flex items-center gap-2">
+                  <Link to="/search" className="flex flex-1 items-center gap-2 rounded-2xl border border-border px-4 py-3 text-sm">
+                    <Search className="size-4" /> Search plants
+                  </Link>
+                  <ThemeToggle />
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </header>
+    </>
+  );
+}
