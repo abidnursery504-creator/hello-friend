@@ -5,7 +5,7 @@ import { Container } from "@/components/common/Container";
 import { CategoryCard } from "@/components/common/CategoryCard";
 import { categories } from "@/data/categories";
 
-export const Route = createFileRoute("/categories")({
+export const Route = createFileRoute("/categories/")({
   head: () => ({
     meta: [
       { title: "সব বিভাগ — অল ট্রি বিডি শপ" },

@@ -6,7 +6,7 @@ import { Container } from "@/components/common/Container";
 import { SmartImage } from "@/components/common/SmartImage";
 import { posts } from "@/data/site";
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
       { title: "ব্লগ ও পরিচর্যা গাইড — অল ট্রি বিডি শপ" },
