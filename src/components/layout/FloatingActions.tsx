@@ -42,7 +42,28 @@ export function FloatingActions() {
   ];
 
   return (
-    <div className="pointer-events-none fixed bottom-24 right-4 z-40 flex flex-col items-end gap-3 sm:right-6 lg:bottom-5 lg:right-8">
+    <div className="pointer-events-none fixed bottom-20 right-3 z-40 flex flex-col items-end gap-4 sm:bottom-24 sm:right-5 lg:bottom-6 lg:right-6">
+      <AnimatePresence>
+        {show && (
+          <motion.button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            initial={{ opacity: 0, y: 20, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.8 }}
+            whileHover={{ y: -3 }}
+            whileTap={{ scale: 0.9 }}
+            aria-label="উপরে যান"
+            className="pointer-events-auto group relative grid size-11 place-items-center rounded-full glass-strong text-foreground shadow-elegant ring-1 ring-border/40 backdrop-blur sm:size-12"
+          >
+            <ArrowUp className="size-5" />
+            <span className="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap rounded-full bg-foreground px-3 py-1 text-xs font-medium text-background opacity-0 shadow-md transition group-hover:opacity-100 sm:block">
+              উপরে যান
+            </span>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
       {buttons.map((b, i) => (
         <motion.a
           key={b.key}
@@ -55,35 +76,17 @@ export function FloatingActions() {
           transition={{ delay: 0.2 + i * 0.08, type: "spring", stiffness: 220, damping: 18 }}
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.94 }}
-          className={`pointer-events-auto group relative grid size-12 place-items-center rounded-full text-white shadow-elegant ring-4 ${b.ring} ${b.bg}`}
+          className={`pointer-events-auto group relative grid size-12 place-items-center rounded-full text-white shadow-elegant ring-4 sm:size-14 ${b.ring} ${b.bg}`}
         >
           <span className="absolute inset-0 -z-10 rounded-full opacity-70">
             <span className={`absolute inset-0 animate-ping rounded-full ${b.bg} opacity-30`} />
           </span>
           {b.icon}
-          <span className="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap rounded-full bg-foreground px-3 py-1 text-xs font-medium text-background opacity-0 transition group-hover:opacity-100 sm:block">
-            {b.label}
+          <span className="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap rounded-full bg-foreground px-3 py-1 text-xs font-medium text-background opacity-0 shadow-md transition group-hover:opacity-100 sm:block">
+            {b.label}-এ মেসেজ দিন
           </span>
         </motion.a>
       ))}
-
-      <AnimatePresence>
-        {show && (
-          <motion.button
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            initial={{ opacity: 0, y: 20, scale: 0.8 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.8 }}
-            whileHover={{ y: -3 }}
-            whileTap={{ scale: 0.9 }}
-            aria-label="Back to top"
-            className="pointer-events-auto grid size-12 place-items-center rounded-full glass-strong text-foreground shadow-elegant"
-          >
-            <ArrowUp className="size-5" />
-          </motion.button>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
