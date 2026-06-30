@@ -57,10 +57,55 @@ export function Navbar() {
       <header
         className={cn(
           "sticky top-0 z-50 transition-all duration-300",
-          scrolled ? "glass-strong shadow-soft" : "bg-background/0",
+          scrolled ? "glass-strong shadow-soft" : "bg-background lg:bg-background/0",
         )}
       >
-        <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-3 sm:gap-4 sm:px-6 lg:px-8">
+        {/* Mobile header: hamburger | centered logo | actions */}
+        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2.5 lg:hidden">
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="grid size-10 place-items-center rounded-xl text-foreground"
+            aria-label="মেনু খুলুন"
+            aria-expanded={open}
+          >
+            {open ? <X className="size-6" /> : <Menu className="size-6" />}
+          </button>
+
+          <Link to="/" className="flex flex-col items-center justify-center leading-tight">
+            <span className="flex items-center gap-1.5">
+              <Leaf className="size-4 text-primary" />
+              <span className="font-display text-[22px] font-extrabold tracking-tight text-primary">Abid</span>
+            </span>
+            <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-primary/80">Nursery and Plants</span>
+            <span className="font-bn -mt-0.5 text-[10px] text-muted-foreground">ফল ও ফুলের গাছ বিক্রয় কেন্দ্র</span>
+          </Link>
+
+          <div className="flex items-center justify-end gap-0.5">
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              aria-label="খুঁজুন"
+              className="grid size-10 place-items-center rounded-xl text-foreground"
+            >
+              <Search className="size-5" />
+            </button>
+            <Link to="/login" aria-label="একাউন্ট" className="grid size-10 place-items-center rounded-xl text-foreground">
+              <User className="size-5" />
+            </Link>
+            <Link to="/cart" aria-label="কার্ট" className="relative grid size-10 place-items-center rounded-xl text-foreground">
+              <ShoppingBag className="size-5" />
+              {cart.totalQty > 0 && (
+                <span className="absolute right-1 top-1 grid size-4 place-items-center rounded-full bg-gold text-[9px] font-bold text-gold-foreground">
+                  {toBnDigits(cart.totalQty)}
+                </span>
+              )}
+            </Link>
+          </div>
+        </div>
+
+        {/* Desktop header */}
+        <div className="mx-auto hidden max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-3 sm:gap-4 sm:px-6 lg:grid lg:px-8">
           {/* Logo */}
           <Link to="/" className="flex min-w-0 items-center gap-2.5">
             <span className="grid size-10 shrink-0 place-items-center rounded-2xl gradient-primary text-primary-foreground shadow-soft">
@@ -74,7 +119,7 @@ export function Navbar() {
 
 
           {/* Desktop nav */}
-          <nav className="hidden items-center justify-center gap-1 lg:flex" aria-label="মূল নেভিগেশন">
+          <nav className="flex items-center justify-center gap-1" aria-label="মূল নেভিগেশন">
             {nav.map((n) => {
               const active = n.to === "/" ? pathname === "/" : pathname.startsWith(n.to);
               const isMega = "mega" in n && n.mega;
@@ -145,8 +190,8 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Actions */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Desktop Actions */}
+          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
@@ -155,8 +200,8 @@ export function Navbar() {
             >
               <Search className="size-4" />
             </button>
-            <ThemeToggle className="hidden sm:grid" />
-            <Link to="/account/wishlist" aria-label="ইচ্ছার তালিকা" className="relative hidden size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent sm:grid">
+            <ThemeToggle />
+            <Link to="/account/wishlist" aria-label="ইচ্ছার তালিকা" className="relative grid size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent">
               <Heart className="size-4" />
               {wish.slugs.length > 0 && (
                 <span className="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
@@ -164,7 +209,7 @@ export function Navbar() {
                 </span>
               )}
             </Link>
-            <Link to="/cart" aria-label="কার্ট" className="relative hidden size-10 place-items-center rounded-full gradient-primary text-primary-foreground shadow-soft transition hover:shadow-elegant sm:grid">
+            <Link to="/cart" aria-label="কার্ট" className="relative grid size-10 place-items-center rounded-full gradient-primary text-primary-foreground shadow-soft transition hover:shadow-elegant">
               <ShoppingBag className="size-4" />
               {cart.totalQty > 0 && (
                 <span className="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-gold text-[10px] font-bold text-gold-foreground">
@@ -172,21 +217,13 @@ export function Navbar() {
                 </span>
               )}
             </Link>
-            <Link to="/login" aria-label="একাউন্ট" className="hidden size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent md:grid">
+            <Link to="/login" aria-label="একাউন্ট" className="grid size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent">
               <User className="size-4" />
             </Link>
-            <button
-              type="button"
-              onClick={() => setOpen((v) => !v)}
-              className="grid size-10 place-items-center rounded-full border border-border bg-card text-foreground lg:hidden"
-              aria-label="মেনু খুলুন"
-              aria-expanded={open}
-            >
-              {open ? <X className="size-4" /> : <Menu className="size-4" />}
-            </button>
           </div>
 
         </div>
+
 
         {/* Mobile menu */}
         <AnimatePresence>
