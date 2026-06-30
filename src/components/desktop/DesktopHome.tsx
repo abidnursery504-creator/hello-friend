@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight, ChevronLeft, ChevronRight, Truck, Wallet, ShieldCheck,
-  Headphones, Sparkles, Star, Quote, ArrowUpRight,
+  Headphones, Sparkles, Star, Quote, ArrowUpRight, Leaf,
 } from "lucide-react";
 import { Container } from "@/components/common/Container";
 import { SmartImage } from "@/components/common/SmartImage";
