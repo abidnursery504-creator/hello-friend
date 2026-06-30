@@ -293,7 +293,7 @@ function MobilePopularProducts() {
     <section className="mt-7">
       <SectionHeader title="জনপ্রিয় চারা" titleEn="Popular plants" to="/shop" />
       <div className="mt-3 grid grid-cols-2 gap-3 px-4">
-        {bestsellers.slice(0, 6).map((p, i) => (
+        {bestsellers().slice(0, 6).map((p, i) => (
           <MobileProductCard key={p.slug} product={p} index={i} />
         ))}
       </div>
