@@ -456,10 +456,10 @@ function MobileReviewsStrip() {
 
 /* Gardening tips */
 const TIPS = [
-  { title: "ছাদ বাগানের শুরু", titleEn: "Rooftop start", image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80&auto=format&fit=crop", icon: Leaf },
-  { title: "গ্রাফটিং কেয়ার", titleEn: "Grafted care", image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80&auto=format&fit=crop", icon: Sparkles },
-  { title: "ভিডিও গাইড", titleEn: "Video guide", image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=800&q=80&auto=format&fit=crop", icon: Play },
-  { title: "কুরিয়ার গাইড", titleEn: "Courier tips", image: "https://images.unsplash.com/photo-1606235495906-d5e94a92e5e3?w=800&q=80&auto=format&fit=crop", icon: Truck },
+  { title: "ছাদ বাগানের শুরু", image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80&auto=format&fit=crop", icon: Leaf },
+  { title: "গ্রাফটিং পরিচর্যা", image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80&auto=format&fit=crop", icon: Sparkles },
+  { title: "ভিডিও গাইড", image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=800&q=80&auto=format&fit=crop", icon: Play },
+  { title: "কুরিয়ার টিপস", image: "https://images.unsplash.com/photo-1606235495906-d5e94a92e5e3?w=800&q=80&auto=format&fit=crop", icon: Truck },
 ];
 
 function MobileTipsStrip() {
@@ -475,12 +475,11 @@ function MobileTipsStrip() {
               to="/care-guide"
               className="relative h-40 w-56 shrink-0 overflow-hidden rounded-3xl shadow-soft"
             >
-              <img src={t.image} alt={t.titleEn} className="h-full w-full object-cover" loading="lazy" />
+              <img src={t.image} alt={t.title} className="h-full w-full object-cover" loading="lazy" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3 text-white">
                 <div className="min-w-0">
                   <p className="font-bn line-clamp-1 text-sm font-bold">{t.title}</p>
-                  <p className="line-clamp-1 text-[10px] opacity-80">{t.titleEn}</p>
                 </div>
                 <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/20 backdrop-blur">
                   <Icon className="size-4" />
@@ -510,10 +509,10 @@ function MobileBlogPreview() {
             <img src={p.cover} alt={p.title} className="size-24 shrink-0 rounded-2xl object-cover" loading="lazy" />
             <div className="flex min-w-0 flex-1 flex-col justify-between py-1">
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">{p.category}</p>
-                <h4 className="mt-1 line-clamp-2 text-sm font-semibold text-foreground">{p.title}</h4>
+                <p className="font-bn text-[10px] font-semibold tracking-wider text-primary">{p.category}</p>
+                <h4 className="font-bn mt-1 line-clamp-2 text-sm font-semibold text-foreground">{p.title}</h4>
               </div>
-              <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+              <div className="font-bn flex items-center justify-between text-[10px] text-muted-foreground">
                 <span>{p.readTime}</span>
                 <ChevronRight className="size-3.5" />
               </div>
@@ -534,13 +533,13 @@ function MobileNewsletter() {
         <div className="absolute -right-8 -top-8 size-32 rounded-full bg-white/10" />
         <div className="absolute -bottom-10 -left-6 size-28 rounded-full bg-white/10" />
         <div className="relative">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase backdrop-blur">
-            <Sparkles className="size-3" /> Newsletter
+          <span className="font-bn inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold backdrop-blur">
+            <Sparkles className="size-3" /> নিউজলেটার
           </span>
           <h3 className="font-bn mt-3 text-xl font-bold leading-snug">নতুন চারার আপডেট পেতে সাবস্ক্রাইব করুন</h3>
-          <p className="mt-1 text-xs opacity-90">Get new arrivals & care tips straight to your inbox.</p>
+          <p className="font-bn mt-1 text-xs opacity-90">নতুন গাছ ও পরিচর্যার টিপস সরাসরি আপনার ইনবক্সে।</p>
           <form
-            onSubmit={(e) => { e.preventDefault(); toast.success("Subscribed! 🌱"); setEmail(""); }}
+            onSubmit={(e) => { e.preventDefault(); toast.success("সাবস্ক্রাইব হয়েছে! 🌱"); setEmail(""); }}
             className="mt-4 flex items-center gap-2 rounded-full bg-white p-1 pl-4 shadow-soft"
           >
             <input
@@ -548,14 +547,14 @@ function MobileNewsletter() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@email.com"
-              className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+              placeholder="আপনার ইমেইল"
+              className="font-bn flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
             <button
               type="submit"
-              className="rounded-full bg-foreground px-4 py-2 text-xs font-bold text-background active:scale-95"
+              className="font-bn rounded-full bg-foreground px-4 py-2 text-xs font-bold text-background active:scale-95"
             >
-              Join
+              যোগ দিন
             </button>
           </form>
         </div>
@@ -565,16 +564,15 @@ function MobileNewsletter() {
 }
 
 function SectionHeader({
-  title, titleEn, to, inline = false,
-}: { title: string; titleEn: string; to: string; inline?: boolean }) {
+  title, to, inline = false,
+}: { title: string; to: string; inline?: boolean }) {
   return (
     <div className={cn("flex items-end justify-between gap-3", inline ? "" : "px-4")}>
       <div>
         <h2 className="font-bn text-lg font-bold leading-tight text-foreground">{title}</h2>
-        <p className="text-[11px] text-muted-foreground">{titleEn}</p>
       </div>
-      <Link to={to} className="flex shrink-0 items-center gap-1 text-xs font-semibold text-primary">
-        See all <ChevronRight className="size-3.5" />
+      <Link to={to} className="font-bn flex shrink-0 items-center gap-1 text-xs font-semibold text-primary">
+        সব দেখুন <ChevronRight className="size-3.5" />
       </Link>
     </div>
   );
