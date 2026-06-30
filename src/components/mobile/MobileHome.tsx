@@ -20,6 +20,8 @@ import pMango from "@/assets/p-mango.png";
 import pJackfruit from "@/assets/p-jackfruit.png";
 import pLitchi from "@/assets/p-litchi.png";
 import pRose from "@/assets/p-rose.png";
+import codBox from "@/assets/cod-box-hand.png";
+import codLeaves from "@/assets/cod-leaves-left.png";
 
 const HERO_SLIDES = [heroNursery, heroMango, heroFlowers];
 
