@@ -273,7 +273,7 @@ function MobileCategoryStrip() {
               <img src={c.image} alt={c.name} className="size-20 rounded-2xl object-cover" loading="lazy" />
             </div>
             <p className="font-bn line-clamp-1 w-full text-center text-xs font-semibold text-foreground">{c.nameBn}</p>
-            <p className="-mt-1 text-[10px] text-muted-foreground">{c.count}+</p>
+            <p className="-mt-1 text-[10px] text-muted-foreground">{toBnDigits(c.count)}+</p>
           </Link>
         ))}
       </div>
@@ -285,7 +285,7 @@ function MobileCategoryStrip() {
 function MobilePopularProducts() {
   return (
     <section className="mt-7">
-      <SectionHeader title="জনপ্রিয় চারা" titleEn="Popular plants" to="/shop" />
+      <SectionHeader title="জনপ্রিয় চারা" to="/shop" />
       <div className="mt-3 grid grid-cols-2 gap-3 px-4">
         {bestsellers().slice(0, 6).map((p, i) => (
           <MobileProductCard key={p.slug} product={p} index={i} />
@@ -321,7 +321,7 @@ function MobileProductCard({ product, index = 0 }: { product: typeof products[nu
         <button
           type="button"
           onClick={(e) => { e.preventDefault(); wish.toggle(product.slug); }}
-          aria-label="Toggle wishlist"
+          aria-label="ইচ্ছার তালিকা"
           aria-pressed={liked}
           className="absolute right-2 top-2 grid size-8 place-items-center rounded-full bg-background/85 text-foreground backdrop-blur"
         >
@@ -348,8 +348,8 @@ function MobileProductCard({ product, index = 0 }: { product: typeof products[nu
           </div>
           <button
             type="button"
-            onClick={() => { cart.add(product); toast.success(`${product.name} added`); }}
-            aria-label="Add to cart"
+            onClick={() => { cart.add(product); toast.success(`${product.name} কার্টে যোগ হয়েছে`); }}
+            aria-label="কার্টে যোগ করুন"
             className="grid size-9 place-items-center rounded-2xl gradient-primary text-primary-foreground shadow-soft active:scale-95"
           >
             <ShoppingBag className="size-4" />
@@ -395,7 +395,7 @@ function MobileNewArrivals() {
   const list = products.slice(6, 14);
   return (
     <section className="mt-7">
-      <SectionHeader title="নতুন এসেছে" titleEn="New arrivals" to="/shop" />
+      <SectionHeader title="নতুন এসেছে" to="/shop" />
       <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-4 pb-2">
         {list.map((p) => (
           <Link
@@ -426,7 +426,7 @@ function MobileNewArrivals() {
 function MobileReviewsStrip() {
   return (
     <section className="mt-7">
-      <SectionHeader title="ক্রেতাদের মতামত" titleEn="What our customers say" to="/reviews" />
+      <SectionHeader title="ক্রেতাদের মতামত" to="/reviews" />
       <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-4 pb-2">
         {testimonials.slice(0, 5).map((t) => (
           <article
@@ -465,7 +465,7 @@ const TIPS = [
 function MobileTipsStrip() {
   return (
     <section className="mt-7">
-      <SectionHeader title="গাছ পরিচর্যার টিপস" titleEn="Plant care tips" to="/care-guide" />
+      <SectionHeader title="গাছ পরিচর্যার টিপস" to="/care-guide" />
       <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-4 pb-2">
         {TIPS.map((t) => {
           const Icon = t.icon;
@@ -498,7 +498,7 @@ function MobileTipsStrip() {
 function MobileBlogPreview() {
   return (
     <section className="mt-7 px-4">
-      <SectionHeader inline title="সাম্প্রতিক ব্লগ" titleEn="Latest blog" to="/blog" />
+      <SectionHeader inline title="সাম্প্রতিক ব্লগ" to="/blog" />
       <div className="mt-3 flex flex-col gap-3">
         {posts.slice(0, 3).map((p) => (
           <Link
