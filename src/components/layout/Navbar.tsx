@@ -60,17 +60,18 @@ export function Navbar() {
           scrolled ? "glass-strong shadow-soft" : "bg-background/0",
         )}
       >
-        <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">
+        <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-3 sm:gap-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link to="/" className="flex min-w-0 items-center gap-2.5">
             <span className="grid size-10 shrink-0 place-items-center rounded-2xl gradient-primary text-primary-foreground shadow-soft">
               <Leaf className="size-5" />
             </span>
-            <span className="hidden flex-col leading-tight sm:flex">
-              <span className="font-display text-base font-bold text-foreground">All Tree BD</span>
-              <span className="font-bn -mt-0.5 text-[11px] text-muted-foreground">গাছের চারা বিক্রয়</span>
+            <span className="flex min-w-0 flex-col leading-tight">
+              <span className="font-display truncate text-base font-bold text-foreground">All Tree BD</span>
+              <span className="font-bn -mt-0.5 truncate text-[11px] text-muted-foreground">গাছের চারা বিক্রয়</span>
             </span>
           </Link>
+
 
           {/* Desktop nav */}
           <nav className="hidden items-center justify-center gap-1 lg:flex" aria-label="মূল নেভিগেশন">
@@ -150,12 +151,12 @@ export function Navbar() {
               type="button"
               onClick={() => setSearchOpen(true)}
               aria-label="খুঁজুন"
-              className="hidden size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent sm:grid"
+              className="grid size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent"
             >
               <Search className="size-4" />
             </button>
             <ThemeToggle className="hidden sm:grid" />
-            <Link to="/account/wishlist" aria-label="ইচ্ছার তালিকা" className="relative grid size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent">
+            <Link to="/account/wishlist" aria-label="ইচ্ছার তালিকা" className="relative hidden size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent sm:grid">
               <Heart className="size-4" />
               {wish.slugs.length > 0 && (
                 <span className="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
@@ -163,7 +164,7 @@ export function Navbar() {
                 </span>
               )}
             </Link>
-            <Link to="/cart" aria-label="কার্ট" className="relative grid size-10 place-items-center rounded-full gradient-primary text-primary-foreground shadow-soft transition hover:shadow-elegant">
+            <Link to="/cart" aria-label="কার্ট" className="relative hidden size-10 place-items-center rounded-full gradient-primary text-primary-foreground shadow-soft transition hover:shadow-elegant sm:grid">
               <ShoppingBag className="size-4" />
               {cart.totalQty > 0 && (
                 <span className="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-gold text-[10px] font-bold text-gold-foreground">
@@ -184,6 +185,7 @@ export function Navbar() {
               {open ? <X className="size-4" /> : <Menu className="size-4" />}
             </button>
           </div>
+
         </div>
 
         {/* Mobile menu */}
