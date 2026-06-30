@@ -1,218 +1,115 @@
 import { Link } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
-  ArrowRight, Bell, Heart, MapPin, Search, ShieldCheck, ShoppingBag,
-  Sparkles, Star, Truck, Wallet, Headphones, Leaf, ChevronRight, Play, Quote,
+  ArrowRight, BadgeCheck, Headphones, Package, Truck, Wallet,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SmartImage } from "@/components/common/SmartImage";
-import { categories } from "@/data/categories";
-import { bestsellers, products } from "@/data/products";
-import { posts, site, testimonials } from "@/data/site";
-import { formatBDT, toBnDigits } from "@/lib/format";
+import { products } from "@/data/products";
+import { formatBDT } from "@/lib/format";
 import { useCart } from "@/context/CartContext";
-import { useWishlist } from "@/context/WishlistContext";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { onImgError, unsplash, unsplashSrcSet, lqip } from "@/lib/img";
+import { onImgError, unsplash, unsplashSrcSet } from "@/lib/img";
 
 const HERO_SLIDES = [
-  {
-    image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1400&q=90&auto=format&fit=crop",
-    eyebrow: "প্রিমিয়াম ফলের গাছ",
-    title: "ফলের গাছের সেরা সংগ্রহ",
-    cta: "এখনই অর্ডার করুন",
-    to: "/categories/fruit",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=1400&q=90&auto=format&fit=crop",
-    eyebrow: "সারা বছর ফুল",
-    title: "প্রিমিয়াম ফুলের চারা",
-    cta: "সব গাছ দেখুন",
-    to: "/categories/flowering",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1591735026282-bb24fd6c0451?w=1400&q=90&auto=format&fit=crop",
-    eyebrow: "আমের মৌসুম",
-    title: "এক্সক্লুসিভ আম কালেকশন",
-    cta: "কালেকশন দেখুন",
-    to: "/categories/mango",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1527325678964-54921661f888?w=1400&q=90&auto=format&fit=crop",
-    eyebrow: "এক্সোটিক ফল",
-    title: "ড্রাগন ফলের চারা",
-    cta: "এখনই অর্ডার করুন",
-    to: "/categories/dragon",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=1400&q=90&auto=format&fit=crop",
-    eyebrow: "নার্সারি ও বাগান",
-    title: "সবুজে গড়া বাগান",
-    cta: "সব গাছ দেখুন",
-    to: "/categories",
-  },
+  "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&q=85&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=1200&q=85&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1591735026282-bb24fd6c0451?w=1200&q=85&auto=format&fit=crop",
 ];
 
-const TRUST_TILES = [
-  { icon: Wallet, label: "ক্যাশ অন ডেলিভারি", sub: "পণ্য বুঝে পেমেন্ট", color: "from-emerald-500/15 to-emerald-500/5", iconColor: "text-emerald-600" },
-  { icon: Truck, label: "৬৪ জেলায় ডেলিভারি", sub: "সারা বাংলাদেশে", color: "from-sky-500/15 to-sky-500/5", iconColor: "text-sky-600" },
-  { icon: ShieldCheck, label: "৩০ দিনের গ্যারান্টি", sub: "লিভিং গ্যারান্টি", color: "from-amber-500/15 to-amber-500/5", iconColor: "text-amber-600" },
-  { icon: Headphones, label: "এক্সপার্ট সাপোর্ট", sub: "যেকোনো সাহায্য", color: "from-rose-500/15 to-rose-500/5", iconColor: "text-rose-600" },
+const TRUST = [
+  { Icon: Truck, t: "সারা বাংলাদেশে ডেলিভারি", s: "দ্রুত ও নিরাপদ ডেলিভারি" },
+  { Icon: Wallet, t: "ক্যাশ অন ডেলিভারি", s: "পণ্য বুঝে পেমেন্ট করুন" },
+  { Icon: BadgeCheck, t: "উন্নত মানের গাছ", s: "সুস্থ ও পরিচর্যা করা গাছ" },
+  { Icon: Headphones, t: "২৪/৭ কাস্টমার সাপোর্ট", s: "আমরা আছি আপনার পাশে" },
 ];
 
-const CAT_COLORS = [
-  "from-emerald-400/30 to-emerald-600/10",
-  "from-amber-400/30 to-orange-500/10",
-  "from-rose-400/30 to-pink-500/10",
-  "from-sky-400/30 to-indigo-500/10",
-  "from-violet-400/30 to-fuchsia-500/10",
-  "from-lime-400/30 to-green-500/10",
-  "from-teal-400/30 to-cyan-500/10",
-  "from-orange-400/30 to-red-500/10",
-];
+const POPULAR_SLUGS = ["amrapali-mango-grafted", "thai-pink-guava", "bedana-litchi", "desi-rose"];
 
 export function MobileHome() {
   return (
     <div className="lg:hidden">
-      <MobileGreetingBar />
-      <MobileSearchBar />
+      <MobilePromoBar />
       <MobileHero />
-      <MobileTrustGrid />
-      <MobileCategoryStrip />
-      <MobilePopularProducts />
-      <MobilePromoBanner />
-      <MobileNewArrivals />
-      <MobileReviewsStrip />
-      <MobileTipsStrip />
-      <MobileBlogPreview />
-      <MobileNewsletter />
+      <MobileTrust />
+      <MobileSectionTitle title="আমাদের ক্যাটাগরি" />
+      <MobileCategoryCards />
+      <MobileSectionTitle title="জনপ্রিয় গাছ সমূহ" />
+      <MobilePopular />
+      <MobileCodBanner />
+      <div className="h-6" />
     </div>
   );
 }
 
-/* Greeting / location pill */
-function MobileGreetingBar() {
+/* ── Top promo strip ───────────────────────────── */
+function MobilePromoBar() {
   return (
-    <div className="px-4 pt-3">
-      <div className="flex items-center justify-between">
-        <div className="flex min-w-0 items-center gap-2">
-          <span className="grid size-9 shrink-0 place-items-center rounded-full gradient-primary text-primary-foreground shadow-soft">
-            <MapPin className="size-4" />
-          </span>
-          <div className="min-w-0">
-            <p className="font-bn text-[10px] tracking-wider text-muted-foreground">ডেলিভারি ঠিকানা</p>
-            <p className="font-bn truncate text-sm font-semibold text-foreground">পুরান বগুড়া · বাংলাদেশ</p>
-          </div>
-        </div>
-        <Link
-          to="/account"
-          aria-label="নোটিফিকেশন"
-          className="relative grid size-10 shrink-0 place-items-center rounded-full border border-border bg-card text-foreground"
-        >
-          <Bell className="size-4" />
-          <span className="absolute -right-0.5 -top-0.5 size-2.5 rounded-full bg-destructive ring-2 ring-background" />
-        </Link>
+    <div className="bg-[#1B5E20] text-white">
+      <div className="flex items-center justify-center gap-4 px-4 py-2 text-[11px] font-medium">
+        <span className="font-bn flex items-center gap-1.5">
+          <Truck className="size-3.5 text-gold" />
+          সারা বাংলাদেশে হোম ডেলিভারি
+        </span>
+        <span className="opacity-30">·</span>
+        <span className="font-bn flex items-center gap-1.5">
+          <Wallet className="size-3.5 text-gold" />
+          ক্যাশ অন ডেলিভারি
+        </span>
       </div>
     </div>
   );
 }
 
-function MobileSearchBar() {
-  return (
-    <div className="px-4 pt-3">
-      <Link
-        to="/search"
-        className="flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 shadow-soft"
-      >
-        <Search className="size-4 text-muted-foreground" />
-        <span className="font-bn flex-1 truncate text-sm text-muted-foreground">আম, লিচু, গোলাপ খুঁজুন...</span>
-        <span className="font-bn rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">নতুন</span>
-      </Link>
-    </div>
-  );
-}
-
-/* Hero */
+/* ── Hero ──────────────────────────────────────── */
 function MobileHero() {
   const [i, setI] = useState(0);
-  const [paused, setPaused] = useState(false);
-
   useEffect(() => {
-    if (paused) return;
     const t = setInterval(() => setI((v) => (v + 1) % HERO_SLIDES.length), 4500);
     return () => clearInterval(t);
-  }, [paused]);
-
+  }, []);
   const slide = HERO_SLIDES[i];
+
   return (
-    <section className="mt-3 px-4" onTouchStart={() => setPaused(true)} onTouchEnd={() => setPaused(false)}>
-      <div className="relative h-[480px] w-full overflow-hidden rounded-[28px] bg-[#0F3D17] shadow-elegant ring-1 ring-white/10">
-        <AnimatePresence mode="sync">
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.4, ease: "easeOut" }}
-            className="absolute inset-0"
+    <section className="px-3 pt-3">
+      <div className="relative h-[420px] w-full overflow-hidden rounded-[28px] shadow-elegant">
+        <motion.img
+          key={slide}
+          src={unsplash(slide, 900, 80)}
+          srcSet={unsplashSrcSet(slide, [500, 750, 1000])}
+          sizes="100vw"
+          alt="ফল ও ফুলের গাছ"
+          initial={{ opacity: 0, scale: 1.08 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="absolute inset-0 h-full w-full object-cover"
+          onError={onImgError}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
+
+        <div className="absolute inset-x-5 top-7 text-white">
+          <h1 className="font-bn text-[28px] font-bold leading-tight drop-shadow-lg">
+            ফল ও ফুলের গাছ
+          </h1>
+          <p className="font-bn mt-1 text-[20px] font-semibold leading-tight drop-shadow-lg">
+            এখন আপনার হাতের নাগালে
+          </p>
+          <p className="font-bn mt-3 max-w-[230px] text-[12px] leading-relaxed text-white/90 drop-shadow">
+            উন্নত মানের গাছ · সঠিক পরিচর্যার গাইড ·<br />
+            সারা বাংলাদেশে ডেলিভারি
+          </p>
+          <Link
+            to="/shop"
+            className="font-bn mt-5 inline-flex items-center gap-2 rounded-full bg-[#1B5E20] px-5 py-2.5 text-sm font-bold text-white shadow-elegant ring-1 ring-white/20 active:scale-95"
           >
-            <img
-              src={unsplash(slide.image, 800, 75)}
-              srcSet={unsplashSrcSet(slide.image, [400, 640, 800, 1024])}
-              sizes="100vw"
-              alt={slide.title}
-              className="h-full w-full object-cover animate-ken-burns"
-              loading={i === 0 ? "eager" : "lazy"}
-              decoding="async"
-              fetchPriority={i === 0 ? "high" : "auto"}
-              onError={onImgError}
-              style={{ backgroundImage: `url(${lqip(slide.image)})`, backgroundSize: "cover", backgroundPosition: "center" }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10" />
-            <div className="absolute inset-0 bg-gradient-to-br from-[#0F3D17]/40 via-transparent to-transparent" />
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Decorative leaf */}
-        <Leaf aria-hidden="true" className="absolute -right-4 top-6 size-24 rotate-12 text-white/10" />
-
-        <div className="absolute inset-x-0 top-4 flex items-center justify-between px-5">
-          <span className="font-bn rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold tracking-wider text-white backdrop-blur ring-1 ring-white/20">
-            {site.nameBn.slice(0, 18)}
-          </span>
-          <span className="font-bn flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold text-white backdrop-blur ring-1 ring-white/20">
-            <Star className="size-3 fill-gold text-gold" />
-            ৪.৯ · ১২হাজার+
-          </span>
-        </div>
-
-        <div className="absolute inset-x-5 bottom-20 text-white">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`copy-${i}`}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-            >
-              <p className="font-bn text-xs font-medium tracking-wider text-gold">{slide.eyebrow}</p>
-              <h1 className="font-bn mt-1.5 text-[28px] font-bold leading-[1.15] drop-shadow">
-                {slide.title}
-              </h1>
-              <Link
-                to={slide.to}
-                className="font-bn mt-4 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#1B5E20] shadow-elegant active:scale-95"
-              >
-                <span>{slide.cta}</span>
-                <ArrowRight className="size-4" />
-              </Link>
-            </motion.div>
-          </AnimatePresence>
+            এখনই অর্ডার করুন
+          </Link>
         </div>
 
         {/* Pagination */}
-        <div className="absolute inset-x-0 bottom-5 flex items-center justify-center gap-1.5">
+        <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-1.5">
           {HERO_SLIDES.map((_, idx) => (
             <button
               key={idx}
@@ -221,7 +118,7 @@ function MobileHero() {
               aria-label={`স্লাইড ${idx + 1}`}
               className={cn(
                 "h-1.5 rounded-full transition-all",
-                idx === i ? "w-6 bg-white" : "w-1.5 bg-white/40",
+                idx === i ? "w-6 bg-white" : "w-1.5 bg-white/50",
               )}
             />
           ))}
@@ -231,365 +128,147 @@ function MobileHero() {
   );
 }
 
-/* Trust tiles */
-function MobileTrustGrid() {
+/* ── Trust strip ───────────────────────────────── */
+function MobileTrust() {
   return (
-    <section className="mt-6 px-4">
-      <div className="grid grid-cols-2 gap-3">
-        {TRUST_TILES.map((t, idx) => {
-          const Icon = t.icon;
-          return (
-            <motion.div
-              key={t.label}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.4, delay: idx * 0.05 }}
-              className={cn(
-                "flex items-center gap-3 rounded-3xl border border-border/60 bg-gradient-to-br p-3 shadow-soft",
-                t.color,
-              )}
-            >
-              <span className={cn("grid size-10 shrink-0 place-items-center rounded-2xl bg-background/80 backdrop-blur", t.iconColor)}>
-                <Icon className="size-5" />
-              </span>
-              <div className="min-w-0">
-                <p className="font-bn truncate text-xs font-bold text-foreground">{t.label}</p>
-                <p className="font-bn truncate text-[10px] text-muted-foreground">{t.sub}</p>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
-
-/* Category strip */
-function MobileCategoryStrip() {
-  return (
-    <section className="mt-7">
-      <SectionHeader title="বিভাগ অনুযায়ী" to="/categories" />
-      <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-4 pb-2">
-        {categories.slice(0, 10).map((c, idx) => (
-          <Link
-            key={c.slug}
-            to="/categories/$slug"
-            params={{ slug: c.slug }}
-            className="group flex w-24 shrink-0 flex-col items-center gap-2"
-          >
-            <div className={cn(
-              "relative grid size-24 place-items-center overflow-hidden rounded-3xl bg-gradient-to-br shadow-soft transition group-active:scale-95",
-              CAT_COLORS[idx % CAT_COLORS.length],
-            )}>
-              <img src={unsplash(c.image, 240, 70)} srcSet={unsplashSrcSet(c.image, [160, 240, 320])} sizes="80px" alt={c.name} className="size-20 rounded-2xl object-cover" loading="lazy" decoding="async" onError={onImgError} />
-            </div>
-            <p className="font-bn line-clamp-1 w-full text-center text-xs font-semibold text-foreground">{c.nameBn}</p>
-            <p className="-mt-1 text-[10px] text-muted-foreground">{toBnDigits(c.count)}+</p>
-          </Link>
+    <section className="-mt-6 px-3">
+      <div className="relative z-10 grid grid-cols-4 gap-2 rounded-3xl border border-border/60 bg-card p-4 shadow-elegant">
+        {TRUST.map(({ Icon, t, s }) => (
+          <div key={t} className="flex flex-col items-center text-center">
+            <span className="grid size-10 place-items-center rounded-full bg-[#1B5E20]/10 text-[#1B5E20]">
+              <Icon className="size-5" strokeWidth={2.2} />
+            </span>
+            <p className="font-bn mt-2 text-[10px] font-bold leading-tight text-foreground">{t}</p>
+            <p className="font-bn mt-1 text-[9px] leading-tight text-muted-foreground">{s}</p>
+          </div>
         ))}
       </div>
     </section>
   );
 }
 
-/* Popular products 2-col */
-function MobilePopularProducts() {
+/* ── Section title with decorative arrows ──────── */
+function MobileSectionTitle({ title }: { title: string }) {
   return (
-    <section className="mt-7">
-      <SectionHeader title="জনপ্রিয় চারা" to="/shop" />
-      <div className="mt-3 grid grid-cols-2 gap-3 px-4">
-        {bestsellers().slice(0, 6).map((p, i) => (
-          <MobileProductCard key={p.slug} product={p} index={i} />
-        ))}
-      </div>
+    <div className="mt-8 flex items-center justify-center gap-3 px-4">
+      <span aria-hidden className="font-display text-lg tracking-tight text-[#1B5E20]">»»</span>
+      <h2 className="font-bn text-lg font-bold tracking-tight text-foreground">{title}</h2>
+      <span aria-hidden className="font-display text-lg tracking-tight text-[#1B5E20]">««</span>
+    </div>
+  );
+}
+
+/* ── 2 category cards ──────────────────────────── */
+function MobileCategoryCards() {
+  return (
+    <section className="mt-4 grid grid-cols-2 gap-3 px-3">
+      <CategoryCard
+        title="ফল গাছ"
+        sub="দেশি-বিদেশি বিভিন্ন প্রজাতির ফল গাছের চারা"
+        to="/categories/mango"
+        bg="bg-[#E5F3D8]"
+        btn="bg-[#1B5E20] text-white"
+        img="https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&q=80&auto=format&fit=crop"
+      />
+      <CategoryCard
+        title="ফুল গাছ"
+        sub="বিভিন্ন রঙের ফুলের গাছ আপনার বাগানের জন্য"
+        to="/categories/flowering"
+        bg="bg-[#FBE0EA]"
+        btn="bg-[#9D174D] text-white"
+        img="https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=600&q=80&auto=format&fit=crop"
+      />
     </section>
   );
 }
 
-function MobileProductCard({ product, index = 0 }: { product: typeof products[number]; index?: number }) {
+function CategoryCard({
+  title, sub, to, bg, btn, img,
+}: { title: string; sub: string; to: string; bg: string; btn: string; img: string }) {
+  return (
+    <Link to={to} className={cn("relative flex h-52 flex-col justify-between overflow-hidden rounded-3xl p-4 shadow-soft active:scale-[0.98]", bg)}>
+      <div className="relative z-10 max-w-[60%]">
+        <h3 className="font-bn text-lg font-extrabold leading-tight text-foreground">{title}</h3>
+        <p className="font-bn mt-1.5 text-[11px] leading-snug text-foreground/70">{sub}</p>
+      </div>
+      <span className={cn("relative z-10 inline-flex w-fit items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-bold", btn)}>
+        দেখুন <ArrowRight className="size-3.5" />
+      </span>
+      <img
+        src={unsplash(img, 400, 80)}
+        srcSet={unsplashSrcSet(img, [240, 360, 480])}
+        sizes="200px"
+        alt={title}
+        className="pointer-events-none absolute -bottom-2 -right-3 h-36 w-36 object-cover [mask-image:radial-gradient(circle_at_70%_60%,#000_60%,transparent_75%)]"
+        loading="lazy"
+        decoding="async"
+        onError={onImgError}
+      />
+    </Link>
+  );
+}
+
+/* ── Popular products grid ─────────────────────── */
+function MobilePopular() {
+  const list = POPULAR_SLUGS
+    .map((s) => products.find((p) => p.slug === s))
+    .filter((p): p is typeof products[number] => Boolean(p));
+
+  return (
+    <section className="mt-4 grid grid-cols-2 gap-3 px-3">
+      {list.map((p, idx) => (
+        <PopularCard key={p.slug} product={p} index={idx} />
+      ))}
+    </section>
+  );
+}
+
+function PopularCard({ product, index }: { product: typeof products[number]; index: number }) {
   const cart = useCart();
-  const wish = useWishlist();
-  const liked = wish.has(product.slug);
-  const discount = product.oldPrice
-    ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)
-    : 0;
-
   return (
     <motion.article
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-30px" }}
-      transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.3) }}
-      className="group flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-card p-2 shadow-soft"
+      transition={{ duration: 0.35, delay: Math.min(index * 0.05, 0.2) }}
+      className="flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft"
     >
-      <Link to="/products/$slug" params={{ slug: product.slug }} className="relative block overflow-hidden rounded-2xl">
+      <Link to="/products/$slug" params={{ slug: product.slug }} className="block overflow-hidden rounded-2xl bg-muted">
         <SmartImage src={product.image} alt={product.name} aspect="square" />
-        {discount > 0 && (
-          <span className="absolute left-2 top-2 rounded-full bg-destructive px-2 py-0.5 text-[10px] font-bold uppercase text-destructive-foreground">
-            −{discount}%
-          </span>
-        )}
-        <button
-          type="button"
-          onClick={(e) => { e.preventDefault(); wish.toggle(product.slug); }}
-          aria-label="ইচ্ছার তালিকা"
-          aria-pressed={liked}
-          className="absolute right-2 top-2 grid size-8 place-items-center rounded-full bg-background/85 text-foreground backdrop-blur"
-        >
-          <Heart className={cn("size-4", liked && "fill-destructive text-destructive")} />
-        </button>
       </Link>
-
-      <div className="flex flex-1 flex-col gap-1 p-2">
-        <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
-          <Star className="size-3 fill-gold text-gold" />
-          <span className="font-semibold text-foreground">{product.rating.toFixed(1)}</span>
-          <span>· {product.reviews}</span>
-        </div>
-        <Link to="/products/$slug" params={{ slug: product.slug }} className="line-clamp-1 text-sm font-semibold text-foreground">
-          {product.name}
-        </Link>
-        <p className="font-bn line-clamp-1 text-[11px] text-muted-foreground">{product.nameBn}</p>
-        <div className="mt-1 flex items-end justify-between gap-1">
-          <div>
-            <div className="text-sm font-bold text-primary">{formatBDT(product.price)}</div>
-            {product.oldPrice && (
-              <div className="text-[10px] text-muted-foreground line-through">{formatBDT(product.oldPrice)}</div>
-            )}
-          </div>
-          <button
-            type="button"
-            onClick={() => { cart.add(product); toast.success(`${product.name} কার্টে যোগ হয়েছে`); }}
-            aria-label="কার্টে যোগ করুন"
-            className="grid size-9 place-items-center rounded-2xl gradient-primary text-primary-foreground shadow-soft active:scale-95"
-          >
-            <ShoppingBag className="size-4" />
-          </button>
-        </div>
-      </div>
+      <Link to="/products/$slug" params={{ slug: product.slug }} className="font-bn mt-3 line-clamp-1 text-sm font-bold text-foreground">
+        {product.name}
+      </Link>
+      <p className="font-bn mt-1 text-lg font-extrabold text-[#1B5E20]">{formatBDT(product.price)}</p>
+      <button
+        type="button"
+        onClick={() => { cart.add(product); toast.success(`${product.name} কার্টে যোগ হয়েছে`); }}
+        className="font-bn mt-3 w-full rounded-full bg-[#1B5E20] py-2 text-xs font-bold text-white shadow-soft active:scale-95"
+      >
+        অর্ডার করুন
+      </button>
     </motion.article>
   );
 }
 
-/* Promo banner */
-function MobilePromoBanner() {
+/* ── COD CTA banner ────────────────────────────── */
+function MobileCodBanner() {
   return (
-    <section className="mt-7 px-4">
-      <Link
-        to="/shop"
-        className="relative block overflow-hidden rounded-3xl shadow-elegant"
-      >
-        <img
-          src={unsplash("https://images.unsplash.com/photo-1416879595882-3373a0480b5b", 800, 75)}
-          srcSet={unsplashSrcSet("https://images.unsplash.com/photo-1416879595882-3373a0480b5b", [400, 640, 800])}
-          sizes="100vw"
-          alt="বর্ষায় রোপণ অফার"
-          className="h-44 w-full object-cover"
-          loading="lazy"
-          decoding="async"
-          onError={onImgError}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/85 via-emerald-900/60 to-transparent" />
-        <div className="absolute inset-y-0 left-0 flex max-w-[70%] flex-col justify-center gap-2 p-5 text-white">
-          <span className="font-bn w-fit rounded-full bg-gold px-2 py-0.5 text-[10px] font-bold text-gold-foreground">
-            ২৫% পর্যন্ত ছাড়
-          </span>
-          <h3 className="font-bn text-xl font-bold leading-tight">বর্ষায় রোপণ অফার</h3>
-          <p className="font-bn text-[11px] opacity-90">বর্ষাকালীন রোপণ — সীমিত স্টক।</p>
-          <span className="font-bn mt-1 inline-flex w-fit items-center gap-1 rounded-full bg-white/15 px-3 py-1.5 text-xs font-bold backdrop-blur">
-            এখনই কিনুন <ArrowRight className="size-3.5" />
-          </span>
+    <section className="mt-6 px-3">
+      <div className="relative flex h-36 items-center overflow-hidden rounded-3xl bg-gradient-to-r from-[#1B5E20] to-[#2E7D32] p-5 text-white shadow-elegant">
+        <div className="relative z-10 max-w-[62%]">
+          <h3 className="font-bn text-xl font-extrabold leading-tight">ক্যাশ অন ডেলিভারি</h3>
+          <p className="font-bn mt-1.5 text-[12px] leading-snug text-white/90">
+            পণ্য হাতে পেয়ে মূল্য পরিশোধ করুন
+          </p>
         </div>
-      </Link>
-    </section>
-  );
-}
-
-/* New arrivals horizontal scroll */
-function MobileNewArrivals() {
-  const list = products.slice(6, 14);
-  return (
-    <section className="mt-7">
-      <SectionHeader title="নতুন এসেছে" to="/shop" />
-      <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-4 pb-2">
-        {list.map((p) => (
-          <Link
-            key={p.slug}
-            to="/products/$slug"
-            params={{ slug: p.slug }}
-            className="group w-44 shrink-0 overflow-hidden rounded-3xl border border-border/60 bg-card shadow-soft"
-          >
-            <div className="relative">
-              <SmartImage src={p.image} alt={p.name} aspect="square" rounded={false} />
-              <span className="font-bn absolute left-2 top-2 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">
-                <Sparkles className="mr-0.5 inline size-2.5" /> নতুন
-              </span>
-            </div>
-            <div className="p-3">
-              <p className="font-bn line-clamp-1 text-sm font-semibold text-foreground">{p.name}</p>
-              <p className="font-bn line-clamp-1 text-[11px] text-muted-foreground">{p.nameBn}</p>
-              <div className="font-bn mt-1 text-sm font-bold text-primary">{formatBDT(p.price)}</div>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/* Reviews strip */
-function MobileReviewsStrip() {
-  return (
-    <section className="mt-7">
-      <SectionHeader title="ক্রেতাদের মতামত" to="/reviews" />
-      <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-4 pb-2">
-        {testimonials.slice(0, 5).map((t) => (
-          <article
-            key={t.name}
-            className="w-72 shrink-0 rounded-3xl border border-border/60 bg-gradient-to-br from-primary/5 to-transparent p-4 shadow-soft"
-          >
-            <Quote className="size-5 text-primary/40" />
-            <p className="font-bn mt-2 line-clamp-4 text-sm leading-relaxed text-foreground">{t.text}</p>
-            <div className="mt-3 flex items-center gap-2.5 border-t border-border/60 pt-3">
-              <img src={t.avatar} alt={t.name} className="size-10 rounded-full object-cover" loading="lazy" />
-              <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-foreground">{t.name}</p>
-                <p className="truncate text-[10px] text-muted-foreground">{t.city} · {t.role}</p>
-              </div>
-              <div className="ml-auto flex items-center gap-0.5">
-                {Array.from({ length: t.rating }).map((_, i) => (
-                  <Star key={i} className="size-3 fill-gold text-gold" />
-                ))}
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/* Gardening tips */
-const TIPS = [
-  { title: "ছাদ বাগানের শুরু", image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80&auto=format&fit=crop", icon: Leaf },
-  { title: "গ্রাফটিং পরিচর্যা", image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80&auto=format&fit=crop", icon: Sparkles },
-  { title: "ভিডিও গাইড", image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=800&q=80&auto=format&fit=crop", icon: Play },
-  { title: "কুরিয়ার টিপস", image: "https://images.unsplash.com/photo-1606235495906-d5e94a92e5e3?w=800&q=80&auto=format&fit=crop", icon: Truck },
-];
-
-function MobileTipsStrip() {
-  return (
-    <section className="mt-7">
-      <SectionHeader title="গাছ পরিচর্যার টিপস" to="/care-guide" />
-      <div className="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-4 pb-2">
-        {TIPS.map((t) => {
-          const Icon = t.icon;
-          return (
-            <Link
-              key={t.title}
-              to="/care-guide"
-              className="relative h-40 w-56 shrink-0 overflow-hidden rounded-3xl shadow-soft"
-            >
-              <img src={unsplash(t.image, 480, 70)} srcSet={unsplashSrcSet(t.image, [320, 480, 640])} sizes="224px" alt={t.title} className="h-full w-full object-cover" loading="lazy" decoding="async" onError={onImgError} />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3 text-white">
-                <div className="min-w-0">
-                  <p className="font-bn line-clamp-1 text-sm font-bold">{t.title}</p>
-                </div>
-                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/20 backdrop-blur">
-                  <Icon className="size-4" />
-                </span>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
-
-/* Blog preview */
-function MobileBlogPreview() {
-  return (
-    <section className="mt-7 px-4">
-      <SectionHeader inline title="সাম্প্রতিক ব্লগ" to="/blog" />
-      <div className="mt-3 flex flex-col gap-3">
-        {posts.slice(0, 3).map((p) => (
-          <Link
-            key={p.slug}
-            to="/blog/$slug"
-            params={{ slug: p.slug }}
-            className="flex gap-3 rounded-3xl border border-border/60 bg-card p-2.5 shadow-soft"
-          >
-            <img src={unsplash(p.cover, 240, 70)} srcSet={unsplashSrcSet(p.cover, [160, 240, 320])} sizes="96px" alt={p.title} className="size-24 shrink-0 rounded-2xl object-cover" loading="lazy" decoding="async" onError={onImgError} />
-            <div className="flex min-w-0 flex-1 flex-col justify-between py-1">
-              <div>
-                <p className="font-bn text-[10px] font-semibold tracking-wider text-primary">{p.category}</p>
-                <h4 className="font-bn mt-1 line-clamp-2 text-sm font-semibold text-foreground">{p.title}</h4>
-              </div>
-              <div className="font-bn flex items-center justify-between text-[10px] text-muted-foreground">
-                <span>{p.readTime}</span>
-                <ChevronRight className="size-3.5" />
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/* Newsletter */
-function MobileNewsletter() {
-  const [email, setEmail] = useState("");
-  return (
-    <section className="mt-7 px-4">
-      <div className="relative overflow-hidden rounded-3xl gradient-primary p-6 text-primary-foreground shadow-elegant">
-        <div className="absolute -right-8 -top-8 size-32 rounded-full bg-white/10" />
-        <div className="absolute -bottom-10 -left-6 size-28 rounded-full bg-white/10" />
-        <div className="relative">
-          <span className="font-bn inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold backdrop-blur">
-            <Sparkles className="size-3" /> নিউজলেটার
-          </span>
-          <h3 className="font-bn mt-3 text-xl font-bold leading-snug">নতুন চারার আপডেট পেতে সাবস্ক্রাইব করুন</h3>
-          <p className="font-bn mt-1 text-xs opacity-90">নতুন গাছ ও পরিচর্যার টিপস সরাসরি আপনার ইনবক্সে।</p>
-          <form
-            onSubmit={(e) => { e.preventDefault(); toast.success("সাবস্ক্রাইব হয়েছে! 🌱"); setEmail(""); }}
-            className="mt-4 flex items-center gap-2 rounded-full bg-white p-1 pl-4 shadow-soft"
-          >
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="আপনার ইমেইল"
-              className="font-bn flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
-            />
-            <button
-              type="submit"
-              className="font-bn rounded-full bg-foreground px-4 py-2 text-xs font-bold text-background active:scale-95"
-            >
-              যোগ দিন
-            </button>
-          </form>
+        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          <div className="grid size-24 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/25 backdrop-blur">
+            <Package className="size-12 text-white" strokeWidth={1.6} />
+          </div>
         </div>
+        <div className="pointer-events-none absolute -left-6 -top-10 size-32 rounded-full bg-gold/20 blur-2xl" />
       </div>
     </section>
-  );
-}
-
-function SectionHeader({
-  title, to, inline = false,
-}: { title: string; to: string; inline?: boolean }) {
-  return (
-    <div className={cn("flex items-end justify-between gap-3", inline ? "" : "px-4")}>
-      <div>
-        <h2 className="font-bn text-lg font-bold leading-tight text-foreground">{title}</h2>
-      </div>
-      <Link to={to} className="font-bn flex shrink-0 items-center gap-1 text-xs font-semibold text-primary">
-        সব দেখুন <ChevronRight className="size-3.5" />
-      </Link>
-    </div>
   );
 }
