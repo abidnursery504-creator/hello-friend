@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight, ChevronLeft, ChevronRight, Truck, Wallet, ShieldCheck,
-  Headphones, Sparkles, Star, Quote, ArrowUpRight,
+  Headphones, Sparkles, Star, Quote, ArrowUpRight, Leaf,
 } from "lucide-react";
 import { Container } from "@/components/common/Container";
 import { SmartImage } from "@/components/common/SmartImage";
@@ -16,25 +16,44 @@ import { cn } from "@/lib/utils";
 /* ───────────── HERO SLIDER ───────────── */
 const SLIDES = [
   {
-    image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=2400&q=85&auto=format&fit=crop",
-    eyebrowBn: "বাংলাদেশের প্রিমিয়াম অনলাইন নার্সারি",
-    titleBn: "ফল ও ফুলের গাছ",
-    subBn: "এখন আপনার হাতের নাগালে",
-    metaBn: "উন্নত মানের গাছ · সঠিক পরিচর্যার গাইড · সারা বাংলাদেশে ডেলিভারি",
+    image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=2000&q=90&auto=format&fit=crop",
+    eyebrowBn: "প্রিমিয়াম ফলের গাছ",
+    titleBn: "ফলের গাছের সেরা সংগ্রহ",
+    subBn: "আম · লেবু · মাল্টা · ড্রাগন",
+    metaBn: "গ্রাফটিং করা মাতৃ গাছ · দ্রুত ফলদানে সক্ষম · সারা বাংলাদেশে ডেলিভারি",
+    to: "/categories/fruit",
   },
   {
-    image: "https://images.unsplash.com/photo-1591735026282-bb24fd6c0451?w=2400&q=85&auto=format&fit=crop",
-    eyebrowBn: "আমের মৌসুম শুরু",
-    titleBn: "প্রিমিয়াম আম সংগ্রহ",
-    subBn: "আম্রপালি · হাঁড়িভাঙ্গা · বারি-৪",
-    metaBn: "গ্রাফটিং করা মাতৃ গাছ · ১৮-২৪ মাসে ফল",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=2400&q=85&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=2000&q=90&auto=format&fit=crop",
     eyebrowBn: "সারা বছর ফুল",
-    titleBn: "ফুলের চারা সংগ্রহ",
+    titleBn: "প্রিমিয়াম ফুলের গাছ",
     subBn: "গোলাপ · জবা · বাগানবিলাস",
-    metaBn: "সুগন্ধি ও দীর্ঘস্থায়ী ফুলের গাছ",
+    metaBn: "সুগন্ধি, রঙিন ও দীর্ঘস্থায়ী ফুলের চারা সংগ্রহ",
+    to: "/categories/flowering",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1591735026282-bb24fd6c0451?w=2000&q=90&auto=format&fit=crop",
+    eyebrowBn: "আমের মৌসুম শুরু",
+    titleBn: "এক্সক্লুসিভ আম কালেকশন",
+    subBn: "আম্রপালি · হাঁড়িভাঙ্গা · বারি-৪",
+    metaBn: "১৮–২৪ মাসের মধ্যে ফল · নির্বাচিত মাতৃ গাছ থেকে গ্রাফটিং",
+    to: "/categories/mango",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1527325678964-54921661f888?w=2000&q=90&auto=format&fit=crop",
+    eyebrowBn: "এক্সোটিক ফল",
+    titleBn: "ড্রাগন ফলের চারা",
+    subBn: "লাল ও সাদা শাঁস · উচ্চ ফলনশীল",
+    metaBn: "ছাদ বাগান ও বাণিজ্যিক চাষের জন্য সেরা পছন্দ",
+    to: "/categories/dragon",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=2000&q=90&auto=format&fit=crop",
+    eyebrowBn: "নার্সারি ও বাগান",
+    titleBn: "সবুজে গড়া বাগান",
+    subBn: "ইনডোর · আউটডোর · ছাদবাগান",
+    metaBn: "প্রিমিয়াম পটেড প্ল্যান্ট, পরিচর্যার গাইড ও এক্সপার্ট সাপোর্ট",
+    to: "/categories",
   },
 ];
 
@@ -57,11 +76,19 @@ function Hero() {
 
   return (
     <section
-      className="relative overflow-hidden bg-[#EAF8E7]"
+      className="relative overflow-hidden bg-gradient-to-b from-[#EAF8E7] via-[#F2FBEE] to-[#E2F2DA]"
       aria-label="Featured collections"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
+      {/* Decorative leaves */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-24 -top-24 size-[420px] rounded-full bg-[#2E7D32]/10 blur-3xl" />
+        <div className="absolute -right-24 top-32 size-[520px] rounded-full bg-[#C8A415]/10 blur-3xl" />
+        <Leaf className="absolute left-6 top-10 size-24 -rotate-12 text-[#2E7D32]/10" />
+        <Leaf className="absolute right-10 bottom-10 size-32 rotate-12 text-[#2E7D32]/10" />
+      </div>
+
       <Container className="relative pt-6">
         <div
           role="region"
@@ -72,52 +99,30 @@ function Hero() {
           onKeyDown={onKey}
           onFocus={() => setPaused(true)}
           onBlur={() => setPaused(false)}
-          className="relative h-[640px] overflow-hidden rounded-[36px] bg-gradient-to-br from-[#EAF8E7] via-[#F5FBEF] to-[#E2F2DA] shadow-elegant focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2"
+          className="relative h-[560px] overflow-hidden rounded-[40px] border border-white/60 bg-gradient-to-br from-white/60 via-white/30 to-[#E2F2DA]/60 shadow-elegant backdrop-blur-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2 lg:h-[680px] xl:h-[740px]"
         >
-          <AnimatePresence mode="sync">
-            <motion.div
-              key={i}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.2, ease: "easeInOut" }}
-              className="absolute inset-0"
-              aria-hidden="true"
-            >
-              <img
-                src={s.image}
-                alt=""
-                width={2400}
-                height={1200}
-                fetchPriority={i === 0 ? "high" : "auto"}
-                loading={i === 0 ? "eager" : "lazy"}
-                decoding="async"
-                sizes="100vw"
-                className="h-full w-full object-cover animate-ken-burns"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/40 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0d2b14]/30 via-transparent to-transparent" />
-            </motion.div>
-          </AnimatePresence>
+          {/* Soft background wash */}
+          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-[#EAF8E7] via-[#F5FBEF] to-[#DDEFD3]" />
 
-          <div className="relative z-10 grid h-full grid-cols-2 items-center">
-            <div className="pl-12 xl:pl-20">
+          <div className="relative z-10 grid h-full grid-cols-1 items-center lg:grid-cols-2">
+            {/* LEFT: Copy */}
+            <div className="px-8 py-10 md:px-12 lg:pl-16 xl:pl-24">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
+                  exit={{ opacity: 0, y: -16 }}
                   transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
                   className="max-w-xl"
                   role="group"
                   aria-roledescription="slide"
                   aria-label={`Slide ${i + 1} of ${SLIDES.length}`}
                 >
-                  <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#1B5E20] backdrop-blur shadow-soft">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#1B5E20] shadow-soft ring-1 ring-[#2E7D32]/15 backdrop-blur">
                     <Sparkles className="size-3.5 text-gold" aria-hidden="true" /> {s.eyebrowBn}
                   </div>
-                  <h1 className="font-bn mt-6 text-5xl font-extrabold leading-[1.1] text-[#1B5E20] sm:text-6xl xl:text-7xl">
+                  <h1 className="font-bn mt-6 text-5xl font-extrabold leading-[1.05] text-[#0F3D17] sm:text-6xl xl:text-7xl">
                     {s.titleBn}
                   </h1>
                   <p className="font-bn mt-4 text-2xl font-semibold text-[#2E7D32] xl:text-3xl">{s.subBn}</p>
@@ -127,19 +132,67 @@ function Hero() {
                       to="/shop"
                       className="group inline-flex items-center gap-2 rounded-full bg-[#2E7D32] px-8 py-4 text-sm font-bn font-semibold text-white shadow-elegant transition hover:-translate-y-0.5 hover:bg-[#1B5E20] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2"
                     >
-                      {site.ctas.primary}
+                      এখনই অর্ডার করুন
                       <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden="true" />
                     </Link>
                     <Link
-                      to="/categories"
-                      className="inline-flex items-center gap-2 rounded-full border border-[#2E7D32]/30 bg-white/80 px-7 py-4 text-sm font-bn font-semibold text-[#1B5E20] backdrop-blur transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2"
+                      to="/shop"
+                      className="inline-flex items-center gap-2 rounded-full border border-[#2E7D32]/30 bg-white/85 px-7 py-4 text-sm font-bn font-semibold text-[#1B5E20] backdrop-blur transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2"
                     >
-                      {site.ctas.secondary}
+                      সব গাছ দেখুন
                     </Link>
                   </div>
                 </motion.div>
               </AnimatePresence>
             </div>
+
+            {/* RIGHT: Image showcase */}
+            <div className="relative hidden h-full items-center justify-center p-8 lg:flex xl:p-12">
+              <AnimatePresence mode="sync">
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 1.1, ease: "easeOut" }}
+                  className="absolute inset-6 overflow-hidden rounded-[32px] shadow-elegant ring-1 ring-white/60 xl:inset-10"
+                  aria-hidden="true"
+                >
+                  <img
+                    src={s.image}
+                    alt=""
+                    width={2000}
+                    height={1400}
+                    fetchPriority={i === 0 ? "high" : "auto"}
+                    loading={i === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                    sizes="(min-width:1024px) 50vw, 100vw"
+                    className="h-full w-full object-cover animate-ken-burns"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-[#0d2b14]/30 via-transparent to-transparent" />
+                  <div className="absolute inset-x-5 bottom-5 flex items-center justify-between rounded-2xl bg-white/85 px-4 py-3 text-xs font-semibold text-[#1B5E20] shadow-soft backdrop-blur">
+                    <span className="font-bn flex items-center gap-1.5"><Star className="size-3.5 fill-gold text-gold" /> প্রিমিয়াম মান</span>
+                    <span className="font-bn">৩০ দিনের লিভিং গ্যারান্টি</span>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Mobile fallback bg image inside box */}
+          <div className="absolute inset-0 lg:hidden" aria-hidden="true">
+            <AnimatePresence mode="sync">
+              <motion.img
+                key={`m-${i}`}
+                src={s.image}
+                alt=""
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.35 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1 }}
+                className="absolute inset-0 h-full w-full object-cover mix-blend-multiply"
+              />
+            </AnimatePresence>
           </div>
 
           <button

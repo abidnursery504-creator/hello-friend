@@ -17,39 +17,39 @@ import { toast } from "sonner";
 
 const HERO_SLIDES = [
   {
-    image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=1200&q=85&auto=format&fit=crop",
-    eyebrow: "প্রিমিয়াম নার্সারি",
-    title: "গড়ুন নিজের সবুজ জগৎ",
+    image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1400&q=90&auto=format&fit=crop",
+    eyebrow: "প্রিমিয়াম ফলের গাছ",
+    title: "ফলের গাছের সেরা সংগ্রহ",
     cta: "এখনই অর্ডার করুন",
-    to: "/shop",
+    to: "/categories/fruit",
   },
   {
-    image: "https://images.unsplash.com/photo-1591735026282-bb24fd6c0451?w=1200&q=85&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=1400&q=90&auto=format&fit=crop",
+    eyebrow: "সারা বছর ফুল",
+    title: "প্রিমিয়াম ফুলের চারা",
+    cta: "সব গাছ দেখুন",
+    to: "/categories/flowering",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1591735026282-bb24fd6c0451?w=1400&q=90&auto=format&fit=crop",
     eyebrow: "আমের মৌসুম",
-    title: "গ্রাফটিং আম গাছ",
+    title: "এক্সক্লুসিভ আম কালেকশন",
     cta: "কালেকশন দেখুন",
     to: "/categories/mango",
   },
   {
-    image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=1200&q=85&auto=format&fit=crop",
-    eyebrow: "ইনডোর গ্রিনস",
-    title: "ঘর সাজান সবুজে",
-    cta: "ইনডোর গাছ",
-    to: "/categories/indoor",
+    image: "https://images.unsplash.com/photo-1527325678964-54921661f888?w=1400&q=90&auto=format&fit=crop",
+    eyebrow: "এক্সোটিক ফল",
+    title: "ড্রাগন ফলের চারা",
+    cta: "এখনই অর্ডার করুন",
+    to: "/categories/dragon",
   },
   {
-    image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=1200&q=85&auto=format&fit=crop",
-    eyebrow: "ফুলের বাগান",
-    title: "সারা বছর ফুটুক",
-    cta: "ফুলের চারা",
-    to: "/categories/flowering",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1610917040803-1fccf9623064?w=1200&q=85&auto=format&fit=crop",
-    eyebrow: "বিরল বিদেশি গাছ",
-    title: "দুর্লভ বিদেশি চারা",
-    cta: "দেখুন",
-    to: "/categories/tropical",
+    image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=1400&q=90&auto=format&fit=crop",
+    eyebrow: "নার্সারি ও বাগান",
+    title: "সবুজে গড়া বাগান",
+    cta: "সব গাছ দেখুন",
+    to: "/categories",
   },
 ];
 
@@ -146,57 +146,64 @@ function MobileHero() {
   const slide = HERO_SLIDES[i];
   return (
     <section className="mt-3 px-4" onTouchStart={() => setPaused(true)} onTouchEnd={() => setPaused(false)}>
-      <div className="relative h-[460px] w-full overflow-hidden rounded-[28px] bg-black shadow-elegant">
-        <AnimatePresence>
+      <div className="relative h-[480px] w-full overflow-hidden rounded-[28px] bg-[#0F3D17] shadow-elegant ring-1 ring-white/10">
+        <AnimatePresence mode="sync">
           <motion.div
             key={i}
-            initial={{ opacity: 0, scale: 1.08 }}
+            initial={{ opacity: 0, scale: 1.1 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
+            transition={{ duration: 1.4, ease: "easeOut" }}
             className="absolute inset-0"
           >
-            <img src={slide.image} alt={slide.title} className="h-full w-full object-cover" loading="eager" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/20" />
+            <img
+              src={slide.image}
+              alt={slide.title}
+              className="h-full w-full object-cover animate-ken-burns"
+              loading={i === 0 ? "eager" : "lazy"}
+              decoding="async"
+              fetchPriority={i === 0 ? "high" : "auto"}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0F3D17]/40 via-transparent to-transparent" />
           </motion.div>
         </AnimatePresence>
 
+        {/* Decorative leaf */}
+        <Leaf aria-hidden="true" className="absolute -right-4 top-6 size-24 rotate-12 text-white/10" />
+
         <div className="absolute inset-x-0 top-4 flex items-center justify-between px-5">
-          <span className="font-bn rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold tracking-wider text-white backdrop-blur">
+          <span className="font-bn rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold tracking-wider text-white backdrop-blur ring-1 ring-white/20">
             {site.nameBn.slice(0, 18)}
           </span>
-          <span className="font-bn flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold text-white backdrop-blur">
+          <span className="font-bn flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold text-white backdrop-blur ring-1 ring-white/20">
             <Star className="size-3 fill-gold text-gold" />
             ৪.৯ · ১২হাজার+
           </span>
         </div>
 
         <div className="absolute inset-x-5 bottom-20 text-white">
-          <motion.p
-            key={`eb-${i}`}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="font-bn text-xs font-medium tracking-wider text-gold"
-          >
-            {slide.eyebrow}
-          </motion.p>
-          <motion.h1
-            key={`t-${i}`}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.08 }}
-            className="font-bn mt-1 text-3xl font-bold leading-tight"
-          >
-            {slide.title}
-          </motion.h1>
-
-          <Link
-            to={slide.to}
-            className="font-bn mt-4 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-foreground shadow-elegant"
-          >
-            <span>{slide.cta}</span>
-            <ArrowRight className="size-4" />
-          </Link>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`copy-${i}`}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+            >
+              <p className="font-bn text-xs font-medium tracking-wider text-gold">{slide.eyebrow}</p>
+              <h1 className="font-bn mt-1.5 text-[28px] font-bold leading-[1.15] drop-shadow">
+                {slide.title}
+              </h1>
+              <Link
+                to={slide.to}
+                className="font-bn mt-4 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#1B5E20] shadow-elegant active:scale-95"
+              >
+                <span>{slide.cta}</span>
+                <ArrowRight className="size-4" />
+              </Link>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* Pagination */}
