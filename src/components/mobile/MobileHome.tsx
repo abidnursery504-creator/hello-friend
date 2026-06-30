@@ -20,6 +20,8 @@ import pMango from "@/assets/p-mango.png";
 import pJackfruit from "@/assets/p-jackfruit.png";
 import pLitchi from "@/assets/p-litchi.png";
 import pRose from "@/assets/p-rose.png";
+import codBox from "@/assets/cod-box-hand.png";
+import codLeaves from "@/assets/cod-leaves-left.png";
 
 const HERO_SLIDES = [heroNursery, heroMango, heroFlowers];
 
@@ -302,19 +304,31 @@ function PopularCard({ item, index }: { item: PopItem; index: number }) {
 function MobileCodBanner() {
   return (
     <section className="mt-6 px-3">
-      <div className="relative flex h-36 items-center overflow-hidden rounded-3xl bg-gradient-to-r from-[#1B5E20] to-[#2E7D32] p-5 text-white shadow-elegant">
-        <div className="relative z-10 max-w-[62%]">
-          <h3 className="font-bn text-xl font-extrabold leading-tight">ক্যাশ অন ডেলিভারি</h3>
-          <p className="font-bn mt-1.5 text-[12px] leading-snug text-white/90">
+      <div className="relative flex h-24 items-center overflow-hidden rounded-2xl bg-[#5C8A3A] px-4 text-white shadow-elegant">
+        {/* Left decorative leaves */}
+        <img
+          src={codLeaves}
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute -left-3 top-1/2 h-28 w-24 -translate-y-1/2 object-contain opacity-95"
+          loading="lazy"
+          decoding="async"
+        />
+        {/* Text */}
+        <div className="relative z-10 ml-20 max-w-[55%]">
+          <h3 className="font-bn text-[18px] font-extrabold leading-tight">ক্যাশ অন ডেলিভারি</h3>
+          <p className="font-bn mt-1 text-[11px] leading-snug text-white/90">
             পণ্য হাতে পেয়ে মূল্য পরিশোধ করুন
           </p>
         </div>
-        <div className="absolute right-3 top-1/2 -translate-y-1/2">
-          <div className="grid size-24 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/25 backdrop-blur">
-            <Package className="size-12 text-white" strokeWidth={1.6} />
-          </div>
-        </div>
-        <div className="pointer-events-none absolute -left-6 -top-10 size-32 rounded-full bg-gold/20 blur-2xl" />
+        {/* Right hand + box */}
+        <img
+          src={codBox}
+          alt="Abid Nursery and Plants delivery"
+          className="pointer-events-none absolute -right-2 top-1/2 h-24 w-32 -translate-y-1/2 object-contain"
+          loading="lazy"
+          decoding="async"
+        />
       </div>
     </section>
   );
