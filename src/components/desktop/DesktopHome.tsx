@@ -243,23 +243,21 @@ function CategoryBanners() {
         <div className="grid gap-6 lg:grid-cols-2">
           <CatBanner
             to="/categories/mango"
-            bg="from-[#EAF8E7] to-[#D7F0CC]"
+            eyebrow="ফলদ সংগ্রহ"
             title="ফল গাছ"
-            titleColor="text-[#1B5E20]"
             sub="দেশি-বিদেশি বিভিন্ন প্রজাতির ফল গাছের চারা"
-            img="https://images.unsplash.com/photo-1591735026282-bb24fd6c0451?w=1400&q=85&auto=format&fit=crop"
-            cta="দেখুন"
-            ctaColor="bg-[#1B5E20] hover:bg-[#0e3a13]"
+            img="photo-1574226516831-e1dff420e562"
+            accent="#1B5E20"
+            tint="from-[#0B2912]/85 via-[#0B2912]/40 to-transparent"
           />
           <CatBanner
             to="/categories/flowering"
-            bg="from-[#FDECEF] to-[#F9D5DC]"
+            eyebrow="ফুলের বাগান"
             title="ফুল গাছ"
-            titleColor="text-[#B11733]"
             sub="বিভিন্ন রকমের ফুলের গাছ আপনার বাগানের জন্য"
-            img="https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=1400&q=85&auto=format&fit=crop"
-            cta="দেখুন"
-            ctaColor="bg-[#B11733] hover:bg-[#8a0f25]"
+            img="photo-1490750967868-88aa4486c946"
+            accent="#B11733"
+            tint="from-[#3A0A14]/85 via-[#3A0A14]/40 to-transparent"
           />
         </div>
       </Container>
@@ -267,9 +265,9 @@ function CategoryBanners() {
   );
 }
 
-function CatBanner({ to, bg, title, titleColor, sub, img, cta, ctaColor }: {
-  to: string; bg: string; title: string; titleColor: string;
-  sub: string; img: string; cta: string; ctaColor: string;
+function CatBanner({ to, eyebrow, title, sub, img, accent, tint }: {
+  to: string; eyebrow: string; title: string; sub: string;
+  img: string; accent: string; tint: string;
 }) {
   return (
     <motion.div
@@ -277,27 +275,51 @@ function CatBanner({ to, bg, title, titleColor, sub, img, cta, ctaColor }: {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.7 }}
-      className={cn("group relative h-[280px] overflow-hidden rounded-[28px] bg-gradient-to-br shadow-soft transition-all duration-500 hover:shadow-elegant hover:-translate-y-1", bg)}
+      className="group relative h-[320px] overflow-hidden rounded-[28px] shadow-soft ring-1 ring-black/5 transition-all duration-500 hover:shadow-elegant hover:-translate-y-1"
     >
-      <div className="relative z-10 grid h-full grid-cols-2 items-center">
-        <div className="pl-8 xl:pl-10">
-          <h3 className={cn("font-bn text-4xl font-extrabold xl:text-5xl", titleColor)}>{title}</h3>
-          <p className="font-bn mt-4 max-w-[18rem] text-sm text-foreground/75 xl:text-base">{sub}</p>
-          <Link
-            to={to as any}
-            className={cn("mt-6 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bn font-semibold text-white shadow-soft transition group-hover:gap-3", ctaColor)}
-          >
-            {cta} <ArrowRight className="size-4" />
-          </Link>
-        </div>
-      </div>
-      <div className="absolute inset-y-0 right-0 w-[55%]">
-        <img src={unsplash(img, 1024, 75)} srcSet={unsplashSrcSet(img, [480, 800, 1024, 1280])} alt="" width={1024} height={720} sizes="(min-width: 1024px) 50vw, 100vw" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" onError={onImgError} />
-        <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-transparent" />
+      {/* Background image */}
+      <img
+        src={unsplash(img, 1280, 78)}
+        srcSet={unsplashSrcSet(img, [640, 960, 1280, 1600])}
+        alt=""
+        width={1280}
+        height={720}
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
+        loading="lazy"
+        decoding="async"
+        onError={onImgError}
+      />
+      {/* Cinematic overlay for legibility */}
+      <div className={cn("absolute inset-0 bg-gradient-to-r", tint)} />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+
+      {/* Content */}
+      <div className="relative z-10 flex h-full flex-col justify-end p-8 xl:p-10">
+        <span
+          className="inline-flex w-fit items-center gap-2 rounded-full bg-white/90 px-3 py-1 text-[11px] font-bn font-semibold uppercase tracking-[0.15em] shadow-soft backdrop-blur"
+          style={{ color: accent }}
+        >
+          <Sparkles className="size-3.5" aria-hidden="true" /> {eyebrow}
+        </span>
+        <h3 className="font-bn mt-4 text-4xl font-extrabold text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.55)] xl:text-5xl">
+          {title}
+        </h3>
+        <p className="font-bn mt-2 max-w-[26rem] text-sm text-white/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] xl:text-base">
+          {sub}
+        </p>
+        <Link
+          to={to as any}
+          className="mt-5 inline-flex w-fit items-center gap-2 rounded-full px-6 py-3 text-sm font-bn font-semibold text-white shadow-elegant transition-all duration-300 group-hover:gap-3 hover:-translate-y-0.5"
+          style={{ backgroundColor: accent }}
+        >
+          এখনই দেখুন <ArrowRight className="size-4" />
+        </Link>
       </div>
     </motion.div>
   );
 }
+
 
 /* ───────────── POPULAR PRODUCTS ───────────── */
 function SectionTitle({ title }: { title: string }) {
