@@ -439,7 +439,7 @@ function Reviews() {
               </div>
               <p className="font-bn mt-4 text-sm leading-relaxed text-foreground/85">{t.text}</p>
               <div className="mt-6 flex items-center gap-3 border-t border-border/50 pt-5">
-                <img src={t.avatar} alt={t.name} className="size-11 rounded-full object-cover" loading="lazy" />
+                <img src={t.avatar} alt={`${t.name} avatar`} width={44} height={44} className="size-11 rounded-full object-cover" loading="lazy" decoding="async" />
                 <div>
                   <p className="text-sm font-semibold text-foreground">{t.name}</p>
                   <p className="text-xs text-muted-foreground">{t.city} · {t.role}</p>
