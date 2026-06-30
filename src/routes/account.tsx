@@ -14,9 +14,9 @@ export const Route = createFileRoute("/account")({
 
 const nav = [
   { to: "/account", label: "Overview", Icon: Home, exact: true },
-  { to: "/account/orders", label: "Orders", Icon: Package },
-  { to: "/account/wishlist", label: "Wishlist", Icon: Heart },
-  { to: "/account/addresses", label: "Addresses", Icon: MapPin },
+  { to: "/account/orders", label: "Orders", Icon: Package, exact: false },
+  { to: "/account/wishlist", label: "Wishlist", Icon: Heart, exact: false },
+  { to: "/account/addresses", label: "Addresses", Icon: MapPin, exact: false },
 ] as const;
 
 function AccountLayout() {
