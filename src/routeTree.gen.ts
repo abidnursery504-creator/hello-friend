@@ -182,14 +182,14 @@ const ProductsSlugRoute = ProductsSlugRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
-  id: '/categories/$slug',
-  path: '/categories/$slug',
-  getParentRoute: () => rootRouteImport,
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => CategoriesRoute,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/blog/$slug',
-  path: '/blog/$slug',
-  getParentRoute: () => rootRouteImport,
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
 } as any)
 const AdminProductsRoute = AdminProductsRouteImport.update({
   id: '/products',
@@ -478,8 +478,6 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   TrackOrderRoute: typeof TrackOrderRoute
   VideoGalleryRoute: typeof VideoGalleryRoute
-  BlogSlugRoute: typeof BlogSlugRoute
-  CategoriesSlugRoute: typeof CategoriesSlugRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
   CategoriesIndexRoute: typeof CategoriesIndexRoute
@@ -678,17 +676,17 @@ declare module '@tanstack/react-router' {
     }
     '/categories/$slug': {
       id: '/categories/$slug'
-      path: '/categories/$slug'
+      path: '/$slug'
       fullPath: '/categories/$slug'
       preLoaderRoute: typeof CategoriesSlugRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof CategoriesRoute
     }
     '/blog/$slug': {
       id: '/blog/$slug'
-      path: '/blog/$slug'
+      path: '/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/admin/products': {
       id: '/admin/products'
@@ -800,8 +798,6 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   TrackOrderRoute: TrackOrderRoute,
   VideoGalleryRoute: VideoGalleryRoute,
-  BlogSlugRoute: BlogSlugRoute,
-  CategoriesSlugRoute: CategoriesSlugRoute,
   ProductsSlugRoute: ProductsSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
   CategoriesIndexRoute: CategoriesIndexRoute,
@@ -809,3 +805,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
