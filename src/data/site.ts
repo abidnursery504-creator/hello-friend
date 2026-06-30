@@ -1,14 +1,20 @@
 export const site = {
   name: "All Tree BD Shop",
   nameBn: "অনলাইনে গাছের চারা বিক্রয়",
-  tagline: "Bangladesh's premium online nursery",
-  taglineBn: "বাংলাদেশের প্রিমিয়াম অনলাইন নার্সারি",
-  phone: "+880 1700-000000",
-  whatsapp: "+880 1700-000000",
-  email: "hello@alltreebd.shop",
-  address: "Savar Nursery Hub, Dhaka, Bangladesh",
+  tagline: "Your trusted partner for hobby & rooftop gardens in Bangladesh",
+  taglineBn: "আপনার শখের ছাদ বাগানের বিশ্বস্ত সঙ্গী",
+  descriptionBn:
+    "🌿 আপনার শখের ছাদ বাগানের বিশ্বস্ত সঙ্গী।\n✅ জিও ব্যাগ সেটআপ করা রেডি মাতৃ গাছ।\n🍎 উন্নত জাতের ফলের চারা।\n🚚 সারা বাংলাদেশে কুরিয়ারে ডেলিভারি।",
+  description:
+    "Your trusted partner for hobby & rooftop gardens. Ready geo-bag setup mother plants, premium grafted fruit saplings, and nationwide courier delivery across Bangladesh.",
+  phone: "01839-208687",
+  phoneAlt: "01838-208687",
+  whatsapp: "01839-208687",
+  email: "ibrahimhossain362840@gmail.com",
+  address: "Puran Bogra, Rajshahi, Bangladesh",
+  addressBn: "পুরান বগুড়া, রাজশাহী, বাংলাদেশ",
   socials: {
-    facebook: "https://facebook.com",
+    facebook: "https://facebook.com/Alltreebd1Shop",
     instagram: "https://instagram.com",
     youtube: "https://youtube.com",
   },
@@ -16,6 +22,23 @@ export const site = {
   shipping: {
     freeAbove: 1500,
     flatFee: 120,
+  },
+  trustBadges: [
+    { label: "Cash on Delivery", labelBn: "ক্যাশ অন ডেলিভারি", icon: "wallet" },
+    { label: "Healthy Plants", labelBn: "স্বাস্থ্যকর গাছ", icon: "leaf" },
+    { label: "Premium Quality", labelBn: "প্রিমিয়াম মান", icon: "award" },
+    { label: "Nationwide Delivery", labelBn: "সারা দেশে ডেলিভারি", icon: "truck" },
+    { label: "Expert Support", labelBn: "এক্সপার্ট সাপোর্ট", icon: "headphones" },
+  ],
+  ctas: {
+    primary: "অর্ডার করুন এখনই",
+    primaryEn: "Order Now",
+    secondary: "চারা দেখুন",
+    secondaryEn: "Explore Plants",
+    call: "এখনই কল করুন",
+    callEn: "Call Now",
+    whatsapp: "হোয়াটসঅ্যাপে অর্ডার",
+    whatsappEn: "Order on WhatsApp",
   },
 };
 
