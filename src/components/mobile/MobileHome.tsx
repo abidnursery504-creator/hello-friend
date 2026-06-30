@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
-  ArrowRight, BadgeCheck, Headphones, Package, Truck, Wallet,
+  ArrowRight, BadgeCheck, Camera, Headphones, Package, Truck,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SmartImage } from "@/components/common/SmartImage";
@@ -11,16 +11,15 @@ import { useCart } from "@/context/CartContext";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { onImgError, unsplash, unsplashSrcSet } from "@/lib/img";
+import heroNursery from "@/assets/mobile-hero-nursery.jpg";
+import heroFlowers from "@/assets/mobile-hero-flowers.jpg";
+import heroMango from "@/assets/mobile-hero-mango.jpg";
 
-const HERO_SLIDES = [
-  "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&q=85&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=1200&q=85&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1591735026282-bb24fd6c0451?w=1200&q=85&auto=format&fit=crop",
-];
+const HERO_SLIDES = [heroNursery, heroMango, heroFlowers];
 
 const TRUST = [
   { Icon: Truck, t: "সারা বাংলাদেশে ডেলিভারি", s: "দ্রুত ও নিরাপদ ডেলিভারি" },
-  { Icon: Wallet, t: "ক্যাশ অন ডেলিভারি", s: "পণ্য বুঝে পেমেন্ট করুন" },
+  { Icon: Camera, t: "ক্যাশ অন ডেলিভারি", s: "পণ্য বুঝে নেবেন!" },
   { Icon: BadgeCheck, t: "উন্নত মানের গাছ", s: "সুস্থ ও পরিচর্যা করা গাছ" },
   { Icon: Headphones, t: "২৪/৭ কাস্টমার সাপোর্ট", s: "আমরা আছি আপনার পাশে" },
 ];
@@ -54,43 +53,44 @@ function MobileHero() {
 
   return (
     <section className="px-3 pt-3">
-      <div className="relative h-[420px] w-full overflow-hidden rounded-[28px] shadow-elegant">
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[28px] bg-[#f6f4e8] shadow-elegant">
         <motion.img
           key={slide}
-          src={unsplash(slide, 900, 80)}
-          srcSet={unsplashSrcSet(slide, [500, 750, 1000])}
-          sizes="100vw"
+          src={slide}
           alt="ফল ও ফুলের গাছ"
-          initial={{ opacity: 0, scale: 1.08 }}
+          initial={{ opacity: 0, scale: 1.06 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
           className="absolute inset-0 h-full w-full object-cover"
+          width={768}
+          height={1024}
           onError={onImgError}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-black/10" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
+        {/* Soft cream glow behind text for readability */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[55%] bg-gradient-to-b from-white/55 via-white/25 to-transparent" />
 
-        <div className="absolute inset-x-5 top-7 text-white">
-          <h1 className="font-bn text-[28px] font-bold leading-tight drop-shadow-lg">
+        <div className="absolute inset-x-0 top-[14%] flex flex-col items-center px-5 text-center">
+          <h1 className="font-bn text-[26px] font-extrabold leading-[1.15] text-[#1B5E20] drop-shadow-sm">
             ফল ও ফুলের গাছ
           </h1>
-          <p className="font-bn mt-1 text-[20px] font-semibold leading-tight drop-shadow-lg">
+          <p className="font-bn mt-1 text-[17px] font-bold leading-tight text-[#0E3A18]">
             এখন আপনার হাতের নাগালে
           </p>
-          <p className="font-bn mt-3 max-w-[230px] text-[12px] leading-relaxed text-white/90 drop-shadow">
-            উন্নত মানের গাছ · সঠিক পরিচর্যার গাইড ·<br />
+          <p className="font-bn mt-3 text-[11.5px] font-medium leading-relaxed text-foreground/80">
+            উন্নত মানের গাছ <span className="mx-1 text-foreground/40">|</span> সঠিক পরিচর্যার গাইড <span className="mx-1 text-foreground/40">|</span>
+            <br />
             সারা বাংলাদেশে ডেলিভারি
           </p>
           <Link
             to="/shop"
-            className="font-bn mt-5 inline-flex items-center gap-2 rounded-full bg-[#1B5E20] px-5 py-2.5 text-sm font-bold text-white shadow-elegant ring-1 ring-white/20 active:scale-95"
+            className="font-bn mt-4 inline-flex items-center gap-2 rounded-full bg-[#1B5E20] px-6 py-2.5 text-[13px] font-bold text-white shadow-elegant ring-1 ring-white/30 active:scale-95"
           >
             এখনই অর্ডার করুন
           </Link>
         </div>
 
         {/* Pagination */}
-        <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-1.5">
+        <div className="absolute inset-x-0 bottom-3 flex items-center justify-center gap-1.5">
           {HERO_SLIDES.map((_, idx) => (
             <button
               key={idx}
@@ -99,7 +99,7 @@ function MobileHero() {
               aria-label={`স্লাইড ${idx + 1}`}
               className={cn(
                 "h-1.5 rounded-full transition-all",
-                idx === i ? "w-6 bg-white" : "w-1.5 bg-white/50",
+                idx === i ? "w-6 bg-[#1B5E20]" : "w-1.5 bg-[#1B5E20]/40",
               )}
             />
           ))}
