@@ -209,20 +209,15 @@ export function Footer() {
 
         {/* Legal bar */}
         <div className="mt-14 rounded-2xl bg-white/5 px-5 py-4 ring-1 ring-white/10">
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 md:justify-end">
-            <Link to="/privacy" className="font-bn text-xs text-white/70 hover:text-[#E8C547]">প্রাইভেসি পলিসি</Link>
-            <Link to="/terms" className="font-bn text-xs text-white/70 hover:text-[#E8C547]">শর্তাবলি</Link>
-            <Link to="/return-policy" className="font-bn text-xs text-white/70 hover:text-[#E8C547]">রিটার্ন</Link>
-            <Link to="/shipping-policy" className="font-bn text-xs text-white/70 hover:text-[#E8C547]">শিপিং</Link>
+          <div className="flex flex-col items-center justify-between gap-3 md:flex-row">
+            <p className="font-bn text-xs text-white/70">© {new Date().getFullYear()} অল ট্রি বিডি শপ। সর্বস্বত্ব সংরক্ষিত।</p>
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+              <Link to="/privacy" className="font-bn text-xs text-white/70 hover:text-[#E8C547]">প্রাইভেসি পলিসি</Link>
+              <Link to="/terms" className="font-bn text-xs text-white/70 hover:text-[#E8C547]">শর্তাবলি</Link>
+              <Link to="/return-policy" className="font-bn text-xs text-white/70 hover:text-[#E8C547]">রিটার্ন</Link>
+              <Link to="/shipping-policy" className="font-bn text-xs text-white/70 hover:text-[#E8C547]">শিপিং</Link>
+            </div>
           </div>
-        </div>
-
-        {/* Copyright */}
-        <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs text-white/65 sm:flex-row">
-          <p className="font-bn">© {new Date().getFullYear()} অল ট্রি বিডি শপ। সর্বস্বত্ব সংরক্ষিত।</p>
-          <p className="font-bn flex items-center gap-1.5">
-            বাংলাদেশে <span className="text-rose-400">❤</span> দিয়ে তৈরি 🇧🇩
-          </p>
         </div>
       </Container>
     </footer>
