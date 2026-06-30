@@ -229,6 +229,16 @@
 .animate-fade-up { animation: fade-up 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 .animate-ken-burns { animation: ken-burns 8s ease-out forwards; }
 
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-ken-burns, .animate-float, .animate-fade-up { animation: none !important; }
+}
+
 .skeleton {
   background: linear-gradient(90deg,
     color-mix(in oklab, var(--muted) 80%, transparent) 0%,

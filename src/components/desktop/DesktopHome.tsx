@@ -8,7 +8,7 @@ import {
 import { Container } from "@/components/common/Container";
 import { SmartImage } from "@/components/common/SmartImage";
 import { ProductCard } from "@/components/common/ProductCard";
-import { bestsellers, getProductsByCategory } from "@/data/products";
+import { bestsellers, getProductsByCategory, newArrivals } from "@/data/products";
 import { testimonials, posts, site } from "@/data/site";
 import { cn } from "@/lib/utils";
 
@@ -43,20 +43,37 @@ function Hero() {
   const [paused, setPaused] = useState(false);
   useEffect(() => {
     if (paused) return;
+    const reduced = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
     const t = setInterval(() => setI((v) => (v + 1) % SLIDES.length), 6000);
     return () => clearInterval(t);
   }, [paused]);
   const go = (n: number) => setI((n + SLIDES.length) % SLIDES.length);
+  const onKey = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") { e.preventDefault(); go(i - 1); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); go(i + 1); }
+  };
   const s = SLIDES[i];
 
   return (
     <section
       className="relative overflow-hidden bg-[#EAF8E7]"
+      aria-label="Featured collections"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       <Container className="relative pt-6">
-        <div className="relative h-[640px] overflow-hidden rounded-[36px] bg-gradient-to-br from-[#EAF8E7] via-[#F5FBEF] to-[#E2F2DA] shadow-elegant">
+        <div
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Homepage hero slider"
+          aria-live={paused ? "polite" : "off"}
+          tabIndex={0}
+          onKeyDown={onKey}
+          onFocus={() => setPaused(true)}
+          onBlur={() => setPaused(false)}
+          className="relative h-[640px] overflow-hidden rounded-[36px] bg-gradient-to-br from-[#EAF8E7] via-[#F5FBEF] to-[#E2F2DA] shadow-elegant focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2"
+        >
           <AnimatePresence mode="sync">
             <motion.div
               key={i}
@@ -65,8 +82,19 @@ function Hero() {
               exit={{ opacity: 0 }}
               transition={{ duration: 1.2, ease: "easeInOut" }}
               className="absolute inset-0"
+              aria-hidden="true"
             >
-              <img src={s.image} alt="" className="h-full w-full object-cover animate-ken-burns" />
+              <img
+                src={s.image}
+                alt=""
+                width={2400}
+                height={1200}
+                fetchPriority={i === 0 ? "high" : "auto"}
+                loading={i === 0 ? "eager" : "lazy"}
+                decoding="async"
+                sizes="100vw"
+                className="h-full w-full object-cover animate-ken-burns"
+              />
               <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/40 to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0d2b14]/30 via-transparent to-transparent" />
             </motion.div>
@@ -82,9 +110,12 @@ function Hero() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
                   className="max-w-xl"
+                  role="group"
+                  aria-roledescription="slide"
+                  aria-label={`Slide ${i + 1} of ${SLIDES.length}`}
                 >
                   <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#1B5E20] backdrop-blur shadow-soft">
-                    <Sparkles className="size-3.5 text-gold" /> {s.eyebrowBn}
+                    <Sparkles className="size-3.5 text-gold" aria-hidden="true" /> {s.eyebrowBn}
                   </div>
                   <h1 className="font-bn mt-6 text-5xl font-extrabold leading-[1.1] text-[#1B5E20] sm:text-6xl xl:text-7xl">
                     {s.titleBn}
@@ -94,14 +125,14 @@ function Hero() {
                   <div className="mt-9 flex flex-wrap gap-3">
                     <Link
                       to="/shop"
-                      className="group inline-flex items-center gap-2 rounded-full bg-[#2E7D32] px-8 py-4 text-sm font-bn font-semibold text-white shadow-elegant transition hover:-translate-y-0.5 hover:bg-[#1B5E20]"
+                      className="group inline-flex items-center gap-2 rounded-full bg-[#2E7D32] px-8 py-4 text-sm font-bn font-semibold text-white shadow-elegant transition hover:-translate-y-0.5 hover:bg-[#1B5E20] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2"
                     >
                       {site.ctas.primary}
-                      <ArrowRight className="size-4 transition group-hover:translate-x-1" />
+                      <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden="true" />
                     </Link>
                     <Link
                       to="/categories"
-                      className="inline-flex items-center gap-2 rounded-full border border-[#2E7D32]/30 bg-white/80 px-7 py-4 text-sm font-bn font-semibold text-[#1B5E20] backdrop-blur transition hover:bg-white"
+                      className="inline-flex items-center gap-2 rounded-full border border-[#2E7D32]/30 bg-white/80 px-7 py-4 text-sm font-bn font-semibold text-[#1B5E20] backdrop-blur transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2"
                     >
                       {site.ctas.secondary}
                     </Link>
@@ -113,30 +144,39 @@ function Hero() {
 
           <button
             type="button"
-            aria-label="Previous"
+            aria-label="Previous slide"
+            aria-controls="hero-slider"
             onClick={() => go(i - 1)}
-            className="absolute left-6 top-1/2 z-20 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[#1B5E20] shadow-soft backdrop-blur transition hover:scale-110 hover:bg-white"
+            className="absolute left-6 top-1/2 z-20 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[#1B5E20] shadow-soft backdrop-blur transition hover:scale-110 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2"
           >
-            <ChevronLeft className="size-5" />
+            <ChevronLeft className="size-5" aria-hidden="true" />
           </button>
           <button
             type="button"
-            aria-label="Next"
+            aria-label="Next slide"
+            aria-controls="hero-slider"
             onClick={() => go(i + 1)}
-            className="absolute right-6 top-1/2 z-20 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[#1B5E20] shadow-soft backdrop-blur transition hover:scale-110 hover:bg-white"
+            className="absolute right-6 top-1/2 z-20 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[#1B5E20] shadow-soft backdrop-blur transition hover:scale-110 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2"
           >
-            <ChevronRight className="size-5" />
+            <ChevronRight className="size-5" aria-hidden="true" />
           </button>
 
-          <div className="absolute bottom-7 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
+          <div
+            className="absolute bottom-7 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2"
+            role="tablist"
+            aria-label="Hero slides"
+          >
             {SLIDES.map((_, n) => (
               <button
                 key={n}
                 type="button"
-                aria-label={`Slide ${n + 1}`}
+                role="tab"
+                aria-selected={n === i}
+                aria-current={n === i ? "true" : undefined}
+                aria-label={`Go to slide ${n + 1} of ${SLIDES.length}`}
                 onClick={() => go(n)}
                 className={cn(
-                  "h-2 rounded-full transition-all duration-500",
+                  "h-2 rounded-full transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2",
                   n === i ? "w-10 bg-[#2E7D32]" : "w-2.5 bg-white/80 hover:bg-white",
                 )}
               />
@@ -168,7 +208,7 @@ function Hero() {
               )}
             >
               <div className="grid size-14 shrink-0 place-items-center rounded-2xl bg-[#EAF8E7] text-[#1B5E20] transition group-hover:scale-110 group-hover:bg-[#2E7D32] group-hover:text-white">
-                <f.Icon className="size-7" strokeWidth={2.2} />
+                <f.Icon className="size-7" strokeWidth={2.2} aria-hidden="true" />
               </div>
               <div className="min-w-0">
                 <p className="font-bn text-sm font-semibold text-foreground sm:text-base">{f.t}</p>
@@ -239,7 +279,7 @@ function CatBanner({ to, bg, title, titleColor, sub, img, cta, ctaColor }: {
         </div>
       </div>
       <div className="absolute inset-y-0 right-0 w-[55%]">
-        <img src={img} alt="" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+        <img src={img} alt="" width={1400} height={900} sizes="(min-width: 1024px) 50vw, 100vw" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
         <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-transparent" />
       </div>
     </motion.div>
@@ -314,9 +354,13 @@ function CodBanner() {
             <div className="relative h-[260px]">
               <img
                 src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&q=85&auto=format&fit=crop"
-                alt="Delivery"
+                alt="Cash on delivery courier"
+                width={1200}
+                height={800}
+                sizes="(min-width: 768px) 40vw, 100vw"
                 className="absolute inset-0 h-full w-full rounded-2xl object-cover shadow-elegant"
                 loading="lazy"
+                decoding="async"
               />
             </div>
           </div>
@@ -328,6 +372,8 @@ function CodBanner() {
 
 /* ───────────── MORE PRODUCT SECTIONS ───────────── */
 function MoreProducts() {
+  const fresh = newArrivals().slice(0, 8);
+  const featured = bestsellers().slice(0, 8);
   const fruit = [
     ...getProductsByCategory("guava"),
     ...getProductsByCategory("litchi"),
@@ -339,24 +385,32 @@ function MoreProducts() {
     ...getProductsByCategory("indoor"),
     ...getProductsByCategory("herbs"),
   ].slice(0, 8);
+
+  const Rail = ({ title, items, href, ctaBn }: { title: string; items: typeof fruit; href: string; ctaBn: string }) => (
+    <section className="py-10" aria-label={title}>
+      <Container>
+        <SectionTitle title={title} />
+        <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+          {items.map((p, i) => <ProductCard key={p.slug} product={p} index={i} />)}
+        </div>
+        <div className="mt-10 text-center">
+          <Link
+            to={href as any}
+            className="inline-flex items-center gap-2 rounded-full border border-[#2E7D32]/30 bg-white px-7 py-3.5 text-sm font-bn font-semibold text-[#1B5E20] shadow-soft transition hover:-translate-y-0.5 hover:bg-[#EAF8E7] hover:shadow-elegant focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2"
+          >
+            {ctaBn} <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
+        </div>
+      </Container>
+    </section>
+  );
+
   return (
     <>
-      <section className="py-10">
-        <Container>
-          <SectionTitle title="ফল গাছের সংগ্রহ" />
-          <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
-            {fruit.map((p, i) => <ProductCard key={p.slug} product={p} index={i} />)}
-          </div>
-        </Container>
-      </section>
-      <section className="py-10">
-        <Container>
-          <SectionTitle title="ফুল ও ইনডোর গাছ" />
-          <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
-            {flowers.map((p, i) => <ProductCard key={p.slug} product={p} index={i} />)}
-          </div>
-        </Container>
-      </section>
+      {fresh.length > 0 && <Rail title="নতুন এসেছে" items={fresh} href="/shop?sort=new" ctaBn="সব নতুন গাছ" />}
+      {featured.length > 0 && <Rail title="বেস্ট সেলার" items={featured} href="/shop?sort=bestsellers" ctaBn="সব বেস্ট সেলার" />}
+      <Rail title="ফল গাছের সংগ্রহ" items={fruit} href="/categories/mango" ctaBn="সব ফল গাছ" />
+      <Rail title="ফুল ও ইনডোর গাছ" items={flowers} href="/categories/flowering" ctaBn="সব ফুল গাছ" />
     </>
   );
 }
@@ -385,7 +439,7 @@ function Reviews() {
               </div>
               <p className="font-bn mt-4 text-sm leading-relaxed text-foreground/85">{t.text}</p>
               <div className="mt-6 flex items-center gap-3 border-t border-border/50 pt-5">
-                <img src={t.avatar} alt={t.name} className="size-11 rounded-full object-cover" loading="lazy" />
+                <img src={t.avatar} alt={`${t.name} avatar`} width={44} height={44} className="size-11 rounded-full object-cover" loading="lazy" decoding="async" />
                 <div>
                   <p className="text-sm font-semibold text-foreground">{t.name}</p>
                   <p className="text-xs text-muted-foreground">{t.city} · {t.role}</p>
