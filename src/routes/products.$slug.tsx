@@ -82,7 +82,7 @@ function ProductPage() {
           {gallery.length > 1 && (
             <div className="mt-4 grid grid-cols-5 gap-3">
               {gallery.map((g: string, i: number) => (
-                <button key={g + i} onClick={() => setActive(i)} className={cn("overflow-hidden rounded-xl border-2 transition", i === active ? "border-primary" : "border-transparent opacity-70 hover:opacity-100")}>
+                <button key={g + i} type="button" onClick={() => setActive(i)} aria-label={`View image ${i + 1}`} aria-pressed={i === active} className={cn("overflow-hidden rounded-xl border-2 transition", i === active ? "border-primary" : "border-transparent opacity-70 hover:opacity-100")}>
                   <SmartImage src={g} alt="" aspect="square" rounded={false} />
                 </button>
               ))}

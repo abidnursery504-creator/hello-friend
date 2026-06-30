@@ -1,8 +1,15 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Leaf, Mail, MapPin, Phone, Youtube } from "lucide-react";
+import { toast } from "sonner";
 import { site } from "@/data/site";
 import { categories } from "@/data/categories";
 import { Container } from "@/components/common/Container";
+
+const socialLinks = [
+  { Icon: Facebook, href: site.socials.facebook, label: "Facebook" },
+  { Icon: Instagram, href: site.socials.instagram, label: "Instagram" },
+  { Icon: Youtube, href: site.socials.youtube, label: "YouTube" },
+];
 
 const cols = [
   {
@@ -57,8 +64,8 @@ export function Footer() {
               Bangladesh's premium online nursery — grafted fruit plants, indoor greens & rare exotics, hand-delivered to all 64 districts.
             </p>
             <div className="mt-5 flex items-center gap-2">
-              {[Facebook, Instagram, Youtube].map((Icon, i) => (
-                <a key={i} href="#" aria-label="Social" className="grid size-10 place-items-center rounded-full bg-white/10 transition hover:bg-gold hover:text-gold-foreground">
+              {socialLinks.map(({ Icon, href, label }) => (
+                <a key={label} href={href} target="_blank" rel="noreferrer noopener" aria-label={label} className="grid size-10 place-items-center rounded-full bg-white/10 transition hover:bg-gold hover:text-gold-foreground">
                   <Icon className="size-4" />
                 </a>
               ))}
@@ -109,10 +116,18 @@ export function Footer() {
               </li>
             </ul>
 
-            <form onSubmit={(e) => e.preventDefault()} className="mt-6">
-              <label className="text-xs uppercase tracking-[0.18em] opacity-80">Plant tips · weekly</label>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const form = e.currentTarget;
+                toast.success("Subscribed — check your inbox for tips 🌱");
+                form.reset();
+              }}
+              className="mt-6"
+            >
+              <label htmlFor="footer-newsletter" className="text-xs uppercase tracking-[0.18em] opacity-80">Plant tips · weekly</label>
               <div className="mt-2 flex items-center gap-2 rounded-full border border-white/15 bg-white/5 p-1.5 backdrop-blur">
-                <input type="email" required placeholder="your@email.com" className="flex-1 bg-transparent px-3 py-2 text-sm placeholder:text-white/50 focus:outline-none" />
+                <input id="footer-newsletter" name="email" type="email" required placeholder="your@email.com" className="flex-1 bg-transparent px-3 py-2 text-sm placeholder:text-white/50 focus:outline-none" />
                 <button type="submit" className="rounded-full bg-gold px-4 py-2 text-xs font-semibold text-gold-foreground transition hover:brightness-110">
                   Subscribe
                 </button>

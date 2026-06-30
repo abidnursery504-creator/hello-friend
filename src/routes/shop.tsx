@@ -83,7 +83,7 @@ function Shop() {
         <aside className={cn("fixed inset-0 z-50 bg-background/95 p-4 backdrop-blur lg:static lg:bg-transparent lg:p-0", !open && "hidden lg:block")}>
           <div className="mb-4 flex items-center justify-between lg:hidden">
             <h3 className="font-semibold">Filters</h3>
-            <button onClick={() => setOpen(false)} className="grid size-9 place-items-center rounded-full border"><X className="size-4" /></button>
+            <button aria-label="Close filters" onClick={() => setOpen(false)} className="grid size-9 place-items-center rounded-full border"><X className="size-4" /></button>
           </div>
           <div className="space-y-6 rounded-3xl border border-border bg-card p-5">
             <div>

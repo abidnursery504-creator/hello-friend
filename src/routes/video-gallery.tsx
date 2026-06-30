@@ -63,7 +63,7 @@ function VideoGallery() {
         {open && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] grid place-items-center bg-black/90 p-4" onClick={() => setOpen(null)}>
-            <button className="absolute right-5 top-5 grid size-11 place-items-center rounded-full bg-white/10 text-white"><X /></button>
+            <button aria-label="Close video" onClick={() => setOpen(null)} className="absolute right-5 top-5 grid size-11 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20"><X /></button>
             <div className="aspect-video w-full max-w-5xl overflow-hidden rounded-2xl bg-black shadow-2xl" onClick={(e) => e.stopPropagation()}>
               <iframe className="h-full w-full" src={`https://www.youtube.com/embed/${open}?autoplay=1`} title="Video" allow="autoplay; encrypted-media" allowFullScreen />
             </div>
