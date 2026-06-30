@@ -335,8 +335,8 @@ function CodBanner() {
         >
           <div className="grid items-center gap-6 p-10 md:grid-cols-[1.2fr_1fr] md:p-14">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[#1B5E20] shadow-soft">
-                <Wallet className="size-3.5" /> Cash on Delivery
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold tracking-wider text-[#1B5E20] shadow-soft">
+                <Wallet className="size-3.5" /> <span className="font-bn">ক্যাশ অন ডেলিভারি</span>
               </div>
               <h3 className="font-bn mt-5 text-4xl font-extrabold text-[#1B5E20] md:text-5xl">
                 ক্যাশ অন ডেলিভারি
@@ -354,7 +354,7 @@ function CodBanner() {
             <div className="relative h-[260px]">
               <img
                 src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&q=85&auto=format&fit=crop"
-                alt="Cash on delivery courier"
+                alt="ক্যাশ অন ডেলিভারি কুরিয়ার"
                 width={1200}
                 height={800}
                 sizes="(min-width: 768px) 40vw, 100vw"
@@ -477,13 +477,13 @@ function BlogSection() {
                   </div>
                 </div>
                 <div className="p-6">
-                  <p className="text-xs text-muted-foreground">{p.date} · {p.readTime}</p>
-                  <h3 className="mt-2 font-display text-lg font-semibold text-foreground line-clamp-2 transition group-hover:text-[#2E7D32]">
+                  <p className="font-bn text-xs text-muted-foreground">{p.date} · {p.readTime}</p>
+                  <h3 className="font-bn mt-2 font-display text-lg font-semibold text-foreground line-clamp-2 transition group-hover:text-[#2E7D32]">
                     {p.title}
                   </h3>
-                  <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{p.excerpt}</p>
-                  <div className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#2E7D32]">
-                    Read more <ArrowUpRight className="size-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  <p className="font-bn mt-2 text-sm text-muted-foreground line-clamp-2">{p.excerpt}</p>
+                  <div className="font-bn mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#2E7D32]">
+                    আরও পড়ুন <ArrowUpRight className="size-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </div>
                 </div>
               </Link>
