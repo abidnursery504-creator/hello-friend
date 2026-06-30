@@ -52,7 +52,7 @@ export function SmartImage({
         {...props}
         alt={alt}
         srcSet={props.srcSet ?? srcSet}
-        sizes={props.sizes ?? sizes}
+        sizes={sizes}
         loading={priority ? "eager" : (props.loading ?? "lazy")}
         fetchPriority={priority ? "high" : (props.fetchPriority ?? "auto")}
         decoding="async"
