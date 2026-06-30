@@ -1,9 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import {
   ArrowRight, Award, Clock, Facebook, Headphones, Instagram, Leaf, Mail,
-  MapPin, MessageCircle, Phone, Send, ShieldCheck, Truck, Wallet, Youtube,
+  MapPin, MessageCircle, Phone, ShieldCheck, Truck, Wallet, Youtube,
 } from "lucide-react";
-import { toast } from "sonner";
 import { site } from "@/data/site";
 import { categories } from "@/data/categories";
 import { Container } from "@/components/common/Container";
