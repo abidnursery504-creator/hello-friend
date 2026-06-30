@@ -88,84 +88,70 @@ function Hero() {
           onBlur={() => setPaused(false)}
           className="relative h-[520px] overflow-hidden rounded-[36px] bg-gradient-to-br from-[#EAF8E7] via-[#F2FBEE] to-[#D7F0CC] shadow-soft ring-1 ring-[#2E7D32]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2 lg:h-[600px]"
         >
-          <div className="relative z-10 grid h-full grid-cols-1 lg:grid-cols-[1fr_1.15fr]">
-            {/* LEFT — text */}
-            <div className="flex h-full items-center px-10 py-10 lg:pl-16 xl:pl-20">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`copy-${i}`}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -16 }}
-                  transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-                  className="max-w-xl"
-                  role="group"
-                  aria-roledescription="slide"
-                  aria-label={`Slide ${i + 1} of ${SLIDES.length}`}
-                >
-                  <div className="inline-flex items-center gap-2 rounded-full bg-white/85 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1B5E20] shadow-soft ring-1 ring-[#2E7D32]/15 backdrop-blur">
-                    <Sparkles className="size-3.5 text-gold" aria-hidden="true" /> {s.eyebrowBn}
-                  </div>
-                  <h1 className="font-bn mt-5 text-[44px] font-extrabold leading-[1.05] text-[#1B3A1F] sm:text-5xl xl:text-[64px]">
-                    {s.titleBn}
-                  </h1>
-                  <p className="font-bn mt-3 text-2xl font-semibold text-[#2E7D32] xl:text-3xl">{s.subBn}</p>
-                  <p className="font-bn mt-5 max-w-md text-base text-foreground/75 xl:text-lg">{s.metaBn}</p>
-                  <div className="mt-8 flex flex-wrap gap-3">
-                    <Link
-                      to={s.to as any}
-                      className="group inline-flex items-center gap-2 rounded-full bg-[#2E7D32] px-8 py-4 text-sm font-bn font-semibold text-white shadow-elegant transition hover:-translate-y-0.5 hover:bg-[#1B5E20] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B5E20] focus-visible:ring-offset-2"
-                    >
-                      এখনই অর্ডার করুন
-                      <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden="true" />
-                    </Link>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            {/* RIGHT — image */}
-            <div className="relative hidden h-full lg:block">
-              <AnimatePresence mode="sync">
-                <motion.div
-                  key={`img-${i}`}
-                  initial={{ opacity: 0, scale: 1.04 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1, ease: "easeOut" }}
-                  className="absolute inset-0"
-                  aria-hidden="true"
-                >
-                  <img
-                    src={s.image}
-                    alt=""
-                    width={1600}
-                    height={1024}
-                    fetchPriority={i === 0 ? "high" : "auto"}
-                    loading={i === 0 ? "eager" : "lazy"}
-                    decoding="async"
-                    sizes="(min-width: 1024px) 55vw, 100vw"
-                    className="h-full w-full object-cover"
-                  />
-                  {/* Soft blend into the green panel on the left edge */}
-                  <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#EAF8E7] to-transparent" />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            {/* Mobile image (under the text on small screens) */}
-            <div className="relative -mt-4 block h-[260px] w-full overflow-hidden lg:hidden">
+          {/* Full-bleed background image */}
+          <AnimatePresence mode="sync">
+            <motion.div
+              key={`img-${i}`}
+              initial={{ opacity: 0, scale: 1.04 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="absolute inset-0 z-0"
+              aria-hidden="true"
+            >
               <img
                 src={s.image}
                 alt=""
                 width={1600}
                 height={1024}
-                loading="eager"
-                fetchPriority="high"
+                fetchPriority={i === 0 ? "high" : "auto"}
+                loading={i === 0 ? "eager" : "lazy"}
                 decoding="async"
+                sizes="100vw"
                 className="h-full w-full object-cover"
               />
-            </div>
+              {/* Readability overlay for centered text */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/30 to-black/55" />
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Centered text */}
+          <div className="relative z-10 flex h-full items-center justify-center px-6 py-10 text-center">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`copy-${i}`}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+                className="mx-auto max-w-3xl"
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`Slide ${i + 1} of ${SLIDES.length}`}
+              >
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/90 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1B5E20] shadow-soft ring-1 ring-white/40 backdrop-blur">
+                  <Sparkles className="size-3.5 text-gold" aria-hidden="true" /> {s.eyebrowBn}
+                </div>
+                <h1 className="font-bn mt-5 text-[40px] font-extrabold leading-[1.05] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-5xl xl:text-[64px]">
+                  {s.titleBn}
+                </h1>
+                <p className="font-bn mt-4 text-2xl font-semibold text-white/95 drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)] xl:text-3xl">
+                  {s.subBn}
+                </p>
+                <p className="font-bn mx-auto mt-5 max-w-xl text-base text-white/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] xl:text-lg">
+                  {s.metaBn}
+                </p>
+                <div className="mt-8 flex flex-wrap justify-center gap-3">
+                  <Link
+                    to={s.to as any}
+                    className="group inline-flex items-center gap-2 rounded-full bg-[#2E7D32] px-8 py-4 text-sm font-bn font-semibold text-white shadow-elegant transition hover:-translate-y-0.5 hover:bg-[#1B5E20] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+                  >
+                    এখনই অর্ডার করুন
+                    <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden="true" />
+                  </Link>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           {/* Arrows */}
