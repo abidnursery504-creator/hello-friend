@@ -10,51 +10,36 @@ import { SmartImage } from "@/components/common/SmartImage";
 import { ProductCard } from "@/components/common/ProductCard";
 import { bestsellers, getProductsByCategory, newArrivals } from "@/data/products";
 import { testimonials, posts, site } from "@/data/site";
-import { cn } from "@/lib/utils";
-import { onImgError, unsplash, unsplashSrcSet, lqip } from "@/lib/img";
+import hero1 from "@/assets/hero-plants-1.jpg";
+import hero2 from "@/assets/hero-plants-2.jpg";
+import hero3 from "@/assets/hero-plants-3.jpg";
 
 
-/* ───────────── HERO SLIDER ───────────── */
+/* ───────────── HERO SLIDER (light, split layout — reference style) ───────────── */
 const SLIDES = [
   {
-    image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=2000&q=90&auto=format&fit=crop",
-    eyebrowBn: "প্রিমিয়াম ফলের গাছ",
-    titleBn: "ফলের গাছের সেরা সংগ্রহ",
-    subBn: "আম · লেবু · মাল্টা · ড্রাগন",
-    metaBn: "গ্রাফটিং করা মাতৃ গাছ · দ্রুত ফলদানে সক্ষম · সারা বাংলাদেশে ডেলিভারি",
-    to: "/categories/fruit",
+    image: hero1,
+    eyebrowBn: "প্রিমিয়াম নার্সারি",
+    titleBn: "ফল ও ফুলের গাছ",
+    subBn: "এখন আপনার হাতের নাগালে",
+    metaBn: "উন্নত মানের গাছ | সঠিক পরিচর্যার গাইড | সারা বাংলাদেশে ডেলিভারি",
+    to: "/shop",
   },
   {
-    image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=2000&q=90&auto=format&fit=crop",
-    eyebrowBn: "সারা বছর ফুল",
+    image: hero2,
+    eyebrowBn: "ফুলের সংগ্রহ",
     titleBn: "প্রিমিয়াম ফুলের গাছ",
-    subBn: "গোলাপ · জবা · বাগানবিলাস",
-    metaBn: "সুগন্ধি, রঙিন ও দীর্ঘস্থায়ী ফুলের চারা সংগ্রহ",
+    subBn: "রঙিন বাগানের শুরু এখানেই",
+    metaBn: "গোলাপ · জবা · বাগানবিলাস · মৌসুমী ফুল — সবই এক জায়গায়",
     to: "/categories/flowering",
   },
   {
-    image: "https://images.unsplash.com/photo-1591735026282-bb24fd6c0451?w=2000&q=90&auto=format&fit=crop",
-    eyebrowBn: "আমের মৌসুম শুরু",
-    titleBn: "এক্সক্লুসিভ আম কালেকশন",
-    subBn: "আম্রপালি · হাঁড়িভাঙ্গা · বারি-৪",
-    metaBn: "১৮–২৪ মাসের মধ্যে ফল · নির্বাচিত মাতৃ গাছ থেকে গ্রাফটিং",
+    image: hero3,
+    eyebrowBn: "গ্রাফটিং ফলের চারা",
+    titleBn: "ফলদ গাছের সেরা সংগ্রহ",
+    subBn: "দ্রুত ফলদানে সক্ষম মাতৃ গাছ",
+    metaBn: "আম · লেবু · মাল্টা · ড্রাগন — ১৮–২৪ মাসেই ফল",
     to: "/categories/mango",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1527325678964-54921661f888?w=2000&q=90&auto=format&fit=crop",
-    eyebrowBn: "এক্সোটিক ফল",
-    titleBn: "ড্রাগন ফলের চারা",
-    subBn: "লাল ও সাদা শাঁস · উচ্চ ফলনশীল",
-    metaBn: "ছাদ বাগান ও বাণিজ্যিক চাষের জন্য সেরা পছন্দ",
-    to: "/categories/dragon",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=2000&q=90&auto=format&fit=crop",
-    eyebrowBn: "নার্সারি ও বাগান",
-    titleBn: "সবুজে গড়া বাগান",
-    subBn: "ইনডোর · আউটডোর · ছাদবাগান",
-    metaBn: "প্রিমিয়াম পটেড প্ল্যান্ট, পরিচর্যার গাইড ও এক্সপার্ট সাপোর্ট",
-    to: "/categories",
   },
 ];
 
@@ -82,12 +67,11 @@ function Hero() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Decorative leaves */}
+      {/* Soft decorative blobs */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -left-24 -top-24 size-[420px] rounded-full bg-[#2E7D32]/10 blur-3xl" />
-        <div className="absolute -right-24 top-32 size-[520px] rounded-full bg-[#C8A415]/10 blur-3xl" />
-        <Leaf className="absolute left-6 top-10 size-24 -rotate-12 text-[#2E7D32]/10" />
-        <Leaf className="absolute right-10 bottom-10 size-32 rotate-12 text-[#2E7D32]/10" />
+        <div className="absolute -left-32 -top-32 size-[460px] rounded-full bg-[#2E7D32]/10 blur-3xl" />
+        <div className="absolute -right-24 top-40 size-[520px] rounded-full bg-[#C8A415]/10 blur-3xl" />
+        <Leaf className="absolute left-10 bottom-10 size-28 -rotate-12 text-[#2E7D32]/10" />
       </div>
 
       <Container className="relative pt-6">
@@ -100,44 +84,14 @@ function Hero() {
           onKeyDown={onKey}
           onFocus={() => setPaused(true)}
           onBlur={() => setPaused(false)}
-          className="relative h-[560px] overflow-hidden rounded-[40px] border border-white/60 bg-gradient-to-br from-white/60 via-white/30 to-[#E2F2DA]/60 shadow-elegant backdrop-blur-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2 lg:h-[680px] xl:h-[740px]"
+          className="relative h-[520px] overflow-hidden rounded-[36px] bg-gradient-to-br from-[#EAF8E7] via-[#F2FBEE] to-[#D7F0CC] shadow-soft ring-1 ring-[#2E7D32]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2 lg:h-[600px]"
         >
-          {/* Full bleed background image (all viewports) */}
-          <AnimatePresence mode="sync">
-            <motion.div
-              key={`bg-${i}`}
-              initial={{ opacity: 0, scale: 1.06 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-              className="absolute inset-0"
-              aria-hidden="true"
-            >
-              <img
-                src={unsplash(s.image, 1600, 75)}
-                srcSet={unsplashSrcSet(s.image, [640, 1024, 1280, 1600])}
-                alt=""
-                width={1600}
-                height={1100}
-                fetchPriority={i === 0 ? "high" : "auto"}
-                loading={i === 0 ? "eager" : "lazy"}
-                decoding="async"
-                sizes="100vw"
-                onError={onImgError}
-                style={{ backgroundImage: `url(${lqip(s.image)})`, backgroundSize: "cover", backgroundPosition: "center" }}
-                className="h-full w-full object-cover animate-ken-burns"
-              />
-              {/* Readability overlays */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/35 to-black/10" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0F3D17]/55 via-transparent to-transparent" />
-            </motion.div>
-          </AnimatePresence>
-
-          <div className="relative z-10 flex h-full items-center">
-            <div className="w-full px-8 py-10 md:px-12 lg:max-w-2xl lg:pl-16 xl:pl-24">
+          <div className="relative z-10 grid h-full grid-cols-1 lg:grid-cols-[1fr_1.15fr]">
+            {/* LEFT — text */}
+            <div className="flex h-full items-center px-10 py-10 lg:pl-16 xl:pl-20">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={i}
+                  key={`copy-${i}`}
                   initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -16 }}
@@ -147,56 +101,92 @@ function Hero() {
                   aria-roledescription="slide"
                   aria-label={`Slide ${i + 1} of ${SLIDES.length}`}
                 >
-                  <div className="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#1B5E20] shadow-soft ring-1 ring-white/40 backdrop-blur">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-white/85 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1B5E20] shadow-soft ring-1 ring-[#2E7D32]/15 backdrop-blur">
                     <Sparkles className="size-3.5 text-gold" aria-hidden="true" /> {s.eyebrowBn}
                   </div>
-                  <h1 className="font-bn mt-6 text-5xl font-extrabold leading-[1.05] text-white drop-shadow-lg sm:text-6xl xl:text-7xl">
+                  <h1 className="font-bn mt-5 text-[44px] font-extrabold leading-[1.05] text-[#1B3A1F] sm:text-5xl xl:text-[64px]">
                     {s.titleBn}
                   </h1>
-                  <p className="font-bn mt-4 text-2xl font-semibold text-gold drop-shadow xl:text-3xl">{s.subBn}</p>
-                  <p className="font-bn mt-5 max-w-md text-base text-white/90 drop-shadow xl:text-lg">{s.metaBn}</p>
-                  <div className="mt-9 flex flex-wrap gap-3">
+                  <p className="font-bn mt-3 text-2xl font-semibold text-[#2E7D32] xl:text-3xl">{s.subBn}</p>
+                  <p className="font-bn mt-5 max-w-md text-base text-foreground/75 xl:text-lg">{s.metaBn}</p>
+                  <div className="mt-8 flex flex-wrap gap-3">
                     <Link
-                      to="/shop"
-                      className="group inline-flex items-center gap-2 rounded-full bg-[#2E7D32] px-8 py-4 text-sm font-bn font-semibold text-white shadow-elegant transition hover:-translate-y-0.5 hover:bg-[#1B5E20] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+                      to={s.to as any}
+                      className="group inline-flex items-center gap-2 rounded-full bg-[#2E7D32] px-8 py-4 text-sm font-bn font-semibold text-white shadow-elegant transition hover:-translate-y-0.5 hover:bg-[#1B5E20] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B5E20] focus-visible:ring-offset-2"
                     >
                       এখনই অর্ডার করুন
                       <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden="true" />
-                    </Link>
-                    <Link
-                      to="/shop"
-                      className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/15 px-7 py-4 text-sm font-bn font-semibold text-white backdrop-blur transition hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
-                    >
-                      সব গাছ দেখুন
                     </Link>
                   </div>
                 </motion.div>
               </AnimatePresence>
             </div>
+
+            {/* RIGHT — image */}
+            <div className="relative hidden h-full lg:block">
+              <AnimatePresence mode="sync">
+                <motion.div
+                  key={`img-${i}`}
+                  initial={{ opacity: 0, scale: 1.04 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1, ease: "easeOut" }}
+                  className="absolute inset-0"
+                  aria-hidden="true"
+                >
+                  <img
+                    src={s.image}
+                    alt=""
+                    width={1600}
+                    height={1024}
+                    fetchPriority={i === 0 ? "high" : "auto"}
+                    loading={i === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                    sizes="(min-width: 1024px) 55vw, 100vw"
+                    className="h-full w-full object-cover"
+                  />
+                  {/* Soft blend into the green panel on the left edge */}
+                  <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#EAF8E7] to-transparent" />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Mobile image (under the text on small screens) */}
+            <div className="relative -mt-4 block h-[260px] w-full overflow-hidden lg:hidden">
+              <img
+                src={s.image}
+                alt=""
+                width={1600}
+                height={1024}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
+            </div>
           </div>
 
-
+          {/* Arrows */}
           <button
             type="button"
             aria-label="Previous slide"
-            aria-controls="hero-slider"
             onClick={() => go(i - 1)}
-            className="absolute left-6 top-1/2 z-20 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[#1B5E20] shadow-soft backdrop-blur transition hover:scale-110 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2"
+            className="absolute left-4 top-1/2 z-20 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white text-[#1B5E20] shadow-soft ring-1 ring-[#2E7D32]/15 transition hover:scale-110 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2"
           >
             <ChevronLeft className="size-5" aria-hidden="true" />
           </button>
           <button
             type="button"
             aria-label="Next slide"
-            aria-controls="hero-slider"
             onClick={() => go(i + 1)}
-            className="absolute right-6 top-1/2 z-20 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[#1B5E20] shadow-soft backdrop-blur transition hover:scale-110 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2"
+            className="absolute right-4 top-1/2 z-20 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white text-[#1B5E20] shadow-soft ring-1 ring-[#2E7D32]/15 transition hover:scale-110 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2"
           >
             <ChevronRight className="size-5" aria-hidden="true" />
           </button>
 
+          {/* Dots */}
           <div
-            className="absolute bottom-7 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2"
+            className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2"
             role="tablist"
             aria-label="Hero slides"
           >
@@ -211,7 +201,7 @@ function Hero() {
                 onClick={() => go(n)}
                 className={cn(
                   "h-2 rounded-full transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32] focus-visible:ring-offset-2",
-                  n === i ? "w-10 bg-[#2E7D32]" : "w-2.5 bg-white/80 hover:bg-white",
+                  n === i ? "w-10 bg-[#2E7D32]" : "w-2.5 bg-[#2E7D32]/30 hover:bg-[#2E7D32]/60",
                 )}
               />
             ))}
@@ -220,7 +210,7 @@ function Hero() {
       </Container>
 
       {/* Floating Trust Card overlapping bottom */}
-      <Container className="relative -mt-14 pb-2">
+      <Container className="relative -mt-12 pb-2">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -255,6 +245,7 @@ function Hero() {
     </section>
   );
 }
+
 
 /* ───────────── CATEGORY BANNER GRID ───────────── */
 function CategoryBanners() {
