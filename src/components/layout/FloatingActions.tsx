@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUp, MessageCircle, Phone } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { site } from "@/data/site";
 
 function WhatsAppIcon({ className }: { className?: string }) {
@@ -21,7 +21,6 @@ function MessengerIcon({ className }: { className?: string }) {
 
 export function FloatingActions() {
   const [show, setShow] = useState(false);
-  const phoneDigits = site.phone.replace(/\D/g, "");
   const waDigits = site.whatsapp.replace(/\D/g, "");
 
   useEffect(() => {
@@ -43,9 +42,8 @@ export function FloatingActions() {
   ];
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40">
-      <div className="mx-auto flex max-w-7xl items-end justify-between px-4 pb-24 sm:px-6 lg:px-8 lg:pb-5">
-        {/* Left: back to top */}
+    <>
+      <div className="pointer-events-none fixed bottom-24 left-4 z-40 sm:left-6 lg:bottom-5 lg:left-8">
         <AnimatePresence>
           {show && (
             <motion.button
@@ -63,34 +61,33 @@ export function FloatingActions() {
             </motion.button>
           )}
         </AnimatePresence>
-
-        {/* Right: chat stack */}
-        <div className="pointer-events-auto flex flex-col items-end gap-3">
-          {buttons.map((b, i) => (
-            <motion.a
-              key={b.key}
-              href={b.href}
-              target={b.href.startsWith("http") ? "_blank" : undefined}
-              rel="noreferrer"
-              aria-label={b.label}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 + i * 0.08, type: "spring", stiffness: 220, damping: 18 }}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.94 }}
-              className={`group relative grid size-12 place-items-center rounded-full text-white shadow-elegant ring-4 ${b.ring} ${b.bg}`}
-            >
-              <span className="absolute inset-0 -z-10 rounded-full opacity-70">
-                <span className={`absolute inset-0 animate-ping rounded-full ${b.bg} opacity-30`} />
-              </span>
-              {b.icon}
-              <span className="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap rounded-full bg-foreground px-3 py-1 text-xs font-medium text-background opacity-0 transition group-hover:opacity-100 sm:block">
-                {b.label}
-              </span>
-            </motion.a>
-          ))}
-        </div>
       </div>
-    </div>
+
+      <div className="pointer-events-auto fixed bottom-24 right-4 z-40 flex flex-col items-end gap-3 sm:right-6 lg:bottom-5 lg:right-8">
+        {buttons.map((b, i) => (
+          <motion.a
+            key={b.key}
+            href={b.href}
+            target={b.href.startsWith("http") ? "_blank" : undefined}
+            rel="noreferrer"
+            aria-label={b.label}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 + i * 0.08, type: "spring", stiffness: 220, damping: 18 }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.94 }}
+            className={`group relative grid size-12 place-items-center rounded-full text-white shadow-elegant ring-4 ${b.ring} ${b.bg}`}
+          >
+            <span className="absolute inset-0 -z-10 rounded-full opacity-70">
+              <span className={`absolute inset-0 animate-ping rounded-full ${b.bg} opacity-30`} />
+            </span>
+            {b.icon}
+            <span className="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap rounded-full bg-foreground px-3 py-1 text-xs font-medium text-background opacity-0 transition group-hover:opacity-100 sm:block">
+              {b.label}
+            </span>
+          </motion.a>
+        ))}
+      </div>
+    </>
   );
 }
