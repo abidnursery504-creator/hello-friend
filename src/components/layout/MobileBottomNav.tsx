@@ -31,10 +31,10 @@ export function MobileBottomNav() {
           {items.map((it) => {
             const active = it.match(pathname);
             const Icon = it.icon;
-            const count =
-              it.badge === "cart" ? cart.totalQty :
-              it.badge === "wish" ? wish.slugs.length : 0;
+            const count = 0;
+            void cart; void wish;
             return (
+
               <li key={it.to} className="relative">
                 <Link
                   to={it.to}
