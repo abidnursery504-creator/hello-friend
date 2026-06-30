@@ -67,7 +67,7 @@ function Gallery() {
             className="fixed inset-0 z-[100] grid place-items-center bg-black/85 p-4 backdrop-blur-sm"
             onClick={() => setOpen(null)}
           >
-            <button className="absolute right-5 top-5 grid size-11 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20" onClick={() => setOpen(null)}><X /></button>
+            <button aria-label="Close" className="absolute right-5 top-5 grid size-11 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20" onClick={() => setOpen(null)}><X /></button>
             <motion.img
               key={open}
               initial={{ scale: 0.92, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
