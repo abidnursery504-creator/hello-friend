@@ -9,7 +9,7 @@ import { SmartImage } from "@/components/common/SmartImage";
 import { categories } from "@/data/categories";
 import { bestsellers, products } from "@/data/products";
 import { posts, site, testimonials } from "@/data/site";
-import { formatBDT } from "@/lib/format";
+import { formatBDT, toBnDigits } from "@/lib/format";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { cn } from "@/lib/utils";
