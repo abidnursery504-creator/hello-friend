@@ -213,9 +213,13 @@ export function Navbar() {
                   );
                 })}
                 <div className="mt-2 flex items-center gap-2">
-                  <Link to="/search" className="flex flex-1 items-center gap-2 rounded-2xl border border-border px-4 py-3 text-sm">
+                  <button
+                    type="button"
+                    onClick={() => { setOpen(false); setSearchOpen(true); }}
+                    className="flex flex-1 items-center gap-2 rounded-2xl border border-border px-4 py-3 text-sm"
+                  >
                     <Search className="size-4" /> Search plants
-                  </Link>
+                  </button>
                   <ThemeToggle />
                 </div>
               </div>
@@ -223,6 +227,8 @@ export function Navbar() {
           )}
         </AnimatePresence>
       </header>
+
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }
