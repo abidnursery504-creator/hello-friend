@@ -17,6 +17,7 @@ import { categories } from "@/data/categories";
 import { bestsellers, getProductsByCategory } from "@/data/products";
 import { testimonials, posts, faqs, site } from "@/data/site";
 import { cn } from "@/lib/utils";
+import { MobileHome } from "@/components/mobile/MobileHome";
 
 export const Route = createFileRoute("/")({
   head: () => ({
