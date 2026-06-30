@@ -354,9 +354,13 @@ function CodBanner() {
             <div className="relative h-[260px]">
               <img
                 src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&q=85&auto=format&fit=crop"
-                alt="Delivery"
+                alt="Cash on delivery courier"
+                width={1200}
+                height={800}
+                sizes="(min-width: 768px) 40vw, 100vw"
                 className="absolute inset-0 h-full w-full rounded-2xl object-cover shadow-elegant"
                 loading="lazy"
+                decoding="async"
               />
             </div>
           </div>
