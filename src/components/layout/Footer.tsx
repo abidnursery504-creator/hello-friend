@@ -205,35 +205,6 @@ export function Footer() {
               </li>
             </ul>
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const form = e.currentTarget;
-                toast.success("সাবস্ক্রাইব হয়েছে — ইনবক্সে গাছ পরিচর্যার টিপস পাবেন 🌱");
-                form.reset();
-              }}
-              className="mt-7 rounded-2xl bg-white/5 p-4 ring-1 ring-white/10 backdrop-blur"
-            >
-              <p className="font-bn text-sm font-semibold">নিউজলেটার</p>
-              <p className="font-bn mt-1 text-xs text-white/65">নতুন চারা ও পরিচর্যার টিপস ইনবক্সে পান।</p>
-              <div className="mt-3 flex items-center gap-2 rounded-full border border-white/15 bg-white/5 p-1.5">
-                <input
-                  id="footer-newsletter"
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="আপনার ইমেইল"
-                  className="font-bn flex-1 bg-transparent px-3 py-2 text-sm placeholder:text-white/45 focus:outline-none"
-                />
-                <button
-                  type="submit"
-                  aria-label="সাবস্ক্রাইব"
-                  className="font-bn inline-flex items-center gap-1.5 rounded-full bg-[#2E7D32] px-4 py-2 text-xs font-semibold transition hover:bg-[#1B5E20]"
-                >
-                  <Send className="size-3.5" /> সাবস্ক্রাইব
-                </button>
-              </div>
-            </form>
           </div>
         </div>
 
