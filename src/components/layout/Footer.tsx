@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import {
-  ArrowRight, Award, Clock, Facebook, Headphones, Instagram, Leaf, Mail,
+  ArrowRight, Award, ChevronDown, Clock, Facebook, Headphones, Instagram, Leaf, Mail,
   MapPin, MessageCircle, Phone, ShieldCheck, Truck, Wallet, Youtube,
 } from "lucide-react";
 import { site } from "@/data/site";
@@ -54,6 +54,51 @@ const cols = [
   },
 ];
 
+const popularCats = categories.slice(0, 5);
+
+function ContactList() {
+  return (
+    <ul className="space-y-3.5 text-sm">
+      <li className="flex items-start gap-3">
+        <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-[#C8A415]/10 text-[#C8A415] ring-1 ring-[#C8A415]/20">
+          <MapPin className="size-4" />
+        </span>
+        <span className="font-bn text-white/85">{site.address}</span>
+      </li>
+      <li className="flex items-center gap-3">
+        <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-[#C8A415]/10 text-[#C8A415] ring-1 ring-[#C8A415]/20">
+          <Phone className="size-4" />
+        </span>
+        <a href={`tel:${site.phone}`} className="font-medium text-white hover:text-[#E8C547]">{site.phone}</a>
+      </li>
+      <li className="flex items-center gap-3">
+        <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-[#C8A415]/10 text-[#C8A415] ring-1 ring-[#C8A415]/20">
+          <Mail className="size-4" />
+        </span>
+        <a href={`mailto:${site.email}`} className="text-white/85 hover:text-[#E8C547]">{site.email}</a>
+      </li>
+      <li className="flex items-center gap-3">
+        <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-[#C8A415]/10 text-[#C8A415] ring-1 ring-[#C8A415]/20">
+          <Clock className="size-4" />
+        </span>
+        <span className="font-bn italic text-white/75">খোলা: শনি–বৃহঃ, সকাল ৯টা – রাত ৯টা</span>
+      </li>
+    </ul>
+  );
+}
+
+function FooterAccordion({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <details className="group border-b border-white/5 last:border-b-0">
+      <summary className="font-bn flex cursor-pointer list-none items-center justify-between px-1 py-4 text-sm font-semibold text-white active:bg-white/5">
+        <span>{title}</span>
+        <ChevronDown className="size-4 text-[#C8A415] transition-transform group-open:rotate-180" />
+      </summary>
+      <div className="pb-4 pl-1 pr-3 pt-1">{children}</div>
+    </details>
+  );
+}
+
 export function Footer() {
   return (
     <footer className="relative mt-24 overflow-hidden bg-[#0E2A14] text-white">
@@ -83,8 +128,103 @@ export function Footer() {
         </Container>
       </div>
 
-      {/* Main */}
-      <Container className="relative py-16 lg:py-20">
+      {/* ============ MOBILE ============ */}
+      <div className="relative lg:hidden">
+        {/* Brand block */}
+        <div className="px-6 pb-6 pt-10 text-center">
+          <div className="mb-4 inline-flex size-16 items-center justify-center rounded-full border border-[#C8A415]/30 bg-[#2E7D32]/20">
+            <Leaf className="size-8 text-[#C8A415]" />
+          </div>
+          <h2 className="font-display text-2xl font-extrabold tracking-tight text-[#C8A415]">অল ট্রি বিডি শপ</h2>
+          <p className="font-bn mt-1 text-[11px] uppercase tracking-[0.18em] text-white/55">প্রকৃতির ছোঁয়ায় আপনার ঘর</p>
+
+          <div className="mt-6 flex justify-center gap-3">
+            {socialLinks.map(({ Icon, href, label }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label={label}
+                className="grid size-10 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 transition hover:-translate-y-0.5 hover:bg-[#C8A415] hover:text-[#0E2A14] hover:ring-[#C8A415]"
+              >
+                <Icon className="size-4" />
+              </a>
+            ))}
+          </div>
+
+          <div className="mt-5 flex flex-wrap justify-center gap-2">
+            <span className="font-bn inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-[11px] font-semibold text-white/85 ring-1 ring-white/10">
+              <Award className="size-3.5 text-[#E8C547]" /> ৫ বছরের অভিজ্ঞতা
+            </span>
+            <span className="font-bn inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-[11px] font-semibold text-white/85 ring-1 ring-white/10">
+              <ShieldCheck className="size-3.5 text-[#A8E29E]" /> ভেরিফায়েড
+            </span>
+          </div>
+        </div>
+
+        {/* Accordions */}
+        <div className="border-t border-white/10 px-5">
+          {cols.map((col) => (
+            <FooterAccordion key={col.title} title={col.title}>
+              <ul className="grid grid-cols-2 gap-x-3 gap-y-2.5">
+                {col.links.map((l) => (
+                  <li key={l.label}>
+                    <Link to={l.to} className="font-bn text-sm text-white/75 hover:text-[#E8C547]">
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </FooterAccordion>
+          ))}
+          <FooterAccordion title="জনপ্রিয় বিভাগ">
+            <ul className="grid grid-cols-2 gap-x-3 gap-y-2.5">
+              {popularCats.map((c) => (
+                <li key={c.slug}>
+                  <Link
+                    to="/categories/$slug"
+                    params={{ slug: c.slug }}
+                    className="font-bn text-sm text-white/75 hover:text-[#E8C547]"
+                  >
+                    {c.nameBn}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </FooterAccordion>
+        </div>
+
+        {/* Contact card */}
+        <div className="px-5 pt-6">
+          <div className="rounded-2xl border border-[#2E7D32]/25 bg-[#2E7D32]/10 p-5">
+            <h3 className="font-bn mb-4 flex items-center gap-2 text-base font-bold text-[#C8A415]">
+              <Mail className="size-5" />
+              যোগাযোগ করুন
+            </h3>
+            <ContactList />
+          </div>
+        </div>
+
+        {/* Legal */}
+        <div className="mt-8 border-t border-white/5 bg-[#0A1F0F] px-6 py-6">
+          <p className="font-bn text-center text-[11px] text-white/55">
+            © {new Date().getFullYear()} অল ট্রি বিডি শপ। সর্বস্বত্ব সংরক্ষিত।
+          </p>
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[11px]">
+            <Link to="/privacy" className="font-bn text-[#C8A415]/80 hover:underline">প্রাইভেসি পলিসি</Link>
+            <span className="text-white/15">|</span>
+            <Link to="/terms" className="font-bn text-[#C8A415]/80 hover:underline">শর্তাবলি</Link>
+            <span className="text-white/15">|</span>
+            <Link to="/return-policy" className="font-bn text-[#C8A415]/80 hover:underline">রিটার্ন</Link>
+            <span className="text-white/15">|</span>
+            <Link to="/shipping-policy" className="font-bn text-[#C8A415]/80 hover:underline">শিপিং</Link>
+          </div>
+        </div>
+      </div>
+
+      {/* ============ DESKTOP ============ */}
+      <Container className="relative hidden py-16 lg:block lg:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_2.6fr_1.5fr]">
           {/* Brand */}
           <div>
@@ -156,7 +296,7 @@ export function Footer() {
                 জনপ্রিয় বিভাগ
               </h4>
               <ul className="space-y-2.5">
-                {categories.slice(0, 5).map((c) => (
+                {popularCats.map((c) => (
                   <li key={c.slug}>
                     <Link
                       to="/categories/$slug"
@@ -172,38 +312,12 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Contact + Newsletter */}
+          {/* Contact */}
           <div>
             <h4 className="font-bn relative mb-5 text-sm font-bold uppercase tracking-wider text-white after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-8 after:rounded-full after:bg-[#C8A415]">
               যোগাযোগ
             </h4>
-            <ul className="space-y-3.5 text-sm">
-              <li className="flex items-start gap-3">
-                <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-white/5 text-[#A8E29E] ring-1 ring-white/10">
-                  <MapPin className="size-4" />
-                </span>
-                <span className="font-bn text-white/80">{site.address}</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-white/5 text-[#A8E29E] ring-1 ring-white/10">
-                  <Phone className="size-4" />
-                </span>
-                <a href={`tel:${site.phone}`} className="text-white/80 hover:text-[#E8C547]">{site.phone}</a>
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-white/5 text-[#A8E29E] ring-1 ring-white/10">
-                  <Mail className="size-4" />
-                </span>
-                <a href={`mailto:${site.email}`} className="text-white/80 hover:text-[#E8C547]">{site.email}</a>
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-white/5 text-[#A8E29E] ring-1 ring-white/10">
-                  <Clock className="size-4" />
-                </span>
-                <span className="font-bn text-white/80">খোলা: শনি–বৃহঃ, সকাল ৯টা – রাত ৯টা</span>
-              </li>
-            </ul>
-
+            <ContactList />
           </div>
         </div>
 
