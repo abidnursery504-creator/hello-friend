@@ -1,3 +1,12 @@
+import bonsaiImg from "@/assets/categories/bonsai.jpg";
+import palmImg from "@/assets/categories/palm.jpg";
+import succulentImg from "@/assets/categories/succulent.jpg";
+import medicinalImg from "@/assets/categories/medicinal.jpg";
+import vegetableImg from "@/assets/categories/vegetable.jpg";
+import timberImg from "@/assets/categories/timber.jpg";
+import bambooImg from "@/assets/categories/bamboo.jpg";
+import aquaticImg from "@/assets/categories/aquatic.jpg";
+
 export type Category = {
   slug: string;
   name: string;
@@ -80,6 +89,78 @@ export const categories: Category[] = [
     image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=1200&q=80&auto=format&fit=crop",
     count: 14,
     accent: "lime",
+  },
+  {
+    slug: "bonsai",
+    name: "বনসাই",
+    nameBn: "বনসাই",
+    description: "ফিকাস, জুনিপার, বট ও জেড বনসাই — শিল্পসম্মত মিনিয়েচার গাছ।",
+    image: bonsaiImg,
+    count: 12,
+    accent: "green",
+  },
+  {
+    slug: "palm",
+    name: "পাম গাছ",
+    nameBn: "পাম গাছ",
+    description: "নারিকেল, খেজুর, ফিশটেইল ও কেন্টিয়া পাম চারা।",
+    image: palmImg,
+    count: 10,
+    accent: "gold",
+  },
+  {
+    slug: "succulent",
+    name: "রসালো ও ক্যাকটাস",
+    nameBn: "রসালো ও ক্যাকটাস",
+    description: "ইচেভেরিয়া, জেড, ব্যারেল ক্যাকটাস ও অন্যান্য সংগ্রহযোগ্য সাকুলেন্ট।",
+    image: succulentImg,
+    count: 14,
+    accent: "lime",
+  },
+  {
+    slug: "medicinal",
+    name: "ঔষধি গাছ",
+    nameBn: "ঔষধি গাছ",
+    description: "ব্রাহ্মী, গিলয়, শতমূলী ও আয়ুর্বেদিক ভেষজ চারা।",
+    image: medicinalImg,
+    count: 10,
+    accent: "green",
+  },
+  {
+    slug: "vegetable",
+    name: "সবজির চারা",
+    nameBn: "সবজির চারা",
+    description: "টমেটো, মরিচ, বেগুন ও ক্যাপসিকাম — তাজা সবজির চারা।",
+    image: vegetableImg,
+    count: 16,
+    accent: "lime",
+  },
+  {
+    slug: "timber",
+    name: "কাঠের গাছ",
+    nameBn: "কাঠের গাছ",
+    description: "সেগুন, মেহগনি, শিশু ও ইউক্যালিপটাস — মূল্যবান কাঠের চারা।",
+    image: timberImg,
+    count: 8,
+    accent: "gold",
+  },
+  {
+    slug: "bamboo",
+    name: "বাঁশ গাছ",
+    nameBn: "বাঁশ গাছ",
+    description: "সোনালি, কালো, বুদ্ধ বেলি ও লাকি বাঁশ — সাজসজ্জা ও ভাগ্যবান গাছ।",
+    image: bambooImg,
+    count: 8,
+    accent: "green",
+  },
+  {
+    slug: "aquatic",
+    name: "জলজ গাছ",
+    nameBn: "জলজ গাছ",
+    description: "পদ্ম, শাপলা, কচুরিপানা ও প্যাপিরাস — জলাশয়ের সৌন্দর্য।",
+    image: aquaticImg,
+    count: 8,
+    accent: "green",
   },
 ];
 
