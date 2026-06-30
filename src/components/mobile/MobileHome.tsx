@@ -76,8 +76,8 @@ function MobileHero() {
           <p className="font-bn mt-1 text-[17px] font-bold leading-tight text-[#0E3A18]">
             এখন আপনার হাতের নাগালে
           </p>
-          <p className="font-bn mt-3 text-[11.5px] font-medium leading-relaxed text-foreground/80">
-            উন্নত মানের গাছ <span className="mx-1 text-foreground/40">|</span> সঠিক পরিচর্যার গাইড <span className="mx-1 text-foreground/40">|</span>
+          <p className="font-bn mt-3 text-[11.5px] font-semibold leading-relaxed text-[#1a2e1a]">
+            উন্নত মানের গাছ <span className="mx-1 text-[#1a2e1a]/50">|</span> সঠিক পরিচর্যার গাইড <span className="mx-1 text-[#1a2e1a]/50">|</span>
             <br />
             সারা বাংলাদেশে ডেলিভারি
           </p>
