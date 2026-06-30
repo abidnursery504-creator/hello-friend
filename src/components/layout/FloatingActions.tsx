@@ -40,22 +40,6 @@ export function FloatingActions() {
       ring: "ring-[#25D366]/40",
       icon: <WhatsAppIcon className="size-6" />,
     },
-    {
-      key: "msg",
-      label: "Messenger",
-      href: `https://m.me/alltreebd`,
-      bg: "bg-[#0084FF]",
-      ring: "ring-[#0084FF]/40",
-      icon: <MessengerIcon className="size-6" />,
-    },
-    {
-      key: "call",
-      label: "Call now",
-      href: `tel:${phoneDigits}`,
-      bg: "gradient-primary",
-      ring: "ring-primary/40",
-      icon: <Phone className="size-5" />,
-    },
   ];
 
   return (
