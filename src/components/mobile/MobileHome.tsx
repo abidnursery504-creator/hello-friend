@@ -30,7 +30,6 @@ const POPULAR_SLUGS = ["amrapali-mango-grafted", "thai-pink-guava", "bedana-litc
 export function MobileHome() {
   return (
     <div className="lg:hidden">
-      <MobilePromoBar />
       <MobileHero />
       <MobileTrust />
       <MobileSectionTitle title="আমাদের ক্যাটাগরি" />
