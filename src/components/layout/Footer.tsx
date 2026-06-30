@@ -1,5 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Facebook, Instagram, Leaf, Mail, MapPin, Phone, Youtube } from "lucide-react";
+import {
+  ArrowRight, Award, Clock, Facebook, Headphones, Instagram, Leaf, Mail,
+  MapPin, MessageCircle, Phone, Send, ShieldCheck, Truck, Wallet, Youtube,
+} from "lucide-react";
 import { toast } from "sonner";
 import { site } from "@/data/site";
 import { categories } from "@/data/categories";
@@ -9,6 +12,14 @@ const socialLinks = [
   { Icon: Facebook, href: site.socials.facebook, label: "Facebook" },
   { Icon: Instagram, href: site.socials.instagram, label: "Instagram" },
   { Icon: Youtube, href: site.socials.youtube, label: "YouTube" },
+  { Icon: MessageCircle, href: "https://wa.me/8801700000000", label: "WhatsApp" },
+];
+
+const trustStrip = [
+  { Icon: Truck, t: "৬৪ জেলায় ডেলিভারি", d: "দ্রুত ও নিরাপদ কুরিয়ার" },
+  { Icon: Wallet, t: "ক্যাশ অন ডেলিভারি", d: "পণ্য বুঝে পেমেন্ট" },
+  { Icon: ShieldCheck, t: "৩০ দিন গ্যারান্টি", d: "লিভিং প্ল্যান্ট গ্যারান্টি" },
+  { Icon: Headphones, t: "২৪/৭ সাপোর্ট", d: "সব সময় পাশে আছি" },
 ];
 
 const cols = [
@@ -19,6 +30,7 @@ const cols = [
       { label: "সব বিভাগ", to: "/categories" },
       { label: "নতুন এসেছে", to: "/shop" },
       { label: "বেস্ট সেলার", to: "/shop" },
+      { label: "অফার", to: "/shop" },
     ],
   },
   {
@@ -26,49 +38,95 @@ const cols = [
     links: [
       { label: "আমাদের সম্পর্কে", to: "/about" },
       { label: "ব্লগ", to: "/blog" },
+      { label: "গ্যালারি", to: "/gallery" },
       { label: "পরিচর্যা গাইড", to: "/care-guide" },
       { label: "প্রশ্নোত্তর", to: "/faq" },
     ],
   },
   {
-    title: "একাউন্ট",
+    title: "সহায়তা",
     links: [
-      { label: "আমার একাউন্ট", to: "/account" },
-      { label: "আমার অর্ডার", to: "/account/orders" },
-      { label: "ইচ্ছার তালিকা", to: "/account/wishlist" },
-      { label: "ঠিকানা", to: "/account/addresses" },
+      { label: "যোগাযোগ", to: "/contact" },
+      { label: "অর্ডার ট্র্যাক", to: "/track-order" },
+      { label: "শিপিং পলিসি", to: "/shipping-policy" },
+      { label: "রিটার্ন পলিসি", to: "/return-policy" },
+      { label: "রিভিউ", to: "/reviews" },
     ],
   },
 ];
 
 export function Footer() {
   return (
-    <footer className="relative mt-24 overflow-hidden border-t bg-primary-dark text-primary-foreground">
-      <div className="pointer-events-none absolute -top-32 right-0 size-[420px] rounded-full bg-primary-light/20 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-32 left-0 size-[380px] rounded-full bg-gold/20 blur-3xl" />
+    <footer className="relative mt-24 overflow-hidden bg-[#0E2A14] text-white">
+      {/* Decorative glow */}
+      <div className="pointer-events-none absolute -top-40 right-0 size-[480px] rounded-full bg-[#2E7D32]/25 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-40 left-0 size-[440px] rounded-full bg-[#C8A415]/15 blur-3xl" />
+      <Leaf aria-hidden="true" className="pointer-events-none absolute -left-6 top-32 size-40 -rotate-12 text-white/[0.04]" />
+      <Leaf aria-hidden="true" className="pointer-events-none absolute right-10 bottom-10 size-48 rotate-12 text-white/[0.04]" />
 
+      {/* Trust strip */}
+      <div className="relative border-b border-white/10 bg-white/[0.03] backdrop-blur">
+        <Container className="grid grid-cols-2 gap-y-6 py-8 md:grid-cols-4">
+          {trustStrip.map(({ Icon, t, d }, i) => (
+            <div
+              key={t}
+              className={`flex items-center gap-3 px-4 ${i < 3 ? "md:border-r md:border-white/10" : ""}`}
+            >
+              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#2E7D32]/20 text-[#A8E29E] ring-1 ring-[#2E7D32]/30">
+                <Icon className="size-5" strokeWidth={2.2} />
+              </span>
+              <div className="min-w-0">
+                <p className="font-bn truncate text-sm font-semibold">{t}</p>
+                <p className="font-bn truncate text-xs text-white/60">{d}</p>
+              </div>
+            </div>
+          ))}
+        </Container>
+      </div>
+
+      {/* Main */}
       <Container className="relative py-16 lg:py-20">
-        <div className="grid gap-10 lg:grid-cols-[1.4fr_3fr_1.4fr]">
+        <div className="grid gap-12 lg:grid-cols-[1.4fr_2.6fr_1.5fr]">
           {/* Brand */}
           <div>
             <Link to="/" className="flex items-center gap-3">
-              <span className="grid size-12 place-items-center rounded-2xl bg-white/10 backdrop-blur">
+              <span className="grid size-12 place-items-center rounded-2xl bg-[#2E7D32] shadow-elegant ring-1 ring-white/10">
                 <Leaf className="size-6" />
               </span>
               <div className="leading-tight">
-                <div className="font-display text-lg font-bold">All Tree BD Shop</div>
-                <div className="font-bn text-xs opacity-80">অনলাইনে গাছের চারা বিক্রয়</div>
+                <div className="font-display text-xl font-extrabold tracking-tight">All Tree BD Shop</div>
+                <div className="font-bn text-xs text-white/70">প্রিমিয়াম অনলাইন নার্সারি</div>
               </div>
             </Link>
-            <p className="font-bn mt-5 text-sm opacity-80">
-              বাংলাদেশের প্রিমিয়াম অনলাইন নার্সারি — গ্রাফটিং ফল গাছ, ইনডোর গ্রিন ও দুর্লভ বিদেশি চারা, ৬৪ জেলায় নিরাপদে ডেলিভারি।
+            <p className="font-bn mt-5 text-sm leading-relaxed text-white/75">
+              বাংলাদেশের প্রিমিয়াম অনলাইন নার্সারি — গ্রাফটিং ফল গাছ, ইনডোর গ্রিন ও দুর্লভ বিদেশি চারা, সারা দেশে নিরাপদে ডেলিভারি।
             </p>
-            <div className="mt-5 flex items-center gap-2">
-              {socialLinks.map(({ Icon, href, label }) => (
-                <a key={label} href={href} target="_blank" rel="noreferrer noopener" aria-label={label} className="grid size-10 place-items-center rounded-full bg-white/10 transition hover:bg-gold hover:text-gold-foreground">
-                  <Icon className="size-4" />
-                </a>
-              ))}
+
+            <div className="mt-6 flex flex-wrap gap-2">
+              <span className="font-bn inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-[11px] font-semibold text-white/85 ring-1 ring-white/10">
+                <Award className="size-3.5 text-[#E8C547]" /> ৫ বছরের অভিজ্ঞতা
+              </span>
+              <span className="font-bn inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-[11px] font-semibold text-white/85 ring-1 ring-white/10">
+                <ShieldCheck className="size-3.5 text-[#A8E29E]" /> ভেরিফায়েড নার্সারি
+              </span>
+            </div>
+
+            <div className="mt-6">
+              <p className="font-bn mb-2 text-xs font-semibold uppercase tracking-wider text-white/60">আমাদের ফলো করুন</p>
+              <div className="flex items-center gap-2">
+                {socialLinks.map(({ Icon, href, label }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    aria-label={label}
+                    className="grid size-10 place-items-center rounded-full bg-white/8 ring-1 ring-white/10 transition hover:-translate-y-0.5 hover:bg-[#2E7D32] hover:ring-[#2E7D32]"
+                  >
+                    <Icon className="size-4" />
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -76,43 +134,74 @@ export function Footer() {
           <div className="grid gap-8 sm:grid-cols-4">
             {cols.map((col) => (
               <div key={col.title}>
-                <h4 className="font-bn mb-4 text-sm font-semibold tracking-wide opacity-90">{col.title}</h4>
+                <h4 className="font-bn relative mb-5 text-sm font-bold uppercase tracking-wider text-white after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-8 after:rounded-full after:bg-[#C8A415]">
+                  {col.title}
+                </h4>
                 <ul className="space-y-2.5">
                   {col.links.map((l) => (
                     <li key={l.label}>
-                      <Link to={l.to} className="font-bn text-sm opacity-75 transition hover:opacity-100 hover:text-gold">{l.label}</Link>
+                      <Link
+                        to={l.to}
+                        className="font-bn group inline-flex items-center gap-1.5 text-sm text-white/75 transition hover:text-[#E8C547]"
+                      >
+                        <ArrowRight className="size-3 -translate-x-1 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100" />
+                        <span className="-ml-3 group-hover:ml-0 transition-all">{l.label}</span>
+                      </Link>
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
             <div>
-              <h4 className="font-bn mb-4 text-sm font-semibold tracking-wide opacity-90">জনপ্রিয় বিভাগ</h4>
+              <h4 className="font-bn relative mb-5 text-sm font-bold uppercase tracking-wider text-white after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-8 after:rounded-full after:bg-[#C8A415]">
+                জনপ্রিয় বিভাগ
+              </h4>
               <ul className="space-y-2.5">
                 {categories.slice(0, 5).map((c) => (
                   <li key={c.slug}>
-                    <Link to="/categories/$slug" params={{ slug: c.slug }} className="font-bn text-sm opacity-75 transition hover:opacity-100 hover:text-gold">{c.name}</Link>
+                    <Link
+                      to="/categories/$slug"
+                      params={{ slug: c.slug }}
+                      className="font-bn group inline-flex items-center gap-1.5 text-sm text-white/75 transition hover:text-[#E8C547]"
+                    >
+                      <ArrowRight className="size-3 -translate-x-1 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100" />
+                      <span className="-ml-3 group-hover:ml-0 transition-all">{c.nameBn}</span>
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
 
-          {/* Contact */}
+          {/* Contact + Newsletter */}
           <div>
-            <h4 className="font-bn mb-4 text-sm font-semibold tracking-wide opacity-90">যোগাযোগ</h4>
-            <ul className="space-y-3 text-sm">
+            <h4 className="font-bn relative mb-5 text-sm font-bold uppercase tracking-wider text-white after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-8 after:rounded-full after:bg-[#C8A415]">
+              যোগাযোগ
+            </h4>
+            <ul className="space-y-3.5 text-sm">
               <li className="flex items-start gap-3">
-                <MapPin className="mt-0.5 size-4 shrink-0 text-gold" />
-                <span className="font-bn opacity-85">{site.address}</span>
+                <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-white/5 text-[#A8E29E] ring-1 ring-white/10">
+                  <MapPin className="size-4" />
+                </span>
+                <span className="font-bn text-white/80">{site.address}</span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="size-4 shrink-0 text-gold" />
-                <a href={`tel:${site.phone}`} className="opacity-85 hover:opacity-100">{site.phone}</a>
+                <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-white/5 text-[#A8E29E] ring-1 ring-white/10">
+                  <Phone className="size-4" />
+                </span>
+                <a href={`tel:${site.phone}`} className="text-white/80 hover:text-[#E8C547]">{site.phone}</a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="size-4 shrink-0 text-gold" />
-                <a href={`mailto:${site.email}`} className="opacity-85 hover:opacity-100">{site.email}</a>
+                <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-white/5 text-[#A8E29E] ring-1 ring-white/10">
+                  <Mail className="size-4" />
+                </span>
+                <a href={`mailto:${site.email}`} className="text-white/80 hover:text-[#E8C547]">{site.email}</a>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-white/5 text-[#A8E29E] ring-1 ring-white/10">
+                  <Clock className="size-4" />
+                </span>
+                <span className="font-bn text-white/80">খোলা: শনি–বৃহঃ, সকাল ৯টা – রাত ৯টা</span>
               </li>
             </ul>
 
@@ -123,22 +212,62 @@ export function Footer() {
                 toast.success("সাবস্ক্রাইব হয়েছে — ইনবক্সে গাছ পরিচর্যার টিপস পাবেন 🌱");
                 form.reset();
               }}
-              className="mt-6"
+              className="mt-7 rounded-2xl bg-white/5 p-4 ring-1 ring-white/10 backdrop-blur"
             >
-              <label htmlFor="footer-newsletter" className="font-bn text-xs tracking-wide opacity-80">সাপ্তাহিক গাছ পরিচর্যার টিপস</label>
-              <div className="mt-2 flex items-center gap-2 rounded-full border border-white/15 bg-white/5 p-1.5 backdrop-blur">
-                <input id="footer-newsletter" name="email" type="email" required placeholder="আপনার ইমেইল" className="font-bn flex-1 bg-transparent px-3 py-2 text-sm placeholder:text-white/50 focus:outline-none" />
-                <button type="submit" className="font-bn rounded-full bg-gold px-4 py-2 text-xs font-semibold text-gold-foreground transition hover:brightness-110">
-                  সাবস্ক্রাইব
+              <p className="font-bn text-sm font-semibold">নিউজলেটার</p>
+              <p className="font-bn mt-1 text-xs text-white/65">নতুন চারা ও পরিচর্যার টিপস ইনবক্সে পান।</p>
+              <div className="mt-3 flex items-center gap-2 rounded-full border border-white/15 bg-white/5 p-1.5">
+                <input
+                  id="footer-newsletter"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="আপনার ইমেইল"
+                  className="font-bn flex-1 bg-transparent px-3 py-2 text-sm placeholder:text-white/45 focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  aria-label="সাবস্ক্রাইব"
+                  className="font-bn inline-flex items-center gap-1.5 rounded-full bg-[#2E7D32] px-4 py-2 text-xs font-semibold transition hover:bg-[#1B5E20]"
+                >
+                  <Send className="size-3.5" /> সাবস্ক্রাইব
                 </button>
               </div>
             </form>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs opacity-75 sm:flex-row">
+        {/* Payment & legal bar */}
+        <div className="mt-14 rounded-2xl bg-white/5 px-5 py-4 ring-1 ring-white/10">
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+            <div className="flex items-center gap-3">
+              <p className="font-bn text-xs font-semibold uppercase tracking-wider text-white/70">পেমেন্ট মাধ্যম</p>
+              <div className="flex flex-wrap items-center gap-1.5">
+                {["bKash", "Nagad", "Rocket", "Visa", "Master", "COD"].map((m) => (
+                  <span
+                    key={m}
+                    className="rounded-md bg-white px-2.5 py-1 text-[11px] font-bold text-[#0E2A14] shadow-sm"
+                  >
+                    {m}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              <Link to="/privacy" className="font-bn text-xs text-white/70 hover:text-[#E8C547]">প্রাইভেসি পলিসি</Link>
+              <Link to="/terms" className="font-bn text-xs text-white/70 hover:text-[#E8C547]">শর্তাবলি</Link>
+              <Link to="/return-policy" className="font-bn text-xs text-white/70 hover:text-[#E8C547]">রিটার্ন</Link>
+              <Link to="/shipping-policy" className="font-bn text-xs text-white/70 hover:text-[#E8C547]">শিপিং</Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Copyright */}
+        <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs text-white/65 sm:flex-row">
           <p className="font-bn">© {new Date().getFullYear()} অল ট্রি বিডি শপ। সর্বস্বত্ব সংরক্ষিত।</p>
-          <p className="font-bn">বাংলাদেশে ভালোবাসা দিয়ে তৈরি 🇧🇩</p>
+          <p className="font-bn flex items-center gap-1.5">
+            বাংলাদেশে <span className="text-rose-400">❤</span> দিয়ে তৈরি 🇧🇩
+          </p>
         </div>
       </Container>
     </footer>
