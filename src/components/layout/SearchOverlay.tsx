@@ -112,7 +112,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                           }}
                           className="flex w-full items-center gap-3 rounded-2xl border border-transparent p-2 text-left transition hover:border-border hover:bg-accent"
                         >
-                          <SmartImage src={p.images[0]} alt={p.name} aspect="square" className="size-14 shrink-0 rounded-xl" />
+                          <SmartImage src={p.image} alt={p.name} aspect="square" className="size-14 shrink-0 rounded-xl" />
                           <div className="min-w-0 flex-1">
                             <div className="truncate text-sm font-semibold">{p.name}</div>
                             <div className="font-bn truncate text-xs text-muted-foreground">{p.nameBn}</div>
