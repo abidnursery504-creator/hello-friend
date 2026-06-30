@@ -11,7 +11,7 @@ import { ProductCard } from "@/components/common/ProductCard";
 import { bestsellers, getProductsByCategory } from "@/data/products";
 import { testimonials, posts, site } from "@/data/site";
 import { cn } from "@/lib/utils";
-import { formatBDT } from "@/lib/format";
+
 
 /* ───────────── HERO SLIDER ───────────── */
 const SLIDES = [
