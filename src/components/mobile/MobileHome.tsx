@@ -30,7 +30,6 @@ const POPULAR_SLUGS = ["amrapali-mango-grafted", "thai-pink-guava", "bedana-litc
 export function MobileHome() {
   return (
     <div className="lg:hidden">
-      <MobilePromoBar />
       <MobileHero />
       <MobileTrust />
       <MobileSectionTitle title="আমাদের ক্যাটাগরি" />
@@ -43,24 +42,6 @@ export function MobileHome() {
   );
 }
 
-/* ── Top promo strip ───────────────────────────── */
-function MobilePromoBar() {
-  return (
-    <div className="bg-[#1B5E20] text-white">
-      <div className="flex items-center justify-center gap-4 px-4 py-2 text-[11px] font-medium">
-        <span className="font-bn flex items-center gap-1.5">
-          <Truck className="size-3.5 text-gold" />
-          সারা বাংলাদেশে হোম ডেলিভারি
-        </span>
-        <span className="opacity-30">·</span>
-        <span className="font-bn flex items-center gap-1.5">
-          <Wallet className="size-3.5 text-gold" />
-          ক্যাশ অন ডেলিভারি
-        </span>
-      </div>
-    </div>
-  );
-}
 
 /* ── Hero ──────────────────────────────────────── */
 function MobileHero() {
