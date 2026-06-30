@@ -5,6 +5,7 @@ import { FloatingActions } from "./FloatingActions";
 import { FloatingLeaves } from "./FloatingLeaves";
 import { RouteLoader } from "./RouteLoader";
 import { PageTransition } from "./PageTransition";
+import { MobileBottomNav } from "./MobileBottomNav";
 
 export function PageLayout({ children }: { children: ReactNode }) {
   return (
@@ -12,11 +13,12 @@ export function PageLayout({ children }: { children: ReactNode }) {
       <FloatingLeaves />
       <RouteLoader />
       <Navbar />
-      <main className="flex-1">
+      <main className="flex-1 pb-24 lg:pb-0">
         <PageTransition>{children}</PageTransition>
       </main>
       <Footer />
       <FloatingActions />
+      <MobileBottomNav />
     </div>
   );
 }
