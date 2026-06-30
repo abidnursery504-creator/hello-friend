@@ -1,17 +1,20 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Heart, Leaf, Menu, Search, ShoppingBag, User, X } from "lucide-react";
+import { ChevronDown, Heart, Leaf, Menu, Search, ShoppingBag, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { ThemeToggle } from "./ThemeToggle";
+import { SearchOverlay } from "./SearchOverlay";
 import { cn } from "@/lib/utils";
 import { site } from "@/data/site";
+import { categories } from "@/data/categories";
+import { SmartImage } from "@/components/common/SmartImage";
 
 const nav = [
   { to: "/", label: "Home", labelBn: "হোম" },
   { to: "/shop", label: "Shop", labelBn: "শপ" },
-  { to: "/categories", label: "Categories", labelBn: "বিভাগ" },
+  { to: "/categories", label: "Categories", labelBn: "বিভাগ", mega: true },
   { to: "/blog", label: "Blog", labelBn: "ব্লগ" },
   { to: "/care-guide", label: "Care Guide", labelBn: "গাইড" },
   { to: "/about", label: "About", labelBn: "আমরা" },
@@ -24,6 +27,8 @@ export function Navbar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [megaOpen, setMegaOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -70,33 +75,84 @@ export function Navbar() {
           <nav className="hidden items-center justify-center gap-1 lg:flex">
             {nav.map((n) => {
               const active = n.to === "/" ? pathname === "/" : pathname.startsWith(n.to);
+              const isMega = "mega" in n && n.mega;
               return (
-                <Link
+                <div
                   key={n.to}
-                  to={n.to}
-                  className={cn(
-                    "relative rounded-full px-4 py-2 text-sm font-medium transition",
-                    active ? "text-primary" : "text-foreground/80 hover:text-primary",
-                  )}
+                  className="relative"
+                  onMouseEnter={() => isMega && setMegaOpen(true)}
+                  onMouseLeave={() => isMega && setMegaOpen(false)}
                 >
-                  {n.label}
-                  {active && (
-                    <motion.span
-                      layoutId="nav-active"
-                      className="absolute inset-0 -z-10 rounded-full bg-primary/10"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
+                  <Link
+                    to={n.to}
+                    className={cn(
+                      "relative inline-flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition",
+                      active ? "text-primary" : "text-foreground/80 hover:text-primary",
+                    )}
+                  >
+                    {n.label}
+                    {isMega && <ChevronDown className="size-3.5 opacity-70" />}
+                    {active && (
+                      <motion.span
+                        layoutId="nav-active"
+                        className="absolute inset-0 -z-10 rounded-full bg-primary/10"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                  </Link>
+
+                  {isMega && (
+                    <AnimatePresence>
+                      {megaOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute left-1/2 top-full z-40 mt-3 w-[min(900px,90vw)] -translate-x-1/2"
+                        >
+                          <div className="glass-strong rounded-3xl border border-border p-5 shadow-elegant">
+                            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                              {categories.slice(0, 6).map((c) => (
+                                <Link
+                                  key={c.slug}
+                                  to="/categories/$slug"
+                                  params={{ slug: c.slug }}
+                                  className="group flex items-center gap-3 rounded-2xl border border-transparent bg-card/40 p-2 transition hover:-translate-y-0.5 hover:border-border hover:shadow-soft"
+                                >
+                                  <SmartImage src={c.image} alt={c.name} aspect="square" className="size-14 shrink-0 rounded-xl" />
+                                  <div className="min-w-0">
+                                    <div className="truncate text-sm font-semibold text-foreground group-hover:text-primary">{c.name}</div>
+                                    <div className="font-bn truncate text-[11px] text-muted-foreground">{c.nameBn}</div>
+                                    <div className="text-[11px] text-primary/80">{c.count} varieties</div>
+                                  </div>
+                                </Link>
+                              ))}
+                            </div>
+                            <div className="mt-4 flex items-center justify-between border-t border-border pt-4 text-xs text-muted-foreground">
+                              <span>Premium grafted saplings · 7-day guarantee</span>
+                              <Link to="/categories" className="font-semibold text-primary hover:underline">View all categories →</Link>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   )}
-                </Link>
+                </div>
               );
             })}
           </nav>
 
           {/* Actions */}
           <div className="flex items-center gap-1.5 sm:gap-2">
-            <Link to="/search" aria-label="Search" className="hidden size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent sm:grid">
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              aria-label="Search"
+              className="hidden size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent sm:grid"
+            >
               <Search className="size-4" />
-            </Link>
+            </button>
             <ThemeToggle className="hidden sm:grid" />
             <Link to="/account/wishlist" aria-label="Wishlist" className="relative grid size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent">
               <Heart className="size-4" />
@@ -157,9 +213,13 @@ export function Navbar() {
                   );
                 })}
                 <div className="mt-2 flex items-center gap-2">
-                  <Link to="/search" className="flex flex-1 items-center gap-2 rounded-2xl border border-border px-4 py-3 text-sm">
+                  <button
+                    type="button"
+                    onClick={() => { setOpen(false); setSearchOpen(true); }}
+                    className="flex flex-1 items-center gap-2 rounded-2xl border border-border px-4 py-3 text-sm"
+                  >
                     <Search className="size-4" /> Search plants
-                  </Link>
+                  </button>
                   <ThemeToggle />
                 </div>
               </div>
@@ -167,6 +227,8 @@ export function Navbar() {
           )}
         </AnimatePresence>
       </header>
+
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }
