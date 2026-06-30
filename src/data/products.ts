@@ -427,6 +427,16 @@ function mk(
   }));
 }
 
+// Override image + gallery with locally generated AI photo when available.
+for (const p of products) {
+  const local = productImg(p.slug);
+  if (local) {
+    p.image = local;
+    p.gallery = [local];
+  }
+}
+
+
 
 export const getProductBySlug = (slug: string) =>
   products.find((p) => p.slug === slug);
