@@ -8,7 +8,7 @@ import {
 import { Container } from "@/components/common/Container";
 import { SmartImage } from "@/components/common/SmartImage";
 import { ProductCard } from "@/components/common/ProductCard";
-import { bestsellers, getProductsByCategory } from "@/data/products";
+import { bestsellers, getProductsByCategory, newArrivals } from "@/data/products";
 import { testimonials, posts, site } from "@/data/site";
 import { cn } from "@/lib/utils";
 
