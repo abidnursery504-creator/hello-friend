@@ -62,7 +62,7 @@ function MobileHero() {
 
   return (
     <section className="px-3 pt-3">
-      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[28px] bg-[#f6f4e8] shadow-elegant">
+      <div className="relative aspect-4/3 w-full overflow-hidden rounded-[28px] bg-[#f6f4e8] shadow-elegant">
         <motion.img
           key={slide}
           src={slide}
@@ -70,29 +70,29 @@ function MobileHero() {
           initial={{ opacity: 0, scale: 1.06 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover object-bottom"
           width={768}
           height={1024}
           onError={onImgError}
         />
         {/* Soft cream glow behind text for readability */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[55%] bg-gradient-to-b from-white/55 via-white/25 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[65%] bg-gradient-to-b from-white/55 via-white/25 to-transparent" />
 
-        <div className="absolute inset-x-0 top-[14%] flex flex-col items-center px-5 text-center">
-          <h1 className="font-bn text-[26px] font-extrabold leading-[1.15] text-[#1B5E20] drop-shadow-sm">
+        <div className="absolute inset-x-0 top-[8%] flex flex-col items-center px-5 text-center">
+          <h1 className="font-bn text-[22px] font-extrabold leading-[1.15] text-[#1B5E20] drop-shadow-sm">
             ফল ও ফুলের গাছ
           </h1>
-          <p className="font-bn mt-1 text-[17px] font-bold leading-tight text-[#0E3A18]">
+          <p className="font-bn mt-1 text-[15px] font-bold leading-tight text-[#0E3A18]">
             এখন আপনার হাতের নাগালে
           </p>
-          <p className="font-bn mt-3 text-[11.5px] font-semibold leading-relaxed text-[#1a2e1a]">
+          <p className="font-bn mt-2 text-[10.5px] font-semibold leading-relaxed text-[#1a2e1a]">
             উন্নত মানের গাছ <span className="mx-1 text-[#1a2e1a]/50">|</span> সঠিক পরিচর্যার গাইড <span className="mx-1 text-[#1a2e1a]/50">|</span>
             <br />
             সারা বাংলাদেশে ডেলিভারি
           </p>
           <Link
             to="/shop"
-            className="font-bn mt-4 inline-flex items-center gap-2 rounded-full bg-[#1B5E20] px-6 py-2.5 text-[13px] font-bold text-white shadow-elegant ring-1 ring-white/30 active:scale-95"
+            className="font-bn mt-3 inline-flex items-center gap-2 rounded-full bg-[#1B5E20] px-6 py-2 text-[12.5px] font-bold text-white shadow-elegant ring-1 ring-white/30 active:scale-95"
           >
             এখনই অর্ডার করুন
           </Link>
