@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { MapPin, Plus } from "lucide-react";
 import { toast } from "sonner";
+import { friendlyError } from "@/lib/errorMessage";
 import { useAddresses, useUpsertAddress, useDeleteAddress, useSetDefaultAddress } from "@/hooks/useAdmin";
 import { Route as AccountRoute } from "./account";
 import {
@@ -36,7 +37,7 @@ function Addresses() {
       setOpen(false);
       setForm({ label: "", line: "", city: "", district: "", phone: "" });
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "যোগ করতে ব্যর্থ হয়েছে");
+      toast.error(friendlyError(err, "যোগ করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।"));
     }
   };
 

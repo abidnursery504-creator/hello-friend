@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { toBnDigits } from "@/lib/format";
+import { friendlyError } from "@/lib/errorMessage";
 import { useCategories } from "@/hooks/useCatalog";
 import { useDeleteCategory } from "@/hooks/useAdmin";
 import { CategoryFormDialog } from "@/components/admin/CategoryFormDialog";
@@ -55,7 +56,7 @@ function AdminCategories() {
       await deleteCategory.mutateAsync(toDelete.slug);
       toast.success("বিভাগ মুছে ফেলা হয়েছে");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "মুছতে ব্যর্থ হয়েছে");
+      toast.error(friendlyError(err, "মুছতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।"));
     } finally {
       setToDelete(null);
     }

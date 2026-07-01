@@ -330,9 +330,11 @@ drop policy if exists "orders_select_own_or_admin" on public.orders;
 create policy "orders_select_own_or_admin" on public.orders for select
   using (auth.uid() = user_id or public.is_admin());
 
+-- Orders require a logged-in account (no guest checkout).
 drop policy if exists "orders_insert_guest_or_own" on public.orders;
-create policy "orders_insert_guest_or_own" on public.orders for insert
-  with check (user_id is null or user_id = auth.uid());
+drop policy if exists "orders_insert_own" on public.orders;
+create policy "orders_insert_own" on public.orders for insert
+  with check (user_id = auth.uid());
 
 drop policy if exists "orders_admin_update" on public.orders;
 create policy "orders_admin_update" on public.orders for update
@@ -356,7 +358,7 @@ create policy "order_items_insert_via_order" on public.order_items for insert
   with check (exists (
     select 1 from public.orders o
     where o.id = order_items.order_id
-      and (o.user_id = auth.uid() or o.user_id is null)
+      and o.user_id = auth.uid()
   ));
 
 drop policy if exists "order_items_admin_write" on public.order_items;

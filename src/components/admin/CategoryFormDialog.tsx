@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { friendlyError } from "@/lib/errorMessage";
 import {
   Dialog,
   DialogContent,
@@ -56,7 +57,7 @@ export function CategoryFormDialog({
       toast.success("বিভাগ সংরক্ষিত হয়েছে");
       onOpenChange(false);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "সংরক্ষণ ব্যর্থ হয়েছে");
+      toast.error(friendlyError(err, "সংরক্ষণ ব্যর্থ হয়েছে। আবার চেষ্টা করুন।"));
     }
   };
 

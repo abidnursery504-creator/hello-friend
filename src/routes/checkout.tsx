@@ -1,7 +1,7 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { CheckCircle2, Truck } from "lucide-react";
+import { CheckCircle2, LogIn, Truck } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/common/Container";
@@ -11,6 +11,8 @@ import { formatBDT, toBnDigits } from "@/lib/format";
 import { site } from "@/data/site";
 import { toast } from "sonner";
 import { createOrder } from "@/lib/supabase/orders.server";
+import { useSession } from "@/hooks/useSession";
+import { friendlyError } from "@/lib/errorMessage";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -22,6 +24,7 @@ export const Route = createFileRoute("/checkout")({
 function CheckoutPage() {
   const { items, subtotal, clear } = useCart();
   const navigate = useNavigate();
+  const { data: session, isLoading: sessionLoading } = useSession();
   const [done, setDone] = useState(false);
   const [orderNumber, setOrderNumber] = useState("");
   const shipping = subtotal >= site.shipping.freeAbove ? 0 : items.length ? site.shipping.flatFee : 0;
@@ -58,7 +61,7 @@ function CheckoutPage() {
       clear();
       toast.success("অর্ডার সফল হয়েছে! ৩০ মিনিটের মধ্যে আমরা কল দিয়ে নিশ্চিত করব।");
     },
-    onError: (err: Error) => toast.error(err.message || "অর্ডার ব্যর্থ হয়েছে"),
+    onError: (err: Error) => toast.error(friendlyError(err, "অর্ডার ব্যর্থ হয়েছে। আবার চেষ্টা করুন।")),
   });
 
   const submit = (e: React.FormEvent) => {
@@ -74,6 +77,28 @@ function CheckoutPage() {
           <h1 className="font-bn mt-6 text-3xl font-bold">অর্ডার সফল হয়েছে!</h1>
           <p className="font-bn mt-2 text-muted-foreground">অর্ডার নম্বর: {orderNumber} · শীঘ্রই হোয়াটসঅ্যাপে নিশ্চিতকরণ পাবেন।</p>
           <button onClick={() => navigate({ to: "/" })} className="font-bn mt-8 rounded-full gradient-primary px-6 py-3 text-sm font-semibold text-primary-foreground">হোমে ফিরে যান</button>
+        </Container>
+      </PageLayout>
+    );
+  }
+
+  if (!sessionLoading && !session) {
+    return (
+      <PageLayout>
+        <Container className="py-24 text-center">
+          <div className="mx-auto grid size-16 place-items-center rounded-full bg-primary/10 text-primary">
+            <LogIn className="size-7" />
+          </div>
+          <h1 className="font-bn mt-6 text-2xl font-bold">অর্ডার করতে লগইন করুন</h1>
+          <p className="font-bn mt-2 text-muted-foreground">অর্ডার ট্র্যাক করতে ও নিরাপদ চেকআউটের জন্য প্রথমে একাউন্টে লগইন বা তৈরি করুন।</p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link to="/login" search={{ redirect: "/checkout" }} className="font-bn rounded-full gradient-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft">
+              লগইন করুন
+            </Link>
+            <Link to="/register" className="font-bn rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:bg-accent">
+              একাউন্ট তৈরি করুন
+            </Link>
+          </div>
         </Container>
       </PageLayout>
     );

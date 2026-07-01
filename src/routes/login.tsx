@@ -2,13 +2,16 @@ import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-r
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Leaf, Lock, Mail } from "lucide-react";
+import { z } from "zod";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Container } from "@/components/common/Container";
 import { toast } from "sonner";
 import { signIn } from "@/lib/supabase/auth.server";
 import { useInvalidateSession } from "@/hooks/useSession";
+import { friendlyError } from "@/lib/errorMessage";
 
 export const Route = createFileRoute("/login")({
+  validateSearch: z.object({ redirect: z.string().optional() }),
   head: () => ({
     meta: [{ title: "লগইন — অল ট্রি বিডি শপ" }, { name: "robots", content: "noindex" }],
   }),
@@ -18,6 +21,7 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const navigate = useNavigate();
   const router = useRouter();
+  const { redirect } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const invalidateSession = useInvalidateSession();
@@ -28,9 +32,9 @@ function LoginPage() {
       toast.success("লগইন সফল হয়েছে");
       invalidateSession();
       await router.invalidate();
-      navigate({ to: "/account" });
+      navigate({ to: redirect || "/account" });
     },
-    onError: (err: Error) => toast.error(err.message || "লগইন ব্যর্থ হয়েছে"),
+    onError: (err: Error) => toast.error(friendlyError(err, "লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।")),
   });
 
   return (
@@ -50,7 +54,7 @@ function LoginPage() {
           </form>
 
           <p className="font-bn mt-6 text-center text-sm text-muted-foreground">
-            নতুন এখানে? <Link to="/register" className="font-semibold text-primary hover:underline">একাউন্ট তৈরি করুন</Link>
+            নতুন এখানে? <Link to="/register" search={{ redirect }} className="font-semibold text-primary hover:underline">একাউন্ট তৈরি করুন</Link>
           </p>
         </div>
       </Container>

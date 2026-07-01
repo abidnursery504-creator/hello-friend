@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Eye, PackageX, Search } from "lucide-react";
 import { toast } from "sonner";
 import { formatBDT, toBnDigits } from "@/lib/format";
+import { friendlyError } from "@/lib/errorMessage";
 import { useOrders, useUpdateOrderStatus } from "@/hooks/useAdmin";
 import type { OrderStatus } from "@/lib/supabase/mutations";
 import type { OrderRow } from "@/lib/supabase/queries";
@@ -63,7 +64,7 @@ function AdminOrders() {
       await updateStatus.mutateAsync({ orderId, status });
       toast.success("অর্ডার স্ট্যাটাস আপডেট হয়েছে");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "আপডেট ব্যর্থ হয়েছে");
+      toast.error(friendlyError(err, "আপডেট ব্যর্থ হয়েছে। আবার চেষ্টা করুন।"));
     }
   };
 

@@ -1,29 +1,17 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   LayoutDashboard,
   Leaf,
   LogOut,
+  Menu,
   ShoppingBag,
   Store,
   Tags,
   Users,
+  X,
 } from "lucide-react";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -33,7 +21,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Separator } from "@/components/ui/separator";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -42,6 +29,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { cn } from "@/lib/utils";
 
 const nav = [
   { to: "/admin", label: "ড্যাশবোর্ড", Icon: LayoutDashboard, exact: true },
@@ -69,6 +57,38 @@ function initials(name?: string | null) {
     .join("");
 }
 
+function BrandMark() {
+  return (
+    <span className="grid size-8 shrink-0 place-items-center rounded-xl gradient-primary text-primary-foreground shadow-soft">
+      <Leaf className="size-4" />
+    </span>
+  );
+}
+
+function NavLinks({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
+  return (
+    <>
+      {nav.map(({ to, label, Icon, exact }) => {
+        const active = exact ? pathname === to : pathname.startsWith(to);
+        return (
+          <Link
+            key={to}
+            to={to}
+            onClick={onNavigate}
+            className={cn(
+              "font-bn flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition",
+              active ? "bg-primary/10 text-primary" : "text-foreground hover:bg-accent",
+            )}
+          >
+            <Icon className="size-4" />
+            {label}
+          </Link>
+        );
+      })}
+    </>
+  );
+}
+
 export function AdminShell({
   session,
   onLogout,
@@ -80,63 +100,104 @@ export function AdminShell({
 }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const currentLabel = crumbLabel[pathname] ?? "ড্যাশবোর্ড";
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  useEffect(() => { setMobileNavOpen(false); }, [pathname]);
 
   return (
-    <SidebarProvider defaultOpen>
-      <Sidebar collapsible="icon" className="border-border">
-        <SidebarHeader>
-          <Link to="/admin" className="flex items-center gap-2.5 px-2 py-1.5">
-            <span className="grid size-8 shrink-0 place-items-center rounded-xl gradient-primary text-primary-foreground shadow-soft">
-              <Leaf className="size-4" />
-            </span>
-            <div className="flex min-w-0 flex-col leading-tight group-data-[collapsible=icon]:hidden">
+    <div className="min-h-screen bg-muted/30">
+      {/* Desktop sidebar */}
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-border bg-sidebar lg:flex">
+        <div className="flex items-center gap-2.5 border-b border-border px-4 py-4">
+          <Link to="/admin" className="flex items-center gap-2.5">
+            <BrandMark />
+            <div className="flex min-w-0 flex-col leading-tight">
               <span className="font-display truncate text-sm font-bold">All Tree BD</span>
               <span className="text-[11px] text-muted-foreground">Admin Console</span>
             </div>
           </Link>
-        </SidebarHeader>
+        </div>
+        <nav className="flex-1 space-y-0.5 overflow-y-auto p-3">
+          <p className="font-bn px-3 pb-2 text-xs font-medium text-muted-foreground">পরিচালনা</p>
+          <NavLinks pathname={pathname} />
+        </nav>
+        <div className="border-t border-border p-3">
+          <Link
+            to="/"
+            className="font-bn flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-foreground transition hover:bg-accent"
+          >
+            <Store className="size-4" /> সাইট দেখুন
+          </Link>
+        </div>
+      </aside>
 
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel className="font-bn">পরিচালনা</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {nav.map(({ to, label, Icon, exact }) => {
-                  const active = exact ? pathname === to : pathname.startsWith(to);
-                  return (
-                    <SidebarMenuItem key={to}>
-                      <SidebarMenuButton asChild isActive={active} tooltip={label} className="font-bn">
-                        <Link to={to}>
-                          <Icon />
-                          <span>{label}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
-
-        <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="সাইট দেখুন" className="font-bn">
-                <Link to="/">
-                  <Store />
-                  <span>সাইট দেখুন</span>
+      {/* Mobile slide-out nav */}
+      <AnimatePresence>
+        {mobileNavOpen && (
+          <>
+            <motion.div
+              key="admin-nav-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+              onClick={() => setMobileNavOpen(false)}
+            />
+            <motion.aside
+              key="admin-nav-drawer"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "tween", duration: 0.2 }}
+              className="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-sidebar shadow-elegant lg:hidden"
+            >
+              <div className="flex items-center justify-between border-b border-border px-4 py-4">
+                <Link to="/admin" className="flex items-center gap-2.5" onClick={() => setMobileNavOpen(false)}>
+                  <BrandMark />
+                  <div className="flex min-w-0 flex-col leading-tight">
+                    <span className="font-display truncate text-sm font-bold">All Tree BD</span>
+                    <span className="text-[11px] text-muted-foreground">Admin Console</span>
+                  </div>
                 </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
-      </Sidebar>
+                <button
+                  type="button"
+                  onClick={() => setMobileNavOpen(false)}
+                  aria-label="মেনু বন্ধ করুন"
+                  className="grid size-9 place-items-center rounded-xl text-foreground hover:bg-accent"
+                >
+                  <X className="size-5" />
+                </button>
+              </div>
+              <nav className="flex-1 space-y-0.5 overflow-y-auto p-3">
+                <p className="font-bn px-3 pb-2 text-xs font-medium text-muted-foreground">পরিচালনা</p>
+                <NavLinks pathname={pathname} onNavigate={() => setMobileNavOpen(false)} />
+              </nav>
+              <div className="border-t border-border p-3">
+                <Link
+                  to="/"
+                  onClick={() => setMobileNavOpen(false)}
+                  className="font-bn flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-foreground transition hover:bg-accent"
+                >
+                  <Store className="size-4" /> সাইট দেখুন
+                </Link>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
 
-      <SidebarInset>
-        <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background/95 px-4 backdrop-blur">
-          <SidebarTrigger />
-          <Separator orientation="vertical" className="mr-1 h-4" />
+      {/* Main column */}
+      <div className="lg:pl-60">
+        <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background/95 px-4 backdrop-blur">
+          <button
+            type="button"
+            onClick={() => setMobileNavOpen(true)}
+            aria-label="মেনু খুলুন"
+            className="grid size-9 shrink-0 place-items-center rounded-xl text-foreground hover:bg-accent lg:hidden"
+          >
+            <Menu className="size-5" />
+          </button>
+
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden sm:block">
@@ -185,8 +246,8 @@ export function AdminShell({
         </header>
 
         <div className="flex-1 space-y-6 p-4 sm:p-6 lg:p-8">{children}</div>
-      </SidebarInset>
-    </SidebarProvider>
+      </div>
+    </div>
   );
 }
 

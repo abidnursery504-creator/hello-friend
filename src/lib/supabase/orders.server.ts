@@ -32,10 +32,14 @@ export const createOrder = createServerFn({ method: "POST" })
       data: { user },
     } = await supabase.auth.getUser();
 
+    if (!user) {
+      throw new Error("অর্ডার করতে হলে আগে লগইন বা একাউন্ট তৈরি করতে হবে।");
+    }
+
     const { data: order, error } = await supabase
       .from("orders")
       .insert({
-        user_id: user?.id ?? null,
+        user_id: user.id,
         customer_name: data.customerName,
         customer_phone: data.customerPhone,
         customer_email: data.customerEmail || null,

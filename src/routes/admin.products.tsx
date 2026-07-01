@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { formatBDT, toBnDigits } from "@/lib/format";
+import { friendlyError } from "@/lib/errorMessage";
 import { useProducts, useCategories } from "@/hooks/useCatalog";
 import { useDeleteProduct } from "@/hooks/useAdmin";
 import { ProductFormDialog } from "@/components/admin/ProductFormDialog";
@@ -67,7 +68,7 @@ function AdminProducts() {
       await deleteProduct.mutateAsync(toDelete.slug);
       toast.success("পণ্য মুছে ফেলা হয়েছে");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "মুছতে ব্যর্থ হয়েছে");
+      toast.error(friendlyError(err, "মুছতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।"));
     } finally {
       setToDelete(null);
     }

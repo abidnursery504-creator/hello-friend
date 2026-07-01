@@ -2,13 +2,16 @@ import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-r
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Leaf, Lock, Mail, User } from "lucide-react";
+import { z } from "zod";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Container } from "@/components/common/Container";
 import { toast } from "sonner";
 import { signIn, signUp } from "@/lib/supabase/auth.server";
 import { useInvalidateSession } from "@/hooks/useSession";
+import { friendlyError } from "@/lib/errorMessage";
 
 export const Route = createFileRoute("/register")({
+  validateSearch: z.object({ redirect: z.string().optional() }),
   head: () => ({
     meta: [{ title: "একাউন্ট তৈরি — অল ট্রি বিডি শপ" }, { name: "robots", content: "noindex" }],
   }),
@@ -18,6 +21,7 @@ export const Route = createFileRoute("/register")({
 function RegisterPage() {
   const navigate = useNavigate();
   const router = useRouter();
+  const { redirect } = Route.useSearch();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,9 +36,9 @@ function RegisterPage() {
       toast.success("একাউন্ট তৈরি হয়েছে");
       invalidateSession();
       await router.invalidate();
-      navigate({ to: "/account" });
+      navigate({ to: redirect || "/account" });
     },
-    onError: (err: Error) => toast.error(err.message || "একাউন্ট তৈরি ব্যর্থ হয়েছে"),
+    onError: (err: Error) => toast.error(friendlyError(err, "একাউন্ট তৈরি ব্যর্থ হয়েছে। আবার চেষ্টা করুন।")),
   });
 
   return (
@@ -55,7 +59,7 @@ function RegisterPage() {
           </form>
 
           <p className="font-bn mt-6 text-center text-sm text-muted-foreground">
-            ইতিমধ্যে একাউন্ট আছে? <Link to="/login" className="font-semibold text-primary hover:underline">লগইন করুন</Link>
+            ইতিমধ্যে একাউন্ট আছে? <Link to="/login" search={{ redirect }} className="font-semibold text-primary hover:underline">লগইন করুন</Link>
           </p>
         </div>
       </Container>

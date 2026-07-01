@@ -6,6 +6,10 @@ import { SmartImage } from "@/components/common/SmartImage";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+function uploadErrorMessage(): string {
+  return "ছবি আপলোড ব্যর্থ হয়েছে। ছবির ফরম্যাট ও সাইজ পরীক্ষা করে আবার চেষ্টা করুন।";
+}
+
 type Props = {
   value: string | null;
   onChange: (url: string | null) => void;
@@ -22,8 +26,8 @@ export function ImageUploader({ value, onChange, className }: Props) {
     try {
       const result = await uploadToCloudinary(file);
       onChange(result.secure_url);
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "ছবি আপলোড ব্যর্থ হয়েছে");
+    } catch {
+      toast.error(uploadErrorMessage());
     } finally {
       setUploading(false);
       if (inputRef.current) inputRef.current.value = "";
@@ -77,8 +81,8 @@ export function MultiImageUploader({ value, onChange }: { value: string[]; onCha
     try {
       const uploaded = await Promise.all(Array.from(files).map((f) => uploadToCloudinary(f)));
       onChange([...value, ...uploaded.map((u) => u.secure_url)]);
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "ছবি আপলোড ব্যর্থ হয়েছে");
+    } catch {
+      toast.error(uploadErrorMessage());
     } finally {
       setUploading(false);
       if (inputRef.current) inputRef.current.value = "";
