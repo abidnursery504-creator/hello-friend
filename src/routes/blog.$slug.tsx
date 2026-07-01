@@ -3,11 +3,14 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/common/Container";
 import { SmartImage } from "@/components/common/SmartImage";
-import { getPostBySlug, posts } from "@/data/site";
+import { ensureBlogPost, ensureBlogPosts, useBlogPosts } from "@/hooks/useCatalog";
 
 export const Route = createFileRoute("/blog/$slug")({
-  loader: ({ params }) => {
-    const post = getPostBySlug(params.slug);
+  loader: async ({ params, context }) => {
+    const [post] = await Promise.all([
+      ensureBlogPost(context.queryClient, params.slug),
+      ensureBlogPosts(context.queryClient),
+    ]);
     if (!post) throw notFound();
     return { post };
   },
@@ -40,6 +43,7 @@ export const Route = createFileRoute("/blog/$slug")({
 
 function BlogPost() {
   const { post } = Route.useLoaderData();
+  const { data: posts = [] } = useBlogPosts();
   const others = posts.filter((p) => p.slug !== post.slug).slice(0, 3);
   return (
     <PageLayout>

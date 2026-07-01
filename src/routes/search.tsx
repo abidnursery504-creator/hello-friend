@@ -5,7 +5,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/common/Container";
 import { ProductCard } from "@/components/common/ProductCard";
-import { products } from "@/data/products";
+import { useProducts } from "@/hooks/useCatalog";
 import { toBnDigits } from "@/lib/format";
 import { z } from "zod";
 
@@ -19,11 +19,12 @@ function SearchPage() {
   const sp = Route.useSearch();
   const navigate = useNavigate({ from: "/search" });
   const [q, setQ] = useState(sp.q ?? "");
+  const { data: products = [] } = useProducts();
   const results = useMemo(() => {
     if (!sp.q) return [];
     const s = sp.q.toLowerCase();
     return products.filter((p) => p.name.toLowerCase().includes(s) || p.nameBn.includes(sp.q!) || p.category.includes(s));
-  }, [sp.q]);
+  }, [sp.q, products]);
 
   return (
     <PageLayout>

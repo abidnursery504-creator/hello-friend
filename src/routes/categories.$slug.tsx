@@ -3,14 +3,13 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/common/Container";
 import { ProductCard } from "@/components/common/ProductCard";
-import { getCategoryBySlug, categories } from "@/data/categories";
-import { getProductsByCategory } from "@/data/products";
+import { ensureCategory, useCategories, useProductsByCategory } from "@/hooks/useCatalog";
 
 export const Route = createFileRoute("/categories/$slug")({
-  loader: ({ params }) => {
-    const category = getCategoryBySlug(params.slug);
+  loader: async ({ params, context }) => {
+    const category = await ensureCategory(context.queryClient, params.slug);
     if (!category) throw notFound();
-    return { category, items: getProductsByCategory(params.slug) };
+    return { category };
   },
   head: ({ loaderData }) => {
     const c = loaderData?.category;
@@ -39,7 +38,9 @@ export const Route = createFileRoute("/categories/$slug")({
 });
 
 function CategoryPage() {
-  const { category, items } = Route.useLoaderData();
+  const { category } = Route.useLoaderData();
+  const { data: items = [] } = useProductsByCategory(category.slug);
+  const { data: categories = [] } = useCategories();
   return (
     <PageLayout>
       <PageHeader

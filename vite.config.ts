@@ -6,22 +6,15 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-const netlifyBuild = process.env.NETLIFY_BUILD === "1";
-
 export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
-    // Netlify has no Cloudflare Workers runtime. Prerender a single client-only
-    // shell and let TanStack Router take over in the browser (classic SPA);
-    // netlify.toml rewrites every path to that shell.
-    ...(netlifyBuild && {
-      spa: { enabled: true },
-    }),
   },
-  // Netlify has no Cloudflare Workers runtime, so skip nitro's Workers build
-  // for this target — TanStack Start's own client/server environments plus
-  // `spa` prerender above are enough to produce a static dist/ folder.
-  ...(netlifyBuild && { nitro: false }),
+  // Deploying as full SSR on Vercel (auth needs server-side sessions, so the
+  // static/SPA Netlify build from before is no longer used).
+  // Note: node_modules/nf3's bundled @vercel/nft needs scripts/patch-nf3.mjs
+  // (run via postinstall) — see that file for why.
+  nitro: { preset: "vercel" },
 });

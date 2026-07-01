@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Search, X, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { products } from "@/data/products";
+import { useProducts } from "@/hooks/useCatalog";
 import { SmartImage } from "@/components/common/SmartImage";
 import { toBnDigits } from "@/lib/format";
 
@@ -11,6 +11,7 @@ const trending = ["আম্রপালি আম", "থাই পেয়া�
 export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [q, setQ] = useState("");
   const navigate = useNavigate();
+  const { data: products = [] } = useProducts();
 
   useEffect(() => {
     if (!open) return;

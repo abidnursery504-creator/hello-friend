@@ -4,7 +4,7 @@ import { Star, Quote } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Section } from "@/components/common/Section";
-import { testimonials } from "@/data/site";
+import { useTestimonials } from "@/hooks/useCatalog";
 import { toBnDigits } from "@/lib/format";
 
 export const Route = createFileRoute("/reviews")({
@@ -24,10 +24,11 @@ const extra = [
   { name: "সাজিদ হাসান", role: "ল্যান্ডস্কেপার", city: "খুলনা", rating: 4, text: "মান চমৎকার। খুলনায় ডেলিভারি ৩ দিন লেগেছে, একটু দেরি হয়েছে।", avatar: "https://i.pravatar.cc/120?img=22" },
   { name: "লুবনা ইয়াসমিন", role: "শখের বাগানি", city: "কুমিল্লা", rating: 5, text: "লেবু গাছে ইতিমধ্যেই ফুল এসেছে। তাদের কেয়ার গাইড PDF সত্যিই কাজে লাগে।", avatar: "https://i.pravatar.cc/120?img=38" },
 ];
-const ALL = [...testimonials, ...extra, ...testimonials];
 
 function Reviews() {
-  const avg = (ALL.reduce((s, r) => s + r.rating, 0) / ALL.length).toFixed(1);
+  const { data: testimonials = [] } = useTestimonials();
+  const ALL = [...testimonials, ...extra, ...testimonials];
+  const avg = ALL.length > 0 ? (ALL.reduce((s, r) => s + r.rating, 0) / ALL.length).toFixed(1) : "0.0";
   return (
     <PageLayout>
       <PageHeader crumbs={[{ label: "হোম", to: "/" }, { label: "রিভিউ" }]} title="বাগানিদের ভালোবাসা" subtitle="সারা বাংলাদেশের গ্রাহকরা কী বলছেন।" />

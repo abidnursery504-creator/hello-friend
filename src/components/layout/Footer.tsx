@@ -4,7 +4,7 @@ import {
   MapPin, MessageCircle, Phone, ShieldCheck, Truck, Wallet, Youtube,
 } from "lucide-react";
 import { site } from "@/data/site";
-import { categories } from "@/data/categories";
+import { useCategories } from "@/hooks/useCatalog";
 import { Container } from "@/components/common/Container";
 
 const socialLinks = [
@@ -54,8 +54,6 @@ const cols = [
   },
 ];
 
-const popularCats = categories.slice(0, 5);
-
 function ContactList() {
   return (
     <ul className="space-y-3.5 text-sm">
@@ -100,6 +98,8 @@ function FooterAccordion({ title, children }: { title: string; children: React.R
 }
 
 export function Footer() {
+  const { data: categories = [] } = useCategories();
+  const popularCats = categories.slice(0, 5);
   return (
     <footer className="relative mt-24 overflow-hidden bg-[#0E2A14] text-white">
       {/* Decorative glow */}

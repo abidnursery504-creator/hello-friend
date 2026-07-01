@@ -1,11 +1,18 @@
-import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, redirect, useRouterState } from "@tanstack/react-router";
 import { LayoutDashboard, Leaf, ShoppingBag, Tags, Users } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/common/Container";
 import { cn } from "@/lib/utils";
+import { getSession } from "@/lib/supabase/auth.server";
 
 export const Route = createFileRoute("/admin")({
+  beforeLoad: async () => {
+    const session = await getSession();
+    if (!session) throw redirect({ to: "/login" });
+    if (session.role !== "admin") throw redirect({ to: "/account" });
+    return { session };
+  },
   head: () => ({
     meta: [{ title: "অ্যাডমিন — অল ট্রি বিডি শপ" }, { name: "robots", content: "noindex" }],
   }),
@@ -22,6 +29,7 @@ const nav = [
 
 function AdminLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { session } = Route.useRouteContext();
   return (
     <PageLayout>
       <PageHeader
@@ -33,7 +41,7 @@ function AdminLayout() {
         <aside className="h-fit rounded-3xl border border-border bg-card p-3 shadow-soft lg:sticky lg:top-28">
           <div className="rounded-2xl bg-primary/5 p-4">
             <div className="font-bn text-xs tracking-wide text-muted-foreground">লগইন করেছেন</div>
-            <div className="font-bn font-semibold">অ্যাডমিন · ডেমো</div>
+            <div className="font-bn truncate font-semibold">{session.fullName || session.email}</div>
           </div>
           <nav className="mt-2 space-y-0.5">
             {nav.map(({ to, label, Icon, exact }) => {

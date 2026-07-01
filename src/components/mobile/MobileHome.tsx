@@ -4,8 +4,8 @@ import {
   ArrowRight, BadgeCheck, Camera, Headphones, Package, Truck,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { SmartImage } from "@/components/common/SmartImage";
-import { products } from "@/data/products";
+import type { Product } from "@/data/products";
+import { useProducts } from "@/hooks/useCatalog";
 import { formatBDT } from "@/lib/format";
 import { useCart } from "@/context/CartContext";
 import { cn } from "@/lib/utils";
@@ -35,6 +35,7 @@ const TRUST = [
 const POPULAR_SLUGS = ["amrapali-mango-grafted", "thai-pink-guava", "bedana-litchi", "desi-rose"];
 
 export function MobileHome() {
+  const { data: products = [] } = useProducts();
   return (
     <div className="lg:hidden">
       <MobileHero />
@@ -42,7 +43,7 @@ export function MobileHome() {
       <MobileSectionTitle title="আমাদের ক্যাটাগরি" />
       <MobileCategoryCards />
       <MobileSectionTitle title="জনপ্রিয় গাছ সমূহ" />
-      <MobilePopular />
+      <MobilePopular products={products} />
       <MobileCodBanner />
       <div className="h-6" />
     </div>
@@ -227,24 +228,24 @@ const POPULAR: PopItem[] = [
   { slug: "desi-rose",              name: "গোলাপ গাছ", price: 250, image: pRose },
 ];
 
-function MobilePopular() {
+function MobilePopular({ products }: { products: Product[] }) {
   return (
     <section className="mt-4 px-3">
       <div className="-mx-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-3 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {POPULAR.map((p, idx) => (
-          <PopularCard key={p.slug} item={p} index={idx} />
+          <PopularCard key={p.slug} item={p} index={idx} products={products} />
         ))}
       </div>
     </section>
   );
 }
 
-function PopularCard({ item, index }: { item: PopItem; index: number }) {
+function PopularCard({ item, index, products }: { item: PopItem; index: number; products: Product[] }) {
   const cart = useCart();
   const fallback = products.find((x) => x.slug === item.slug);
 
   const handleAdd = () => {
-    const product: typeof products[number] = fallback ?? {
+    const product: Product = fallback ?? {
       slug: item.slug,
       name: item.name,
       nameBn: item.name,

@@ -3,11 +3,12 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/common/Container";
 import { CategoryCard } from "@/components/common/CategoryCard";
-import { categories } from "@/data/categories";
+import { ensureCategories, useCategories } from "@/hooks/useCatalog";
 
 const FRUIT_SLUGS = ["mango", "citrus", "guava", "litchi", "tropical"];
 
 export const Route = createFileRoute("/categories/fruits")({
+  loader: ({ context }) => ensureCategories(context.queryClient),
   head: () => ({
     meta: [
       { title: "ফল গাছ — সব বিভাগ" },
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/categories/fruits")({
 });
 
 function FruitsHub() {
+  const { data: categories = [] } = useCategories();
   const items = categories.filter((c) => FRUIT_SLUGS.includes(c.slug));
   return (
     <PageLayout>

@@ -8,7 +8,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import { SearchOverlay } from "./SearchOverlay";
 import { cn } from "@/lib/utils";
 import { site } from "@/data/site";
-import { categories } from "@/data/categories";
+import { useCategories } from "@/hooks/useCatalog";
 import { SmartImage } from "@/components/common/SmartImage";
 import { toBnDigits } from "@/lib/format";
 
@@ -25,6 +25,7 @@ const nav = [
 export function Navbar() {
   const cart = useCart();
   const wish = useWishlist();
+  const { data: categories = [] } = useCategories();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);

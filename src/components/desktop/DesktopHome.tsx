@@ -8,8 +8,9 @@ import {
 import { Container } from "@/components/common/Container";
 import { SmartImage } from "@/components/common/SmartImage";
 import { ProductCard } from "@/components/common/ProductCard";
-import { bestsellers, getProductsByCategory, newArrivals } from "@/data/products";
-import { testimonials, posts, site } from "@/data/site";
+import type { Product } from "@/data/products";
+import type { Testimonial, BlogPost } from "@/data/site";
+import { useProducts, useTestimonials, useBlogPosts, selectBestsellers, selectNewArrivals, selectByCategory } from "@/hooks/useCatalog";
 import { cn } from "@/lib/utils";
 import { onImgError, unsplash, unsplashSrcSet } from "@/lib/img";
 import hero1 from "@/assets/hero-plants-1.jpg";
@@ -334,8 +335,8 @@ function SectionTitle({ title }: { title: string }) {
   );
 }
 
-function PopularProducts() {
-  const items = bestsellers().slice(0, 8);
+function PopularProducts({ products }: { products: Product[] }) {
+  const items = selectBestsellers(products).slice(0, 8);
   return (
     <section className="py-14">
       <Container>
@@ -408,19 +409,19 @@ function CodBanner() {
 }
 
 /* ───────────── MORE PRODUCT SECTIONS ───────────── */
-function MoreProducts() {
-  const fresh = newArrivals().slice(0, 8);
-  const featured = bestsellers().slice(0, 8);
+function MoreProducts({ products }: { products: Product[] }) {
+  const fresh = selectNewArrivals(products).slice(0, 8);
+  const featured = selectBestsellers(products).slice(0, 8);
   const fruit = [
-    ...getProductsByCategory("guava"),
-    ...getProductsByCategory("litchi"),
-    ...getProductsByCategory("citrus"),
-    ...getProductsByCategory("tropical"),
+    ...selectByCategory(products, "guava"),
+    ...selectByCategory(products, "litchi"),
+    ...selectByCategory(products, "citrus"),
+    ...selectByCategory(products, "tropical"),
   ].slice(0, 8);
   const flowers = [
-    ...getProductsByCategory("flowering"),
-    ...getProductsByCategory("indoor"),
-    ...getProductsByCategory("herbs"),
+    ...selectByCategory(products, "flowering"),
+    ...selectByCategory(products, "indoor"),
+    ...selectByCategory(products, "herbs"),
   ].slice(0, 8);
 
   const Rail = ({ title, items, href, ctaBn }: { title: string; items: typeof fruit; href: string; ctaBn: string }) => (
@@ -453,7 +454,7 @@ function MoreProducts() {
 }
 
 /* ───────────── REVIEWS ───────────── */
-function Reviews() {
+function Reviews({ testimonials }: { testimonials: Testimonial[] }) {
   return (
     <section className="bg-[#F8FFF7] py-16">
       <Container>
@@ -491,7 +492,7 @@ function Reviews() {
 }
 
 /* ───────────── BLOG ───────────── */
-function BlogSection() {
+function BlogSection({ posts }: { posts: BlogPost[] }) {
   return (
     <section className="py-16">
       <Container>
@@ -533,15 +534,18 @@ function BlogSection() {
 }
 
 export function DesktopHome() {
+  const { data: products = [] } = useProducts();
+  const { data: testimonials = [] } = useTestimonials();
+  const { data: posts = [] } = useBlogPosts();
   return (
     <>
       <Hero />
       <CategoryBanners />
-      <PopularProducts />
+      <PopularProducts products={products} />
       <CodBanner />
-      <MoreProducts />
-      <Reviews />
-      <BlogSection />
+      <MoreProducts products={products} />
+      <Reviews testimonials={testimonials} />
+      <BlogSection posts={posts} />
     </>
   );
 }

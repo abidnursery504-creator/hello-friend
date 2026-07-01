@@ -1,11 +1,18 @@
-import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { Heart, Home, MapPin, Package, User } from "lucide-react";
+import { createFileRoute, Link, Outlet, redirect, useRouterState } from "@tanstack/react-router";
+import { Heart, Home, LogOut, MapPin, Package, User } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/common/Container";
 import { cn } from "@/lib/utils";
+import { getSession, signOut } from "@/lib/supabase/auth.server";
+import { useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/account")({
+  beforeLoad: async () => {
+    const session = await getSession();
+    if (!session) throw redirect({ to: "/login" });
+    return { session };
+  },
   head: () => ({
     meta: [{ title: "আমার একাউন্ট — অল ট্রি বিডি শপ" }, { name: "robots", content: "noindex" }],
   }),
@@ -21,6 +28,8 @@ const nav = [
 
 function AccountLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { session } = Route.useRouteContext();
+  const router = useRouter();
   return (
     <PageLayout>
       <PageHeader
@@ -32,9 +41,14 @@ function AccountLayout() {
         <aside className="h-fit rounded-3xl border border-border bg-card p-3 shadow-soft lg:sticky lg:top-28">
           <div className="flex items-center gap-3 rounded-2xl bg-primary/5 p-3">
             <span className="grid size-10 place-items-center rounded-full gradient-primary text-primary-foreground"><User className="size-4" /></span>
-            <div className="min-w-0">
-              <div className="font-bn truncate text-sm font-semibold">অতিথি ব্যবহারকারী</div>
-              <Link to="/login" className="font-bn text-xs text-primary hover:underline">লগইন করুন</Link>
+            <div className="min-w-0 flex-1">
+              <div className="font-bn truncate text-sm font-semibold">{session.fullName || session.email}</div>
+              <button
+                onClick={async () => { await signOut(); router.invalidate(); }}
+                className="font-bn inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive"
+              >
+                <LogOut className="size-3" /> লগআউট
+              </button>
             </div>
           </div>
           <nav className="mt-2 space-y-0.5">

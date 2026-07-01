@@ -3,11 +3,12 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/common/Container";
 import { CategoryCard } from "@/components/common/CategoryCard";
-import { categories } from "@/data/categories";
+import { ensureCategories, useCategories } from "@/hooks/useCatalog";
 
 const FLOWER_SLUGS = ["flowering", "indoor", "herbs"];
 
 export const Route = createFileRoute("/categories/flowers")({
+  loader: ({ context }) => ensureCategories(context.queryClient),
   head: () => ({
     meta: [
       { title: "ফুল ও সবুজ গাছ — সব বিভাগ" },
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/categories/flowers")({
 });
 
 function FlowersHub() {
+  const { data: categories = [] } = useCategories();
   const items = categories.filter((c) => FLOWER_SLUGS.includes(c.slug));
   return (
     <PageLayout>

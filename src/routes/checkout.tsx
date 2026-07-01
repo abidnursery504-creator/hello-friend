@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { CheckCircle2, Truck } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -9,6 +10,7 @@ import { useCart } from "@/context/CartContext";
 import { formatBDT, toBnDigits } from "@/lib/format";
 import { site } from "@/data/site";
 import { toast } from "sonner";
+import { createOrder } from "@/lib/supabase/orders.server";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -21,14 +23,47 @@ function CheckoutPage() {
   const { items, subtotal, clear } = useCart();
   const navigate = useNavigate();
   const [done, setDone] = useState(false);
+  const [orderNumber, setOrderNumber] = useState("");
   const shipping = subtotal >= site.shipping.freeAbove ? 0 : items.length ? site.shipping.flatFee : 0;
   const total = subtotal + shipping;
 
+  const [form, setForm] = useState({
+    name: "", phone: "", email: "", address: "", city: "", district: "", note: "",
+  });
+  const set = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+    setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  const mutation = useMutation({
+    mutationFn: () =>
+      createOrder({
+        data: {
+          customerName: form.name,
+          customerPhone: form.phone,
+          customerEmail: form.email,
+          shippingAddress: form.address,
+          shippingCity: form.city,
+          shippingDistrict: form.district,
+          shippingNote: form.note,
+          items: items.map(({ product, qty }) => ({
+            slug: product.slug, name: product.name, image: product.image, price: product.price, qty,
+          })),
+          subtotal,
+          shippingFee: shipping,
+          total,
+        },
+      }),
+    onSuccess: (res) => {
+      setOrderNumber(res.orderNumber);
+      setDone(true);
+      clear();
+      toast.success("অর্ডার সফল হয়েছে! ৩০ মিনিটের মধ্যে আমরা কল দিয়ে নিশ্চিত করব।");
+    },
+    onError: (err: Error) => toast.error(err.message || "অর্ডার ব্যর্থ হয়েছে"),
+  });
+
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    setDone(true);
-    clear();
-    toast.success("অর্ডার সফল হয়েছে! ৩০ মিনিটের মধ্যে আমরা কল দিয়ে নিশ্চিত করব।");
+    mutation.mutate();
   };
 
   if (done) {
@@ -37,7 +72,7 @@ function CheckoutPage() {
         <Container className="py-24 text-center">
           <CheckCircle2 className="mx-auto size-16 text-primary" />
           <h1 className="font-bn mt-6 text-3xl font-bold">অর্ডার সফল হয়েছে!</h1>
-          <p className="font-bn mt-2 text-muted-foreground">শীঘ্রই হোয়াটসঅ্যাপে নিশ্চিতকরণ পাবেন।</p>
+          <p className="font-bn mt-2 text-muted-foreground">অর্ডার নম্বর: {orderNumber} · শীঘ্রই হোয়াটসঅ্যাপে নিশ্চিতকরণ পাবেন।</p>
           <button onClick={() => navigate({ to: "/" })} className="font-bn mt-8 rounded-full gradient-primary px-6 py-3 text-sm font-semibold text-primary-foreground">হোমে ফিরে যান</button>
         </Container>
       </PageLayout>
@@ -51,23 +86,23 @@ function CheckoutPage() {
         <form onSubmit={submit} className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
           <div className="space-y-6">
             <Card title="যোগাযোগের তথ্য">
-              <Field label="পুরো নাম" required><input required className={fieldCls} placeholder="মো. ইমরান হোসেন" /></Field>
-              <Field label="ফোন (হোয়াটসঅ্যাপ)" required><input required type="tel" className={fieldCls} placeholder="+৮৮০ ১XXX-XXXXXX" /></Field>
-              <Field label="ইমেইল (ঐচ্ছিক)"><input type="email" className={fieldCls} placeholder="you@email.com" /></Field>
+              <Field label="পুরো নাম" required><input required className={fieldCls} placeholder="মো. ইমরান হোসেন" value={form.name} onChange={set("name")} /></Field>
+              <Field label="ফোন (হোয়াটসঅ্যাপ)" required><input required type="tel" className={fieldCls} placeholder="+৮৮০ ১XXX-XXXXXX" value={form.phone} onChange={set("phone")} /></Field>
+              <Field label="ইমেইল (ঐচ্ছিক)"><input type="email" className={fieldCls} placeholder="you@email.com" value={form.email} onChange={set("email")} /></Field>
             </Card>
 
             <Card title="ডেলিভারি ঠিকানা">
-              <Field label="বিস্তারিত ঠিকানা" required><input required className={fieldCls} placeholder="বাড়ি ১২, রোড ৪, ধানমন্ডি" /></Field>
+              <Field label="বিস্তারিত ঠিকানা" required><input required className={fieldCls} placeholder="বাড়ি ১২, রোড ৪, ধানমন্ডি" value={form.address} onChange={set("address")} /></Field>
               <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="শহর/উপজেলা" required><input required className={fieldCls} placeholder="ঢাকা" /></Field>
+                <Field label="শহর/উপজেলা" required><input required className={fieldCls} placeholder="ঢাকা" value={form.city} onChange={set("city")} /></Field>
                 <Field label="জেলা" required>
-                  <select required className={fieldCls} defaultValue="">
+                  <select required className={fieldCls} value={form.district} onChange={set("district")}>
                     <option value="" disabled>জেলা নির্বাচন করুন</option>
                     {["ঢাকা", "চট্টগ্রাম", "রাজশাহী", "খুলনা", "সিলেট", "বরিশাল", "রংপুর", "ময়মনসিংহ"].map((d) => <option key={d}>{d}</option>)}
                   </select>
                 </Field>
               </div>
-              <Field label="অতিরিক্ত নোট (ঐচ্ছিক)"><textarea rows={3} className={fieldCls} placeholder="ল্যান্ডমার্ক, পছন্দের সময়…" /></Field>
+              <Field label="অতিরিক্ত নোট (ঐচ্ছিক)"><textarea rows={3} className={fieldCls} placeholder="ল্যান্ডমার্ক, পছন্দের সময়…" value={form.note} onChange={set("note")} /></Field>
             </Card>
 
             <Card title="পেমেন্ট পদ্ধতি">
@@ -101,8 +136,8 @@ function CheckoutPage() {
               <div className="flex justify-between"><dt className="text-muted-foreground">ডেলিভারি</dt><dd>{shipping === 0 ? <span className="text-primary">ফ্রি</span> : formatBDT(shipping)}</dd></div>
               <div className="flex justify-between border-t pt-2 text-base"><dt className="font-semibold">মোট</dt><dd className="font-display text-xl font-bold text-primary">{formatBDT(total)}</dd></div>
             </dl>
-            <button type="submit" disabled={items.length === 0} className="font-bn mt-6 w-full rounded-full gradient-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-soft transition hover:shadow-elegant disabled:opacity-50">
-              অর্ডার নিশ্চিত করুন
+            <button type="submit" disabled={items.length === 0 || mutation.isPending} className="font-bn mt-6 w-full rounded-full gradient-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-soft transition hover:shadow-elegant disabled:opacity-50">
+              {mutation.isPending ? "অর্ডার হচ্ছে…" : "অর্ডার নিশ্চিত করুন"}
             </button>
           </aside>
         </form>

@@ -1,8 +1,11 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { Leaf, Lock, Mail } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Container } from "@/components/common/Container";
 import { toast } from "sonner";
+import { signIn } from "@/lib/supabase/auth.server";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -13,6 +16,20 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const navigate = useNavigate();
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const mutation = useMutation({
+    mutationFn: () => signIn({ data: { email, password } }),
+    onSuccess: async () => {
+      toast.success("লগইন সফল হয়েছে");
+      await router.invalidate();
+      navigate({ to: "/account" });
+    },
+    onError: (err: Error) => toast.error(err.message || "লগইন ব্যর্থ হয়েছে"),
+  });
+
   return (
     <PageLayout>
       <Container className="grid place-items-center py-16">
@@ -21,10 +38,12 @@ function LoginPage() {
           <h1 className="font-bn text-center font-display text-2xl font-bold">আবার স্বাগতম</h1>
           <p className="font-bn mt-1 text-center text-sm text-muted-foreground">অর্ডার ট্র্যাক করতে ও পছন্দের তালিকা দেখতে লগইন করুন।</p>
 
-          <form onSubmit={(e) => { e.preventDefault(); toast.success("লগইন সফল হয়েছে"); navigate({ to: "/account" }); }} className="mt-8 space-y-4">
-            <Field icon={<Mail className="size-4" />} type="email" placeholder="আপনার ইমেইল" />
-            <Field icon={<Lock className="size-4" />} type="password" placeholder="পাসওয়ার্ড" />
-            <button type="submit" className="font-bn w-full rounded-full gradient-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-soft">লগইন করুন</button>
+          <form onSubmit={(e) => { e.preventDefault(); mutation.mutate(); }} className="mt-8 space-y-4">
+            <Field icon={<Mail className="size-4" />} type="email" placeholder="আপনার ইমেইল" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Field icon={<Lock className="size-4" />} type="password" placeholder="পাসওয়ার্ড" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <button type="submit" disabled={mutation.isPending} className="font-bn w-full rounded-full gradient-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-soft disabled:opacity-60">
+              {mutation.isPending ? "লগইন হচ্ছে…" : "লগইন করুন"}
+            </button>
           </form>
 
           <p className="font-bn mt-6 text-center text-sm text-muted-foreground">

@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Heart } from "lucide-react";
 import { useWishlist } from "@/context/WishlistContext";
-import { products } from "@/data/products";
+import { useProducts } from "@/hooks/useCatalog";
 import { ProductCard } from "@/components/common/ProductCard";
 
 export const Route = createFileRoute("/account/wishlist")({
@@ -10,6 +10,7 @@ export const Route = createFileRoute("/account/wishlist")({
 
 function WishlistPage() {
   const { slugs } = useWishlist();
+  const { data: products = [] } = useProducts();
   const items = products.filter((p) => slugs.includes(p.slug));
   if (items.length === 0) {
     return (

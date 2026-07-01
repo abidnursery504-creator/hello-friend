@@ -1,16 +1,24 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Heart, Package, ShoppingBag } from "lucide-react";
 import { toBnDigits } from "@/lib/format";
+import { useMyOrders } from "@/hooks/useAdmin";
+import { useWishlist } from "@/context/WishlistContext";
+import { Route as AccountRoute } from "./account";
 
 export const Route = createFileRoute("/account/")({
   component: AccountOverview,
 });
 
 function AccountOverview() {
+  const { session } = AccountRoute.useRouteContext();
+  const { data: orders = [] } = useMyOrders(session.id);
+  const { slugs } = useWishlist();
+  const pending = orders.filter((o) => o.status === "processing" || o.status === "shipped").length;
+
   const tiles = [
-    { Icon: Package, t: 0, l: "চলমান অর্ডার", to: "/account/orders" as const },
-    { Icon: ShoppingBag, t: 12, l: "মোট অর্ডার", to: "/account/orders" as const },
-    { Icon: Heart, t: 5, l: "ইচ্ছার তালিকা", to: "/account/wishlist" as const },
+    { Icon: Package, t: pending, l: "চলমান অর্ডার", to: "/account/orders" as const },
+    { Icon: ShoppingBag, t: orders.length, l: "মোট অর্ডার", to: "/account/orders" as const },
+    { Icon: Heart, t: slugs.length, l: "ইচ্ছার তালিকা", to: "/account/wishlist" as const },
   ];
   return (
     <div className="space-y-6">

@@ -3,10 +3,11 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/common/Container";
-import { faqs } from "@/data/site";
+import { ensureFaqs, useFaqs } from "@/hooks/useCatalog";
 
 export const Route = createFileRoute("/faq")({
-  head: () => ({
+  loader: ({ context }) => ensureFaqs(context.queryClient),
+  head: ({ loaderData }) => ({
     meta: [
       { title: "সাধারণ প্রশ্নোত্তর — অল ট্রি বিডি শপ" },
       { name: "description", content: "ডেলিভারি, গ্যারান্টি, পরিচর্যা ও পেমেন্ট সম্পর্কে সাধারণ প্রশ্নের উত্তর।" },
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/faq")({
       children: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        mainEntity: faqs.map((f) => ({
+        mainEntity: (loaderData ?? []).map((f) => ({
           "@type": "Question",
           name: f.q,
           acceptedAnswer: { "@type": "Answer", text: f.a },
@@ -31,6 +32,7 @@ export const Route = createFileRoute("/faq")({
 });
 
 function FAQPage() {
+  const { data: faqs = [] } = useFaqs();
   return (
     <PageLayout>
       <PageHeader crumbs={[{ label: "হোম", to: "/" }, { label: "প্রশ্নোত্তর" }]} title="সাধারণ প্রশ্নোত্তর" subtitle="সবচেয়ে বেশি জিজ্ঞাসিত প্রশ্নের সহজ উত্তর।" align="center" />

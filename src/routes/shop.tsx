@@ -5,8 +5,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/common/Container";
 import { ProductCard } from "@/components/common/ProductCard";
-import { categories } from "@/data/categories";
-import { products } from "@/data/products";
+import { ensureCategories, ensureProducts, useCategories, useProducts } from "@/hooks/useCatalog";
 import { cn } from "@/lib/utils";
 import { toBnDigits } from "@/lib/format";
 import { z } from "zod";
@@ -19,6 +18,9 @@ const search = z.object({
 
 export const Route = createFileRoute("/shop")({
   validateSearch: search,
+  loader: async ({ context }) => {
+    await Promise.all([ensureProducts(context.queryClient), ensureCategories(context.queryClient)]);
+  },
   head: () => ({
     meta: [
       { title: "সব গাছ — অল ট্রি বিডি শপ" },
@@ -35,6 +37,8 @@ function Shop() {
   const sp = Route.useSearch();
   const navigate = useNavigate({ from: "/shop" });
   const [open, setOpen] = useState(false);
+  const { data: products = [] } = useProducts();
+  const { data: categories = [] } = useCategories();
 
   const filtered = useMemo(() => {
     let list = [...products];
@@ -51,7 +55,7 @@ function Shop() {
       case "bestseller": list = list.filter((p) => p.badges?.includes("বেস্ট সেলার")).concat(list.filter((p) => !p.badges?.includes("বেস্ট সেলার"))); break;
     }
     return list;
-  }, [sp]);
+  }, [sp, products]);
 
   return (
     <PageLayout>

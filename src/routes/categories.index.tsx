@@ -3,9 +3,10 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/common/Container";
 import { CategoryCard } from "@/components/common/CategoryCard";
-import { categories } from "@/data/categories";
+import { ensureCategories, useCategories } from "@/hooks/useCatalog";
 
 export const Route = createFileRoute("/categories/")({
+  loader: ({ context }) => ensureCategories(context.queryClient),
   head: () => ({
     meta: [
       { title: "সব বিভাগ — অল ট্রি বিডি শপ" },
@@ -15,7 +16,12 @@ export const Route = createFileRoute("/categories/")({
     ],
     links: [{ rel: "canonical", href: "/categories" }],
   }),
-  component: () => (
+  component: CategoriesIndex,
+});
+
+function CategoriesIndex() {
+  const { data: categories = [] } = useCategories();
+  return (
     <PageLayout>
       <PageHeader
         crumbs={[{ label: "হোম", to: "/" }, { label: "বিভাগ" }]}
@@ -28,5 +34,5 @@ export const Route = createFileRoute("/categories/")({
         </div>
       </Container>
     </PageLayout>
-  ),
-});
+  );
+}

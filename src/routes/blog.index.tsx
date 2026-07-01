@@ -4,9 +4,10 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/common/Container";
 import { SmartImage } from "@/components/common/SmartImage";
-import { posts } from "@/data/site";
+import { ensureBlogPosts, useBlogPosts } from "@/hooks/useCatalog";
 
 export const Route = createFileRoute("/blog/")({
+  loader: ({ context }) => ensureBlogPosts(context.queryClient),
   head: () => ({
     meta: [
       { title: "ব্লগ ও পরিচর্যা গাইড — অল ট্রি বিডি শপ" },
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/blog/")({
 });
 
 function BlogIndex() {
+  const { data: posts = [] } = useBlogPosts();
   return (
     <PageLayout>
       <PageHeader crumbs={[{ label: "হোম", to: "/" }, { label: "ব্লগ" }]} title="গাছের গল্প ও পরিচর্যা গাইড" subtitle="ছাদে আম চাষ থেকে বর্ষার সংগ্রাম — বাগানিদের জন্য বাগানিদের লেখা।" />

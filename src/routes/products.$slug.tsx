@@ -8,8 +8,7 @@ import { Container } from "@/components/common/Container";
 import { Section } from "@/components/common/Section";
 import { SmartImage } from "@/components/common/SmartImage";
 import { ProductCard } from "@/components/common/ProductCard";
-import { getProductBySlug, getProductsByCategory } from "@/data/products";
-import { getCategoryBySlug } from "@/data/categories";
+import { ensureProduct, useCategory, useProductsByCategory } from "@/hooks/useCatalog";
 import { formatBDT, toBnDigits } from "@/lib/format";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
@@ -17,8 +16,8 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/products/$slug")({
-  loader: ({ params }) => {
-    const product = getProductBySlug(params.slug);
+  loader: async ({ params, context }) => {
+    const product = await ensureProduct(context.queryClient, params.slug);
     if (!product) throw notFound();
     return { product };
   },
@@ -55,8 +54,9 @@ function ProductPage() {
   const [active, setActive] = useState(0);
   const cart = useCart();
   const wish = useWishlist();
-  const category = getCategoryBySlug(product.category);
-  const related = getProductsByCategory(product.category).filter((p) => p.slug !== product.slug).slice(0, 4);
+  const { data: category } = useCategory(product.category);
+  const { data: sameCategory = [] } = useProductsByCategory(product.category);
+  const related = sameCategory.filter((p) => p.slug !== product.slug).slice(0, 4);
   const gallery = product.gallery.length > 0 ? product.gallery : [product.image];
 
   return (
