@@ -6,6 +6,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { Container } from "@/components/common/Container";
 import { toast } from "sonner";
 import { signIn } from "@/lib/supabase/auth.server";
+import { useInvalidateSession } from "@/hooks/useSession";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -19,11 +20,13 @@ function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const invalidateSession = useInvalidateSession();
 
   const mutation = useMutation({
     mutationFn: () => signIn({ data: { email, password } }),
     onSuccess: async () => {
       toast.success("লগইন সফল হয়েছে");
+      invalidateSession();
       await router.invalidate();
       navigate({ to: "/account" });
     },

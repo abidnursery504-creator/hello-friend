@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/common/Container";
 import { cn } from "@/lib/utils";
 import { getSession, signOut } from "@/lib/supabase/auth.server";
+import { useInvalidateSession } from "@/hooks/useSession";
 import { useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/account")({
@@ -30,6 +31,7 @@ function AccountLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { session } = Route.useRouteContext();
   const router = useRouter();
+  const invalidateSession = useInvalidateSession();
   return (
     <PageLayout>
       <PageHeader
@@ -44,7 +46,7 @@ function AccountLayout() {
             <div className="min-w-0 flex-1">
               <div className="font-bn truncate text-sm font-semibold">{session.fullName || session.email}</div>
               <button
-                onClick={async () => { await signOut(); router.invalidate(); }}
+                onClick={async () => { await signOut(); invalidateSession(); router.invalidate(); }}
                 className="font-bn inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive"
               >
                 <LogOut className="size-3" /> লগআউট

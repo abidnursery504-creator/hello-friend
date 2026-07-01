@@ -1,5 +1,5 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import { ChevronDown, Heart, Leaf, Menu, Search, ShoppingBag, User, X } from "lucide-react";
+import { Link, useRouter, useRouterState } from "@tanstack/react-router";
+import { ChevronDown, Heart, LogOut, Leaf, Menu, Search, ShoppingBag, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/context/CartContext";
@@ -9,8 +9,11 @@ import { SearchOverlay } from "./SearchOverlay";
 import { cn } from "@/lib/utils";
 import { site } from "@/data/site";
 import { useCategories } from "@/hooks/useCatalog";
+import { useSession, useInvalidateSession } from "@/hooks/useSession";
+import { signOut } from "@/lib/supabase/auth.server";
 import { SmartImage } from "@/components/common/SmartImage";
 import { toBnDigits } from "@/lib/format";
+import { toast } from "sonner";
 
 const nav = [
   { to: "/", label: "হোম" },
@@ -26,11 +29,24 @@ export function Navbar() {
   const cart = useCart();
   const wish = useWishlist();
   const { data: categories = [] } = useCategories();
+  const { data: session } = useSession();
+  const invalidateSession = useInvalidateSession();
+  const router = useRouter();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+
+  const handleLogout = async () => {
+    await signOut();
+    invalidateSession();
+    await router.invalidate();
+    setAccountMenuOpen(false);
+    toast.success("লগআউট হয়েছে");
+    router.navigate({ to: "/" });
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -229,9 +245,50 @@ export function Navbar() {
                 </span>
               )}
             </Link>
-            <Link to="/login" aria-label="একাউন্ট" className="grid size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent">
-              <User className="size-4" />
-            </Link>
+            {session ? (
+              <div
+                className="relative"
+                onMouseEnter={() => setAccountMenuOpen(true)}
+                onMouseLeave={() => setAccountMenuOpen(false)}
+              >
+                <Link
+                  to="/account"
+                  aria-label="একাউন্ট"
+                  className="grid size-10 place-items-center rounded-full border border-primary/40 bg-primary/5 text-primary transition hover:bg-primary/10"
+                >
+                  <User className="size-4" />
+                </Link>
+                <AnimatePresence>
+                  {accountMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 top-full z-40 mt-2 w-52 overflow-hidden rounded-2xl border border-border bg-card shadow-elegant"
+                    >
+                      <div className="font-bn truncate border-b border-border px-4 py-3 text-sm font-semibold">
+                        {session.fullName || session.email}
+                      </div>
+                      <Link to="/account" className="font-bn flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-accent">
+                        <User className="size-4" /> আমার একাউন্ট
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="font-bn flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-destructive hover:bg-destructive/10"
+                      >
+                        <LogOut className="size-4" /> লগআউট
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <Link to="/login" aria-label="লগইন" className="grid size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent">
+                <User className="size-4" />
+              </Link>
+            )}
           </div>
 
         </div>
@@ -272,6 +329,33 @@ export function Navbar() {
                     <Search className="size-4" /> গাছ খুঁজুন
                   </button>
                   <ThemeToggle />
+                </div>
+
+                <div className="mt-2 border-t border-border pt-3">
+                  {session ? (
+                    <>
+                      <Link
+                        to="/account"
+                        className="font-bn flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium text-foreground hover:bg-accent"
+                      >
+                        <User className="size-4" /> {session.fullName || session.email}
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="font-bn flex w-full items-center gap-2 rounded-2xl px-4 py-3 text-left text-sm font-medium text-destructive hover:bg-destructive/10"
+                      >
+                        <LogOut className="size-4" /> লগআউট
+                      </button>
+                    </>
+                  ) : (
+                    <Link
+                      to="/login"
+                      className="font-bn flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium text-foreground hover:bg-accent"
+                    >
+                      <User className="size-4" /> লগইন করুন
+                    </Link>
+                  )}
                 </div>
               </div>
             </motion.div>
