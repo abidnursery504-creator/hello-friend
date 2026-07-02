@@ -112,8 +112,8 @@ function MobileSectionTitle({ title }: { title: string }) {
 /* ── 2 category banners ────────────────────────── */
 function MobileCategoryCards() {
   return (
-    <section className="mt-4 flex flex-col gap-3 px-3">
-      <Link to="/categories/fruits" aria-label="ফল গাছ" className="block overflow-hidden rounded-3xl shadow-soft active:scale-[0.98]">
+    <section className="mt-4 grid grid-cols-2 gap-3 px-3">
+      <Link to="/categories/fruits" aria-label="ফল গাছ" className="block overflow-hidden rounded-3xl bg-[#EAF8E7] shadow-soft active:scale-[0.98]">
         <img
           src={catFruitBanner}
           alt="ফল গাছ"
@@ -122,7 +122,7 @@ function MobileCategoryCards() {
           decoding="async"
         />
       </Link>
-      <Link to="/categories/flowers" aria-label="ফুল গাছ" className="block overflow-hidden rounded-3xl shadow-soft active:scale-[0.98]">
+      <Link to="/categories/flowers" aria-label="ফুল গাছ" className="block overflow-hidden rounded-3xl bg-[#FCE4EC] shadow-soft active:scale-[0.98]">
         <img
           src={catFlowerBanner}
           alt="ফুল গাছ"
