@@ -16,6 +16,7 @@ import { onImgError, unsplash, unsplashSrcSet } from "@/lib/img";
 import hero1 from "@/assets/hero-plants-1.jpg";
 import hero2 from "@/assets/hero-plants-2.jpg";
 import hero3 from "@/assets/hero-plants-3.jpg";
+import deliveryBanner from "@/assets/delivery-banner.jpg";
 
 
 /* ───────────── HERO SLIDER (light, split layout — reference style) ───────────── */
@@ -367,41 +368,20 @@ function CodBanner() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#EAF8E7] via-[#DDF1D2] to-[#C9E8B8] shadow-elegant"
+          className="overflow-hidden rounded-[32px] shadow-elegant"
         >
-          <div className="grid items-center gap-6 p-10 md:grid-cols-[1.2fr_1fr] md:p-14">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold tracking-wider text-[#1B5E20] shadow-soft">
-                <Wallet className="size-3.5" /> <span className="font-bn">ক্যাশ অন ডেলিভারি</span>
-              </div>
-              <h3 className="font-bn mt-5 text-4xl font-extrabold text-[#1B5E20] md:text-5xl">
-                ক্যাশ অন ডেলিভারি
-              </h3>
-              <p className="font-bn mt-4 max-w-md text-base text-foreground/80 md:text-lg">
-                পণ্য হাতে পেয়ে মূল্য পরিশোধ করুন। সারা বাংলাদেশের ৬৪ জেলায় নিরাপদ ডেলিভারি।
-              </p>
-              <Link
-                to="/shop"
-                className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#1B5E20] px-7 py-3.5 text-sm font-bn font-semibold text-white shadow-soft transition hover:bg-[#0e3a13]"
-              >
-                বিস্তারিত দেখুন <ArrowRight className="size-4" />
-              </Link>
-            </div>
-            <div className="relative h-[260px]">
-              <img
-                src={unsplash("https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da", 1024, 75)}
-                srcSet={unsplashSrcSet("https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da", [480, 800, 1024])}
-                alt="ক্যাশ অন ডেলিভারি কুরিয়ার"
-                width={1024}
-                height={680}
-                sizes="(min-width: 768px) 40vw, 100vw"
-                className="absolute inset-0 h-full w-full rounded-2xl object-cover shadow-elegant"
-                loading="lazy"
-                decoding="async"
-                onError={onImgError}
-              />
-            </div>
-          </div>
+          <Link to="/shop" aria-label="ক্যাশ অন ডেলিভারি">
+            <img
+              src={deliveryBanner}
+              alt="ক্যাশ অন ডেলিভারি"
+              width={1600}
+              height={533}
+              className="h-auto w-full object-contain"
+              loading="lazy"
+              decoding="async"
+              onError={onImgError}
+            />
+          </Link>
         </motion.div>
       </Container>
     </section>

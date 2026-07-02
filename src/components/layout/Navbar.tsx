@@ -105,7 +105,7 @@ export function Navbar() {
           </button>
 
           <Link to="/" className="flex items-center justify-center">
-            <img src={logoFull} alt="Abid Nursery and Plants" className="h-11 w-auto object-contain" />
+            <img src={logoFull} alt="Abid Nursery and Plants" className="h-14 w-auto object-contain" />
           </Link>
 
           <div className="flex items-center justify-end gap-0.5">

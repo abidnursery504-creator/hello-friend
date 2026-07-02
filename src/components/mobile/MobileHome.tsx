@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import {
   ArrowRight, BadgeCheck, Camera, Headphones, Package, Truck,
 } from "lucide-react";
-import { useEffect, useState } from "react";
 import type { Product } from "@/data/products";
 import { useProducts } from "@/hooks/useCatalog";
 import { formatBDT } from "@/lib/format";
@@ -11,23 +10,14 @@ import { useCart } from "@/context/CartContext";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { onImgError, unsplash, unsplashSrcSet } from "@/lib/img";
-import hero1 from "@/assets/mobile-hero-1.jpg";
 import hero2 from "@/assets/mobile-hero-2.jpg";
-import hero3 from "@/assets/mobile-hero-3.jpg";
+import deliveryBanner from "@/assets/delivery-banner.jpg";
 import catFruit from "@/assets/cat-fruit-tree.png";
 import catFlower from "@/assets/cat-flower-tree.png";
 import pMango from "@/assets/p-mango.png";
 import pJackfruit from "@/assets/p-jackfruit.png";
 import pLitchi from "@/assets/p-litchi.png";
 import pRose from "@/assets/p-rose.png";
-import codBox from "@/assets/cod-box-hand.png";
-import codLeaves from "@/assets/cod-leaves-left.png";
-
-const HERO_SLIDES = [
-  { image: hero1, to: "/categories/fruits", alt: "ফল গাছ" },
-  { image: hero2, to: "/shop", alt: "ফল ও ফুলের গাছ" },
-  { image: hero3, to: "/categories/flowers", alt: "ফুল গাছ" },
-] as const;
 
 const TRUST = [
   { Icon: Truck, t: "সারা বাংলাদেশে ডেলিভারি", s: "দ্রুত ও নিরাপদ ডেলিভারি" },
@@ -57,47 +47,21 @@ export function MobileHome() {
 
 /* ── Hero ──────────────────────────────────────── */
 function MobileHero() {
-  const [i, setI] = useState(0);
-  useEffect(() => {
-    const t = setInterval(() => setI((v) => (v + 1) % HERO_SLIDES.length), 4500);
-    return () => clearInterval(t);
-  }, []);
-  const slide = HERO_SLIDES[i];
-
   return (
     <section className="px-3 pt-3">
-      <div className="relative aspect-3/2 w-full overflow-hidden rounded-[28px] bg-[#f6f4e8] shadow-elegant">
-        <Link key={slide.to} to={slide.to} aria-label={slide.alt} className="absolute inset-0 block">
-          <motion.img
-            key={slide.image}
-            src={slide.image}
-            alt={slide.alt}
-            initial={{ opacity: 0, scale: 1.06 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
-            className="h-full w-full object-cover"
-            width={1600}
-            height={1000}
-            onError={onImgError}
-          />
-        </Link>
-
-        {/* Pagination */}
-        <div className="absolute inset-x-0 bottom-3 flex items-center justify-center gap-1.5">
-          {HERO_SLIDES.map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => setI(idx)}
-              aria-label={`স্লাইড ${idx + 1}`}
-              className={cn(
-                "h-1.5 rounded-full transition-all",
-                idx === i ? "w-6 bg-[#1B5E20]" : "w-1.5 bg-white/70",
-              )}
-            />
-          ))}
-        </div>
-      </div>
+      <Link to="/shop" aria-label="ফল ও ফুলের গাছ" className="block overflow-hidden rounded-[28px] shadow-elegant">
+        <motion.img
+          src={hero2}
+          alt="ফল ও ফুলের গাছ"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="h-auto w-full object-contain"
+          width={1600}
+          height={941}
+          onError={onImgError}
+        />
+      </Link>
     </section>
   );
 }
@@ -289,28 +253,11 @@ function PopularCard({ item, index, products }: { item: PopItem; index: number; 
 function MobileCodBanner() {
   return (
     <section className="mt-6 px-3">
-      <div className="relative flex h-24 items-center overflow-hidden rounded-2xl bg-[#5C8A3A] px-4 text-white shadow-elegant">
-        {/* Left decorative leaves */}
+      <div className="overflow-hidden rounded-2xl shadow-elegant">
         <img
-          src={codLeaves}
-          alt=""
-          aria-hidden
-          className="pointer-events-none absolute -left-3 top-1/2 h-28 w-24 -translate-y-1/2 object-contain opacity-95"
-          loading="lazy"
-          decoding="async"
-        />
-        {/* Text */}
-        <div className="relative z-10 ml-20 max-w-[55%]">
-          <h3 className="font-bn text-[18px] font-extrabold leading-tight">ক্যাশ অন ডেলিভারি</h3>
-          <p className="font-bn mt-1 text-[11px] leading-snug text-white/90">
-            পণ্য হাতে পেয়ে মূল্য পরিশোধ করুন
-          </p>
-        </div>
-        {/* Right hand + box */}
-        <img
-          src={codBox}
-          alt="Abid Nursery and Plants delivery"
-          className="pointer-events-none absolute -right-2 top-1/2 h-24 w-32 -translate-y-1/2 object-contain"
+          src={deliveryBanner}
+          alt="ক্যাশ অন ডেলিভারি"
+          className="h-auto w-full object-contain"
           loading="lazy"
           decoding="async"
         />
