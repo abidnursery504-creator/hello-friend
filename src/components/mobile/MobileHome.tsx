@@ -11,9 +11,9 @@ import { useCart } from "@/context/CartContext";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { onImgError, unsplash, unsplashSrcSet } from "@/lib/img";
-import heroNursery from "@/assets/mobile-hero-nursery.jpg";
-import heroFlowers from "@/assets/mobile-hero-flowers.jpg";
-import heroMango from "@/assets/mobile-hero-mango.jpg";
+import hero1 from "@/assets/mobile-hero-1.jpg";
+import hero2 from "@/assets/mobile-hero-2.jpg";
+import hero3 from "@/assets/mobile-hero-3.jpg";
 import catFruit from "@/assets/cat-fruit-tree.png";
 import catFlower from "@/assets/cat-flower-tree.png";
 import pMango from "@/assets/p-mango.png";
@@ -23,7 +23,11 @@ import pRose from "@/assets/p-rose.png";
 import codBox from "@/assets/cod-box-hand.png";
 import codLeaves from "@/assets/cod-leaves-left.png";
 
-const HERO_SLIDES = [heroNursery, heroMango, heroFlowers];
+const HERO_SLIDES = [
+  { image: hero1, to: "/categories/fruits", alt: "ফল গাছ" },
+  { image: hero2, to: "/shop", alt: "ফল ও ফুলের গাছ" },
+  { image: hero3, to: "/categories/flowers", alt: "ফুল গাছ" },
+] as const;
 
 const TRUST = [
   { Icon: Truck, t: "সারা বাংলাদেশে ডেলিভারি", s: "দ্রুত ও নিরাপদ ডেলিভারি" },
@@ -62,41 +66,21 @@ function MobileHero() {
 
   return (
     <section className="px-3 pt-3">
-      <div className="relative aspect-4/3 w-full overflow-hidden rounded-[28px] bg-[#f6f4e8] shadow-elegant">
-        <motion.img
-          key={slide}
-          src={slide}
-          alt="ফল ও ফুলের গাছ"
-          initial={{ opacity: 0, scale: 1.06 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          className="absolute inset-0 h-full w-full object-cover object-bottom"
-          width={768}
-          height={1024}
-          onError={onImgError}
-        />
-        {/* Soft cream glow behind text for readability */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[65%] bg-gradient-to-b from-white/55 via-white/25 to-transparent" />
-
-        <div className="absolute inset-x-0 top-[8%] flex flex-col items-center px-5 text-center">
-          <h1 className="font-bn text-[22px] font-extrabold leading-[1.15] text-[#1B5E20] drop-shadow-sm">
-            ফল ও ফুলের গাছ
-          </h1>
-          <p className="font-bn mt-1 text-[15px] font-bold leading-tight text-[#0E3A18]">
-            এখন আপনার হাতের নাগালে
-          </p>
-          <p className="font-bn mt-2 text-[10.5px] font-semibold leading-relaxed text-[#1a2e1a]">
-            উন্নত মানের গাছ <span className="mx-1 text-[#1a2e1a]/50">|</span> সঠিক পরিচর্যার গাইড <span className="mx-1 text-[#1a2e1a]/50">|</span>
-            <br />
-            সারা বাংলাদেশে ডেলিভারি
-          </p>
-          <Link
-            to="/shop"
-            className="font-bn mt-3 inline-flex items-center gap-2 rounded-full bg-[#1B5E20] px-6 py-2 text-[12.5px] font-bold text-white shadow-elegant ring-1 ring-white/30 active:scale-95"
-          >
-            এখনই অর্ডার করুন
-          </Link>
-        </div>
+      <div className="relative aspect-3/2 w-full overflow-hidden rounded-[28px] bg-[#f6f4e8] shadow-elegant">
+        <Link key={slide.to} to={slide.to} aria-label={slide.alt} className="absolute inset-0 block">
+          <motion.img
+            key={slide.image}
+            src={slide.image}
+            alt={slide.alt}
+            initial={{ opacity: 0, scale: 1.06 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            className="h-full w-full object-cover"
+            width={1600}
+            height={1000}
+            onError={onImgError}
+          />
+        </Link>
 
         {/* Pagination */}
         <div className="absolute inset-x-0 bottom-3 flex items-center justify-center gap-1.5">
@@ -108,7 +92,7 @@ function MobileHero() {
               aria-label={`স্লাইড ${idx + 1}`}
               className={cn(
                 "h-1.5 rounded-full transition-all",
-                idx === i ? "w-6 bg-[#1B5E20]" : "w-1.5 bg-[#1B5E20]/40",
+                idx === i ? "w-6 bg-[#1B5E20]" : "w-1.5 bg-white/70",
               )}
             />
           ))}

@@ -22,6 +22,10 @@ dist-ssr
 .env.*
 !.env.example
 
+# Scratch folder for dropping raw source images before they're moved into
+# src/assets/ — not meant to be committed itself.
+/images/
+
 # This project uses bun.lock; ignore lockfiles from other package managers
 # that may get generated locally by mistake.
 package-lock.json
