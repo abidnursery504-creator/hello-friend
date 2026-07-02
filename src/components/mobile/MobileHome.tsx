@@ -1,19 +1,18 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
-  ArrowRight, BadgeCheck, Camera, Headphones, Package, Truck,
+  BadgeCheck, Headphones, Leaf, ShieldCheck, Sparkles, Truck, Wallet,
 } from "lucide-react";
 import type { Product } from "@/data/products";
 import { useProducts } from "@/hooks/useCatalog";
 import { formatBDT } from "@/lib/format";
 import { useCart } from "@/context/CartContext";
-import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { onImgError, unsplash, unsplashSrcSet } from "@/lib/img";
 import hero2 from "@/assets/mobile-hero-2.jpg";
 import deliveryBanner from "@/assets/delivery-banner.jpg";
-import catFruit from "@/assets/cat-fruit-tree.png";
-import catFlower from "@/assets/cat-flower-tree.png";
+import catFruitBanner from "@/assets/cat-fruit-banner.jpg";
+import catFlowerBanner from "@/assets/cat-flower-banner.jpg";
 import pMango from "@/assets/p-mango.png";
 import pJackfruit from "@/assets/p-jackfruit.png";
 import pLitchi from "@/assets/p-litchi.png";
@@ -21,9 +20,15 @@ import pRose from "@/assets/p-rose.png";
 
 const TRUST = [
   { Icon: Truck, t: "সারা বাংলাদেশে ডেলিভারি", s: "দ্রুত ও নিরাপদ ডেলিভারি" },
-  { Icon: Camera, t: "ক্যাশ অন ডেলিভারি", s: "পণ্য বুঝে নেবেন!" },
+  { Icon: Wallet, t: "ক্যাশ অন ডেলিভারি", s: "পণ্য বুঝে নেবেন!" },
   { Icon: BadgeCheck, t: "উন্নত মানের গাছ", s: "সুস্থ ও পরিচর্যা করা গাছ" },
   { Icon: Headphones, t: "২৪/৭ কাস্টমার সাপোর্ট", s: "আমরা আছি আপনার পাশে" },
+];
+
+const WHY_US = [
+  { Icon: ShieldCheck, t: "নিরাপদ প্যাকেজিং", s: "গাছ সুরক্ষিতভাবে প্যাক করে পাঠানো হয়" },
+  { Icon: Leaf, t: "সতেজ ও সুস্থ চারা", s: "নার্সারি থেকে সরাসরি সংগ্রহ" },
+  { Icon: Sparkles, t: "বিশেষজ্ঞ পরামর্শ", s: "গাছের যত্নে সঠিক গাইডলাইন" },
 ];
 
 const POPULAR_SLUGS = ["amrapali-mango-grafted", "thai-pink-guava", "bedana-litchi", "desi-rose"];
@@ -39,6 +44,8 @@ export function MobileHome() {
       <MobileSectionTitle title="জনপ্রিয় গাছ সমূহ" />
       <MobilePopular products={products} />
       <MobileCodBanner />
+      <MobileSectionTitle title="কেন আমাদের বেছে নেবেন" />
+      <MobileWhyUs />
       <div className="h-6" />
     </div>
   );
@@ -102,68 +109,29 @@ function MobileSectionTitle({ title }: { title: string }) {
   );
 }
 
-/* ── 2 category cards ──────────────────────────── */
+/* ── 2 category banners ────────────────────────── */
 function MobileCategoryCards() {
   return (
-    <section className="mt-4 grid grid-cols-2 gap-3 px-3">
-      <CategoryCard
-        title="ফল গাছ"
-        sub="দেশি-বিদেশি বিভিন্ন প্রজাতির ফল গাছের চারা"
-        to="/categories/fruits"
-        bg="bg-[#1F7A3A]"
-        text="text-white"
-        sub2="text-white/85"
-        btn="bg-white text-[#1B5E20]"
-        img={catFruit}
-      />
-      <CategoryCard
-        title="ফুল গাছ"
-        sub="বিভিন্ন রঙের ফুলের গাছ আপনার বাগানের জন্য"
-        to="/categories/flowers"
-        bg="bg-[#FCE4EC]"
-        text="text-[#7A1A3C]"
-        sub2="text-[#7A1A3C]/80"
-        btn="bg-[#9D174D] text-white"
-        img={catFlower}
-      />
+    <section className="mt-4 flex flex-col gap-3 px-3">
+      <Link to="/categories/fruits" aria-label="ফল গাছ" className="block overflow-hidden rounded-3xl shadow-soft active:scale-[0.98]">
+        <img
+          src={catFruitBanner}
+          alt="ফল গাছ"
+          className="h-auto w-full object-contain"
+          loading="lazy"
+          decoding="async"
+        />
+      </Link>
+      <Link to="/categories/flowers" aria-label="ফুল গাছ" className="block overflow-hidden rounded-3xl shadow-soft active:scale-[0.98]">
+        <img
+          src={catFlowerBanner}
+          alt="ফুল গাছ"
+          className="h-auto w-full object-contain"
+          loading="lazy"
+          decoding="async"
+        />
+      </Link>
     </section>
-  );
-}
-
-function CategoryCard({
-  title, sub, to, bg, text, sub2, btn, img,
-}: {
-  title: string; sub: string; to: string;
-  bg: string; text: string; sub2: string; btn: string; img: string;
-}) {
-  return (
-    <Link
-      to={to}
-      className={cn(
-        "relative flex h-44 flex-col justify-between overflow-hidden rounded-3xl p-3.5 shadow-soft active:scale-[0.98]",
-        bg,
-      )}
-    >
-      <div className="relative z-10 max-w-[58%]">
-        <h3 className={cn("font-bn text-[17px] font-extrabold leading-tight", text)}>{title}</h3>
-        <p className={cn("font-bn mt-1.5 text-[10.5px] leading-snug", sub2)}>{sub}</p>
-      </div>
-      <span
-        className={cn(
-          "relative z-10 inline-flex w-fit items-center gap-1 rounded-full px-3.5 py-1.5 text-[11px] font-bold shadow-sm",
-          btn,
-        )}
-      >
-        দেখুন <ArrowRight className="size-3" />
-      </span>
-      <img
-        src={img}
-        alt={title}
-        className="pointer-events-none absolute -bottom-1 -right-2 h-36 w-28 object-contain"
-        loading="lazy"
-        decoding="async"
-      />
-    </Link>
   );
 }
 
@@ -261,6 +229,27 @@ function MobileCodBanner() {
           loading="lazy"
           decoding="async"
         />
+      </div>
+    </section>
+  );
+}
+
+/* ── Why choose us ─────────────────────────────── */
+function MobileWhyUs() {
+  return (
+    <section className="mt-4 px-3">
+      <div className="flex flex-col gap-3">
+        {WHY_US.map(({ Icon, t, s }) => (
+          <div key={t} className="flex items-center gap-3 rounded-2xl border border-border/60 bg-card p-4 shadow-soft">
+            <span className="grid size-11 shrink-0 place-items-center rounded-full bg-[#1B5E20]/10 text-[#1B5E20]">
+              <Icon className="size-5" strokeWidth={2.2} />
+            </span>
+            <div>
+              <p className="font-bn text-[13px] font-bold text-foreground">{t}</p>
+              <p className="font-bn mt-0.5 text-[11px] text-muted-foreground">{s}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

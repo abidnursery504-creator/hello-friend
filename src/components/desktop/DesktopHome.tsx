@@ -12,11 +12,13 @@ import type { Product } from "@/data/products";
 import type { Testimonial, BlogPost } from "@/data/site";
 import { useProducts, useTestimonials, useBlogPosts, selectBestsellers, selectNewArrivals, selectByCategory } from "@/hooks/useCatalog";
 import { cn } from "@/lib/utils";
-import { onImgError, unsplash, unsplashSrcSet } from "@/lib/img";
+import { onImgError } from "@/lib/img";
 import hero1 from "@/assets/hero-plants-1.jpg";
 import hero2 from "@/assets/hero-plants-2.jpg";
 import hero3 from "@/assets/hero-plants-3.jpg";
 import deliveryBanner from "@/assets/delivery-banner.jpg";
+import catFruitBanner from "@/assets/cat-fruit-banner.jpg";
+import catFlowerBanner from "@/assets/cat-flower-banner.jpg";
 
 
 /* ───────────── HERO SLIDER (light, split layout — reference style) ───────────── */
@@ -243,81 +245,33 @@ function CategoryBanners() {
     <section className="py-14">
       <Container>
         <div className="grid gap-6 lg:grid-cols-2">
-          <CatBanner
-            to="/categories/mango"
-            eyebrow="ফলদ সংগ্রহ"
-            title="ফল গাছ"
-            sub="দেশি-বিদেশি বিভিন্ন প্রজাতির ফল গাছের চারা"
-            img="photo-1574226516831-e1dff420e562"
-            accent="#1B5E20"
-            tint="from-[#0B2912]/85 via-[#0B2912]/40 to-transparent"
-          />
-          <CatBanner
-            to="/categories/flowering"
-            eyebrow="ফুলের বাগান"
-            title="ফুল গাছ"
-            sub="বিভিন্ন রকমের ফুলের গাছ আপনার বাগানের জন্য"
-            img="photo-1490750967868-88aa4486c946"
-            accent="#B11733"
-            tint="from-[#3A0A14]/85 via-[#3A0A14]/40 to-transparent"
-          />
+          <CatBanner to="/categories/mango" title="ফল গাছ" img={catFruitBanner} />
+          <CatBanner to="/categories/flowering" title="ফুল গাছ" img={catFlowerBanner} />
         </div>
       </Container>
     </section>
   );
 }
 
-function CatBanner({ to, eyebrow, title, sub, img, accent, tint }: {
-  to: string; eyebrow: string; title: string; sub: string;
-  img: string; accent: string; tint: string;
-}) {
+function CatBanner({ to, title, img }: { to: string; title: string; img: string }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.7 }}
-      className="group relative h-[320px] overflow-hidden rounded-[28px] shadow-soft ring-1 ring-black/5 transition-all duration-500 hover:shadow-elegant hover:-translate-y-1"
+      className="group overflow-hidden rounded-[28px] shadow-soft ring-1 ring-black/5 transition-all duration-500 hover:shadow-elegant hover:-translate-y-1"
     >
-      {/* Background image */}
-      <img
-        src={unsplash(img, 1280, 78)}
-        srcSet={unsplashSrcSet(img, [640, 960, 1280, 1600])}
-        alt=""
-        width={1280}
-        height={720}
-        sizes="(min-width: 1024px) 50vw, 100vw"
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
-        loading="lazy"
-        decoding="async"
-        onError={onImgError}
-      />
-      {/* Cinematic overlay for legibility */}
-      <div className={cn("absolute inset-0 bg-gradient-to-r", tint)} />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
-
-      {/* Content */}
-      <div className="relative z-10 flex h-full flex-col justify-end p-8 xl:p-10">
-        <span
-          className="inline-flex w-fit items-center gap-2 rounded-full bg-white/90 px-3 py-1 text-[11px] font-bn font-semibold uppercase tracking-[0.15em] shadow-soft backdrop-blur"
-          style={{ color: accent }}
-        >
-          <Sparkles className="size-3.5" aria-hidden="true" /> {eyebrow}
-        </span>
-        <h3 className="font-bn mt-4 text-4xl font-extrabold text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.55)] xl:text-5xl">
-          {title}
-        </h3>
-        <p className="font-bn mt-2 max-w-[26rem] text-sm text-white/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] xl:text-base">
-          {sub}
-        </p>
-        <Link
-          to={to as any}
-          className="mt-5 inline-flex w-fit items-center gap-2 rounded-full px-6 py-3 text-sm font-bn font-semibold text-white shadow-elegant transition-all duration-300 group-hover:gap-3 hover:-translate-y-0.5"
-          style={{ backgroundColor: accent }}
-        >
-          এখনই দেখুন <ArrowRight className="size-4" />
-        </Link>
-      </div>
+      <Link to={to as any} aria-label={title}>
+        <img
+          src={img}
+          alt={title}
+          className="h-auto w-full object-contain transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+          loading="lazy"
+          decoding="async"
+          onError={onImgError}
+        />
+      </Link>
     </motion.div>
   );
 }
