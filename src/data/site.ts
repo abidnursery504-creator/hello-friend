@@ -9,14 +9,14 @@ export const site = {
     "শখের ছাদ বাগানের বিশ্বস্ত সঙ্গী। জিও ব্যাগ সেটআপ করা মাতৃ গাছ, উন্নত জাতের ফলের চারা এবং সারা বাংলাদেশে কুরিয়ার ডেলিভারি।",
   phone: "01839-208687",
   phoneAlt: "01838-208687",
-  whatsapp: "01839-208687",
+  whatsapp: "8801839208687",
   email: "ibrahimhossain362840@gmail.com",
   address: "পুরান বগুড়া, রাজশাহী, বাংলাদেশ",
   addressBn: "পুরান বগুড়া, রাজশাহী, বাংলাদেশ",
   socials: {
     facebook: "https://facebook.com/Alltreebd1Shop",
     instagram: "https://instagram.com",
-    youtube: "https://youtube.com",
+    youtube: "https://youtube.com/@abidnursery?si=EXC7_KaRMIQ0R8iy",
   },
   currency: "৳",
   shipping: {

@@ -22,7 +22,7 @@ export const Route = createFileRoute("/contact")({
 function ContactPage() {
   const items = [
     { Icon: Phone, label: "ফোন করুন", value: site.phone, href: `tel:${site.phone}` },
-    { Icon: MessageCircle, label: "হোয়াটসঅ্যাপ", value: site.whatsapp, href: `https://wa.me/${site.whatsapp.replace(/\D/g, "")}` },
+    { Icon: MessageCircle, label: "হোয়াটসঅ্যাপ", value: site.phone, href: `https://wa.me/${site.whatsapp.replace(/\D/g, "")}` },
     { Icon: Mail, label: "ইমেইল", value: site.email, href: `mailto:${site.email}` },
     { Icon: MapPin, label: "ঠিকানা", value: site.address },
     { Icon: Clock, label: "খোলার সময়", value: "শনি – বৃহস্পতি · সকাল ৯টা – রাত ৮টা" },

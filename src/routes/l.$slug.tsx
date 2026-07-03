@@ -160,6 +160,15 @@ function LandingPage() {
             <a href={`tel:${site.phone}`} className="font-bn hidden items-center gap-1.5 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-sm font-semibold text-primary sm:flex">
               <PhoneCall className="size-3.5" /> {site.phone}
             </a>
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noreferrer"
+              className="grid size-9 shrink-0 place-items-center rounded-full bg-[#25D366] text-white shadow-soft"
+              aria-label="হোয়াটসঅ্যাপে যোগাযোগ করুন"
+            >
+              <MessageCircle className="size-4" />
+            </a>
             <button
               type="button"
               onClick={scrollToOrder}
@@ -303,14 +312,46 @@ function LandingPage() {
             {mutation.isPending ? "অর্ডার হচ্ছে…" : `অর্ডার নিশ্চিত করুন — ${formatBDT(total)}`}
           </button>
         </form>
+
+        {/* Testimonials — last section */}
+        {page.testimonials.length > 0 && (
+          <div className="mt-10">
+            <h3 className="font-bn font-display text-center text-lg font-bold">গ্রাহকদের মতামত</h3>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {page.testimonials.map((t, i) => (
+                <div key={i} className="rounded-2xl border border-border bg-card p-5 shadow-soft">
+                  <Quote className="size-5 text-primary/40" />
+                  <p className="font-bn mt-2 text-sm leading-relaxed text-foreground">{t.text}</p>
+                  <p className="font-bn mt-3 text-xs font-bold text-primary">— {t.name}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Sticky mobile CTA */}
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 p-3 shadow-elegant backdrop-blur sm:hidden">
-        <a href="#order-form" className="font-bn flex w-full items-center justify-center rounded-full gradient-primary px-6 py-3.5 text-sm font-bold text-primary-foreground shadow-soft">
+      <div className="fixed inset-x-0 bottom-0 z-40 flex gap-2 border-t border-border bg-card/95 p-3 shadow-elegant backdrop-blur sm:hidden">
+        <a
+          href={whatsappHref}
+          target="_blank"
+          rel="noreferrer"
+          className="grid size-12 shrink-0 place-items-center rounded-full bg-[#25D366] text-white shadow-soft"
+          aria-label="হোয়াটসঅ্যাপে যোগাযোগ করুন"
+        >
+          <MessageCircle className="size-5" />
+        </a>
+        <a href="#order-form" className="font-bn flex flex-1 items-center justify-center rounded-full gradient-primary px-6 py-3.5 text-sm font-bold text-primary-foreground shadow-soft">
           অর্ডার করুন — {formatBDT(total)}
         </a>
       </div>
+
+      {/* Image preview modal */}
+      <Dialog open={!!previewImage} onOpenChange={(open) => !open && setPreviewImage(null)}>
+        <DialogContent className="max-w-lg p-2">
+          {previewImage && <SmartImage src={previewImage} alt="" aspect="square" className="w-full" />}
+        </DialogContent>
+      </Dialog>
 
       {/* Auto-show offer popup */}
       <Dialog open={popupOpen} onOpenChange={setPopupOpen}>
