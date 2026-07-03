@@ -29,6 +29,24 @@ as $$
   );
 $$;
 
+-- Bypasses RLS on public.orders (security definer) so the order_items insert
+-- policy below can see a just-inserted guest order (user_id is null), which
+-- the caller's own SELECT policy on orders would otherwise hide from them
+-- since auth.uid() = user_id is never true for a null user_id.
+create or replace function public.order_is_guest_or_own(p_order_id uuid)
+returns boolean
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select exists (
+    select 1 from public.orders o
+    where o.id = p_order_id
+      and (o.user_id is null or o.user_id = auth.uid())
+  );
+$$;
+
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -358,11 +376,7 @@ create policy "order_items_select_via_order" on public.order_items for select
 
 drop policy if exists "order_items_insert_via_order" on public.order_items;
 create policy "order_items_insert_via_order" on public.order_items for insert
-  with check (exists (
-    select 1 from public.orders o
-    where o.id = order_items.order_id
-      and (o.user_id is null or o.user_id = auth.uid())
-  ));
+  with check (public.order_is_guest_or_own(order_items.order_id));
 
 drop policy if exists "order_items_admin_write" on public.order_items;
 create policy "order_items_admin_write" on public.order_items for all
