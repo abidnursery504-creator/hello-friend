@@ -67,5 +67,35 @@ export const createOrder = createServerFn({ method: "POST" })
 
     if (itemsError) throw new Error(itemsError.message);
 
+    syncOrderToGoogleSheet(data, order.order_number);
+
     return { orderNumber: order.order_number };
   });
+
+function syncOrderToGoogleSheet(data: z.infer<typeof createOrderSchema>, orderNumber: string) {
+  const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
+  if (!webhookUrl) return;
+
+  fetch(webhookUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      orderNumber,
+      createdAt: new Date().toISOString(),
+      customerName: data.customerName,
+      customerPhone: data.customerPhone,
+      customerEmail: data.customerEmail || "",
+      shippingAddress: data.shippingAddress,
+      shippingUpazila: data.shippingUpazila,
+      shippingDistrict: data.shippingDistrict,
+      shippingDivision: data.shippingDivision,
+      shippingNote: data.shippingNote || "",
+      itemsSummary: data.items.map((item) => `${item.name} x${item.qty}`).join(", "),
+      subtotal: data.subtotal,
+      shippingFee: data.shippingFee,
+      total: data.total,
+      paymentMethod: "cod",
+      status: "processing",
+    }),
+  }).catch((err) => console.error("Google Sheet sync failed:", err));
+}
