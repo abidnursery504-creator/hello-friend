@@ -40,6 +40,7 @@ import { Route as CategoriesFlowersRouteImport } from './routes/categories.flowe
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApiSheetStatusUpdateRouteImport } from './routes/api.sheet-status-update'
+import { Route as ApiKeepAliveRouteImport } from './routes/api.keep-alive'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminLandingPagesRouteImport } from './routes/admin.landing-pages'
@@ -201,6 +202,11 @@ const ApiSheetStatusUpdateRoute = ApiSheetStatusUpdateRouteImport.update({
   path: '/api/sheet-status-update',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiKeepAliveRoute = ApiKeepAliveRouteImport.update({
+  id: '/api/keep-alive',
+  path: '/api/keep-alive',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminProductsRoute = AdminProductsRouteImport.update({
   id: '/products',
   path: '/products',
@@ -254,6 +260,7 @@ export interface FileRoutesByFullPath {
   '/admin/landing-pages': typeof AdminLandingPagesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
+  '/api/keep-alive': typeof ApiKeepAliveRoute
   '/api/sheet-status-update': typeof ApiSheetStatusUpdateRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
@@ -291,6 +298,7 @@ export interface FileRoutesByTo {
   '/admin/landing-pages': typeof AdminLandingPagesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
+  '/api/keep-alive': typeof ApiKeepAliveRoute
   '/api/sheet-status-update': typeof ApiSheetStatusUpdateRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
@@ -330,6 +338,7 @@ export interface FileRoutesById {
   '/admin/landing-pages': typeof AdminLandingPagesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
+  '/api/keep-alive': typeof ApiKeepAliveRoute
   '/api/sheet-status-update': typeof ApiSheetStatusUpdateRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
@@ -370,6 +379,7 @@ export interface FileRouteTypes {
     | '/admin/landing-pages'
     | '/admin/orders'
     | '/admin/products'
+    | '/api/keep-alive'
     | '/api/sheet-status-update'
     | '/blog/$slug'
     | '/categories/$slug'
@@ -407,6 +417,7 @@ export interface FileRouteTypes {
     | '/admin/landing-pages'
     | '/admin/orders'
     | '/admin/products'
+    | '/api/keep-alive'
     | '/api/sheet-status-update'
     | '/blog/$slug'
     | '/categories/$slug'
@@ -445,6 +456,7 @@ export interface FileRouteTypes {
     | '/admin/landing-pages'
     | '/admin/orders'
     | '/admin/products'
+    | '/api/keep-alive'
     | '/api/sheet-status-update'
     | '/blog/$slug'
     | '/categories/$slug'
@@ -479,6 +491,7 @@ export interface RootRouteChildren {
   TrackOrderRoute: typeof TrackOrderRoute
   VideoGalleryRoute: typeof VideoGalleryRoute
   WishlistRoute: typeof WishlistRoute
+  ApiKeepAliveRoute: typeof ApiKeepAliveRoute
   ApiSheetStatusUpdateRoute: typeof ApiSheetStatusUpdateRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
@@ -709,6 +722,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSheetStatusUpdateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/keep-alive': {
+      id: '/api/keep-alive'
+      path: '/api/keep-alive'
+      fullPath: '/api/keep-alive'
+      preLoaderRoute: typeof ApiKeepAliveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/products': {
       id: '/admin/products'
       path: '/products'
@@ -789,6 +809,7 @@ const rootRouteChildren: RootRouteChildren = {
   TrackOrderRoute: TrackOrderRoute,
   VideoGalleryRoute: VideoGalleryRoute,
   WishlistRoute: WishlistRoute,
+  ApiKeepAliveRoute: ApiKeepAliveRoute,
   ApiSheetStatusUpdateRoute: ApiSheetStatusUpdateRoute,
   BlogSlugRoute: BlogSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
