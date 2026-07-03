@@ -1,7 +1,17 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { CheckCircle2, MinusCircle, PlusCircle, ShieldCheck, Truck } from "lucide-react";
+import {
+  BadgeCheck,
+  CheckCircle2,
+  MinusCircle,
+  PhoneCall,
+  PlusCircle,
+  Quote,
+  ShieldCheck,
+  Star,
+  Truck,
+} from "lucide-react";
 import { toast } from "sonner";
 import { SmartImage } from "@/components/common/SmartImage";
 import { ensureLandingPage } from "@/hooks/useCatalog";
@@ -63,6 +73,7 @@ function LandingPage() {
 
   const shipping = 0;
   const total = page.price * qty + shipping;
+  const discount = page.oldPrice ? Math.round(((page.oldPrice - page.price) / page.oldPrice) * 100) : 0;
 
   const mutation = useMutation({
     mutationFn: () =>
@@ -102,126 +113,189 @@ function LandingPage() {
     mutation.mutate();
   };
 
+  if (done) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-gradient-to-b from-primary/10 via-background to-background px-4">
+        <div className="mx-auto max-w-md text-center">
+          <div className="mx-auto grid size-20 place-items-center rounded-full gradient-primary text-primary-foreground shadow-elegant">
+            <CheckCircle2 className="size-10" />
+          </div>
+          <h1 className="font-bn mt-6 text-3xl font-bold">অর্ডার সফল হয়েছে!</h1>
+          <p className="font-bn mt-3 text-lg font-semibold text-primary">অর্ডার নম্বর: {orderNumber}</p>
+          <p className="font-bn mt-2 text-muted-foreground">শীঘ্রই আমরা কল দিয়ে অর্ডার নিশ্চিত করব।</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card py-3">
+    <div className="min-h-screen bg-background pb-24 sm:pb-0">
+      {/* Top utility bar */}
+      <div className="gradient-primary py-2 text-center">
+        <p className="font-bn text-xs font-semibold text-primary-foreground sm:text-sm">
+          ৳{toBnDigits(site.shipping.freeAbove)}+ অর্ডারে ফ্রি ডেলিভারি · সারা বাংলাদেশে ক্যাশ অন ডেলিভারি
+        </p>
+      </div>
+
+      <header className="border-b border-border bg-card/95 py-3 backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4">
           <div className="flex items-center gap-2">
-            <img src={logoIcon} alt="Abid Nursery and Plants" className="size-8 object-contain" />
-            <span className="font-display text-sm font-bold">Abid Nursery</span>
+            <img src={logoIcon} alt="Abid Nursery and Plants" className="size-9 object-contain" />
+            <span className="font-display text-base font-bold">Abid Nursery</span>
           </div>
-          <a href={`tel:${site.phone}`} className="font-bn text-sm font-semibold text-primary">{site.phone}</a>
+          <a href={`tel:${site.phone}`} className="font-bn flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-sm font-semibold text-primary">
+            <PhoneCall className="size-3.5" /> {site.phone}
+          </a>
         </div>
       </header>
 
-      {done ? (
-        <div className="mx-auto max-w-3xl px-4 py-24 text-center">
-          <CheckCircle2 className="mx-auto size-16 text-primary" />
-          <h1 className="font-bn mt-6 text-3xl font-bold">অর্ডার সফল হয়েছে!</h1>
-          <p className="font-bn mt-2 text-muted-foreground">অর্ডার নম্বর: {orderNumber} · শীঘ্রই কল দিয়ে নিশ্চিত করব।</p>
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-primary/5 to-background">
+        <div className="gradient-radial-leaf pointer-events-none absolute inset-0 opacity-40" />
+        <div className="relative mx-auto max-w-3xl px-4 py-12 text-center sm:py-16">
+          {discount > 0 && (
+            <span className="font-bn inline-flex items-center gap-1.5 rounded-full bg-destructive px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-destructive-foreground shadow-soft">
+              সীমিত সময়ের অফার — {toBnDigits(discount)}% ছাড়
+            </span>
+          )}
+          <h1 className="font-bn font-display mt-4 text-3xl font-bold leading-tight text-foreground sm:text-4xl">
+            {page.headline}
+          </h1>
+          {page.heroImage && (
+            <div className="mx-auto mt-8 max-w-xl overflow-hidden rounded-3xl shadow-elegant">
+              <SmartImage src={page.heroImage} alt={page.headline} aspect="video" className="w-full" priority />
+            </div>
+          )}
         </div>
-      ) : (
-        <>
-          <section className="border-b border-border bg-primary/5">
-            <div className="mx-auto max-w-3xl px-4 py-10 text-center">
-              <h1 className="font-bn font-display text-2xl font-bold leading-snug sm:text-3xl">{page.headline}</h1>
-              {page.heroImage && (
-                <SmartImage src={page.heroImage} alt={page.headline} aspect="video" className="mx-auto mt-6 max-w-lg rounded-2xl shadow-elegant" />
-              )}
-            </div>
-          </section>
+      </section>
 
-          <section className="mx-auto max-w-3xl px-4 py-10">
-            <div className="rounded-3xl border border-border bg-card p-6 shadow-soft">
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h2 className="font-bn font-display text-xl font-bold">{page.productName}</h2>
-                <div className="font-bn flex items-baseline gap-2">
-                  {page.oldPrice && <span className="text-sm text-muted-foreground line-through">{formatBDT(page.oldPrice)}</span>}
-                  <span className="text-2xl font-bold text-primary">{formatBDT(page.price)}</span>
+      <section className="mx-auto max-w-3xl px-4 py-10">
+        {/* Product showcase card */}
+        <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-soft">
+          <div className="p-6 sm:p-8">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <h2 className="font-bn font-display text-2xl font-bold text-foreground">{page.productName}</h2>
+                <div className="mt-1.5 flex items-center gap-1 text-gold">
+                  {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="size-4 fill-gold" />)}
+                  <span className="font-bn ml-1 text-xs font-semibold text-muted-foreground">(৫.০)</span>
                 </div>
               </div>
-              {page.description && <p className="font-bn mt-3 whitespace-pre-line text-sm text-muted-foreground">{page.description}</p>}
-
-              {page.gallery.length > 0 && (
-                <div className="mt-4 grid grid-cols-3 gap-2">
-                  {page.gallery.map((url) => (
-                    <SmartImage key={url} src={url} alt="" aspect="square" className="rounded-xl" />
-                  ))}
-                </div>
-              )}
+              <div className="font-bn text-right">
+                {page.oldPrice && (
+                  <div className="text-sm text-muted-foreground line-through">{formatBDT(page.oldPrice)}</div>
+                )}
+                <div className="font-display text-3xl font-bold text-primary">{formatBDT(page.price)}</div>
+              </div>
             </div>
 
-            {page.testimonials.length > 0 && (
-              <div className="mt-6 space-y-3">
-                {page.testimonials.map((t, i) => (
-                  <div key={i} className="rounded-2xl border border-border bg-card p-4">
-                    <p className="font-bn text-sm">"{t.text}"</p>
-                    <p className="font-bn mt-2 text-xs font-semibold text-muted-foreground">— {t.name}</p>
-                  </div>
-                ))}
-              </div>
+            {page.description && (
+              <p className="font-bn mt-5 whitespace-pre-line leading-relaxed text-muted-foreground">{page.description}</p>
             )}
+          </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
-              <div className="flex items-center gap-2 rounded-2xl bg-primary/5 p-3">
-                <Truck className="size-5 text-primary" />
-                <span className="font-bn">সারা বাংলাদেশে ডেলিভারি</span>
-              </div>
-              <div className="flex items-center gap-2 rounded-2xl bg-primary/5 p-3">
-                <ShieldCheck className="size-5 text-primary" />
-                <span className="font-bn">ক্যাশ অন ডেলিভারি</span>
-              </div>
+          {page.gallery.length > 0 && (
+            <div className={`grid gap-1 ${page.gallery.length === 1 ? "grid-cols-1" : page.gallery.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}>
+              {page.gallery.map((url) => (
+                <SmartImage key={url} src={url} alt="" aspect="square" rounded={false} className="w-full" />
+              ))}
             </div>
+          )}
+        </div>
 
-            <form onSubmit={submit} className="mt-8 space-y-5 rounded-3xl border-2 border-primary/30 bg-card p-6 shadow-elegant">
-              <h3 className="font-bn font-display text-lg font-bold">এখনই অর্ডার করুন</h3>
+        {/* Trust bar */}
+        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <TrustItem Icon={Truck} label="সারা বাংলাদেশে ডেলিভারি" />
+          <TrustItem Icon={ShieldCheck} label="ক্যাশ অন ডেলিভারি" />
+          <TrustItem Icon={BadgeCheck} label="মানের নিশ্চয়তা" />
+        </div>
 
-              <div className="flex items-center gap-3">
-                <span className="font-bn text-sm font-medium">পরিমাণ</span>
-                <div className="inline-flex items-center gap-1 rounded-full border border-border bg-background p-1">
-                  <button type="button" onClick={() => setQty((q) => Math.max(1, q - 1))} className="grid size-8 place-items-center rounded-full hover:bg-accent"><MinusCircle className="size-4" /></button>
-                  <span className="font-bn min-w-8 text-center font-bold tabular-nums">{toBnDigits(qty)}</span>
-                  <button type="button" onClick={() => setQty((q) => q + 1)} className="grid size-8 place-items-center rounded-full hover:bg-accent"><PlusCircle className="size-4" /></button>
+        {/* Testimonials */}
+        {page.testimonials.length > 0 && (
+          <div className="mt-10">
+            <h3 className="font-bn font-display text-center text-lg font-bold">গ্রাহকদের মতামত</h3>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {page.testimonials.map((t, i) => (
+                <div key={i} className="rounded-2xl border border-border bg-card p-5 shadow-soft">
+                  <Quote className="size-5 text-primary/40" />
+                  <p className="font-bn mt-2 text-sm leading-relaxed text-foreground">{t.text}</p>
+                  <p className="font-bn mt-3 text-xs font-bold text-primary">— {t.name}</p>
                 </div>
-              </div>
+              ))}
+            </div>
+          </div>
+        )}
 
-              <Field label="পুরো নাম" required><input required className={fieldCls} placeholder="মো. ইমরান হোসেন" value={form.name} onChange={set("name")} /></Field>
-              <Field label="ফোন (হোয়াটসঅ্যাপ)" required><input required type="tel" className={fieldCls} placeholder="+৮৮০ ১XXX-XXXXXX" value={form.phone} onChange={set("phone")} /></Field>
+        {/* Order form */}
+        <form id="order-form" onSubmit={submit} className="mt-10 space-y-5 rounded-3xl border-2 border-primary/25 bg-card p-6 shadow-elegant sm:p-8">
+          <div className="text-center">
+            <h3 className="font-bn font-display text-xl font-bold text-foreground">এখনই অর্ডার করুন</h3>
+            <p className="font-bn mt-1 text-sm text-muted-foreground">ফর্মটি পূরণ করুন, আমরা কল দিয়ে নিশ্চিত করব</p>
+          </div>
 
-              <div className="grid gap-3 sm:grid-cols-3">
-                <Field label="বিভাগ" required>
-                  <select required className={fieldCls} value={form.division} onChange={setDivision}>
-                    <option value="" disabled>বিভাগ</option>
-                    {divisionNames.map((d) => <option key={d}>{d}</option>)}
-                  </select>
-                </Field>
-                <Field label="জেলা" required>
-                  <select required disabled={!form.division} className={fieldCls} value={form.district} onChange={setDistrict}>
-                    <option value="" disabled>জেলা</option>
-                    {districts.map((d) => <option key={d.name}>{d.name}</option>)}
-                  </select>
-                </Field>
-                <Field label="উপজেলা" required>
-                  <select required disabled={!form.district} className={fieldCls} value={form.upazila} onChange={set("upazila")}>
-                    <option value="" disabled>উপজেলা</option>
-                    {upazilas.map((u) => <option key={u}>{u}</option>)}
-                  </select>
-                </Field>
-              </div>
+          <div className="flex items-center justify-center gap-4 rounded-2xl bg-muted/40 p-4">
+            <span className="font-bn text-sm font-semibold">পরিমাণ</span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background p-1">
+              <button type="button" onClick={() => setQty((q) => Math.max(1, q - 1))} className="grid size-9 place-items-center rounded-full transition hover:bg-accent"><MinusCircle className="size-4" /></button>
+              <span className="font-bn min-w-9 text-center text-lg font-bold tabular-nums">{toBnDigits(qty)}</span>
+              <button type="button" onClick={() => setQty((q) => q + 1)} className="grid size-9 place-items-center rounded-full transition hover:bg-accent"><PlusCircle className="size-4" /></button>
+            </div>
+          </div>
 
-              <Field label="বিস্তারিত ঠিকানা" required><input required className={fieldCls} placeholder="বাড়ি ১২, রোড ৪, ধানমন্ডি" value={form.address} onChange={set("address")} /></Field>
+          <Field label="পুরো নাম" required><input required className={fieldCls} placeholder="মো. ইমরান হোসেন" value={form.name} onChange={set("name")} /></Field>
+          <Field label="ফোন (হোয়াটসঅ্যাপ)" required><input required type="tel" className={fieldCls} placeholder="+৮৮০ ১XXX-XXXXXX" value={form.phone} onChange={set("phone")} /></Field>
 
-              <dl className="font-bn space-y-1 border-t pt-3 text-sm">
-                <div className="flex justify-between border-t pt-2 text-base"><dt className="font-semibold">মোট</dt><dd className="font-display text-xl font-bold text-primary">{formatBDT(total)}</dd></div>
-              </dl>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <Field label="বিভাগ" required>
+              <select required className={fieldCls} value={form.division} onChange={setDivision}>
+                <option value="" disabled>বিভাগ</option>
+                {divisionNames.map((d) => <option key={d}>{d}</option>)}
+              </select>
+            </Field>
+            <Field label="জেলা" required>
+              <select required disabled={!form.division} className={fieldCls} value={form.district} onChange={setDistrict}>
+                <option value="" disabled>জেলা</option>
+                {districts.map((d) => <option key={d.name}>{d.name}</option>)}
+              </select>
+            </Field>
+            <Field label="উপজেলা" required>
+              <select required disabled={!form.district} className={fieldCls} value={form.upazila} onChange={set("upazila")}>
+                <option value="" disabled>উপজেলা</option>
+                {upazilas.map((u) => <option key={u}>{u}</option>)}
+              </select>
+            </Field>
+          </div>
 
-              <button type="submit" disabled={mutation.isPending} className="font-bn w-full rounded-full gradient-primary px-6 py-4 text-base font-bold text-primary-foreground shadow-soft transition hover:shadow-elegant disabled:opacity-50">
-                {mutation.isPending ? "অর্ডার হচ্ছে…" : `অর্ডার নিশ্চিত করুন — ${formatBDT(total)}`}
-              </button>
-            </form>
-          </section>
-        </>
-      )}
+          <Field label="বিস্তারিত ঠিকানা" required><input required className={fieldCls} placeholder="বাড়ি ১২, রোড ৪, ধানমন্ডি" value={form.address} onChange={set("address")} /></Field>
+
+          <div className="flex items-center justify-between border-t border-dashed border-border pt-4">
+            <span className="font-bn text-base font-semibold">সর্বমোট</span>
+            <span className="font-display text-2xl font-bold text-primary">{formatBDT(total)}</span>
+          </div>
+
+          <button type="submit" disabled={mutation.isPending} className="font-bn w-full rounded-full gradient-primary px-6 py-4 text-base font-bold text-primary-foreground shadow-soft transition hover:shadow-elegant disabled:opacity-50">
+            {mutation.isPending ? "অর্ডার হচ্ছে…" : `অর্ডার নিশ্চিত করুন — ${formatBDT(total)}`}
+          </button>
+        </form>
+      </section>
+
+      {/* Sticky mobile CTA */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 p-3 shadow-elegant backdrop-blur sm:hidden">
+        <a href="#order-form" className="font-bn flex w-full items-center justify-center rounded-full gradient-primary px-6 py-3.5 text-sm font-bold text-primary-foreground shadow-soft">
+          অর্ডার করুন — {formatBDT(total)}
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function TrustItem({ Icon, label }: { Icon: typeof Truck; label: string }) {
+  return (
+    <div className="flex items-center gap-2.5 rounded-2xl border border-border bg-card px-4 py-3.5 shadow-soft">
+      <span className="grid size-9 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
+        <Icon className="size-4.5" />
+      </span>
+      <span className="font-bn text-sm font-medium">{label}</span>
     </div>
   );
 }
