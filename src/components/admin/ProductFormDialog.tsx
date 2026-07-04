@@ -38,6 +38,7 @@ const emptyProduct = (): Product => ({
   careLevel: "সহজ",
   sunlight: "পূর্ণ রোদ",
   water: "মাঝারি",
+  freeDelivery: false,
 });
 
 export function ProductFormDialog({
@@ -86,7 +87,12 @@ export function ProductFormDialog({
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <Label className="font-bn">স্লাগ (URL)</Label>
-              <Input value={form.slug} disabled={!!product} onChange={(e) => set("slug", e.target.value)} placeholder="amrapali-mango-grafted" />
+              <Input
+                value={form.slug}
+                disabled={!!product}
+                onChange={(e) => set("slug", e.target.value)}
+                placeholder="amrapali-mango-grafted"
+              />
             </div>
             <div>
               <Label className="font-bn">বিভাগ</Label>
@@ -97,7 +103,9 @@ export function ProductFormDialog({
               >
                 <option value="">নির্বাচন করুন</option>
                 {categories.map((c) => (
-                  <option key={c.slug} value={c.slug}>{c.name}</option>
+                  <option key={c.slug} value={c.slug}>
+                    {c.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -106,33 +114,64 @@ export function ProductFormDialog({
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <Label className="font-bn">নাম (বাংলা)</Label>
-              <Input className="font-bn" value={form.nameBn} onChange={(e) => { set("nameBn", e.target.value); set("name", e.target.value); }} />
+              <Input
+                className="font-bn"
+                value={form.nameBn}
+                onChange={(e) => {
+                  set("nameBn", e.target.value);
+                  set("name", e.target.value);
+                }}
+              />
             </div>
             <div>
               <Label className="font-bn">মূল্য (৳)</Label>
-              <Input type="number" value={form.price} onChange={(e) => set("price", Number(e.target.value))} />
+              <Input
+                type="number"
+                value={form.price}
+                onChange={(e) => set("price", Number(e.target.value))}
+              />
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <Label className="font-bn">পুরনো মূল্য (ঐচ্ছিক)</Label>
-              <Input type="number" value={form.oldPrice ?? ""} onChange={(e) => set("oldPrice", e.target.value ? Number(e.target.value) : undefined)} />
+              <Input
+                type="number"
+                value={form.oldPrice ?? ""}
+                onChange={(e) =>
+                  set("oldPrice", e.target.value ? Number(e.target.value) : undefined)
+                }
+              />
             </div>
             <div>
               <Label className="font-bn">উচ্চতা</Label>
-              <Input className="font-bn" value={form.height} onChange={(e) => set("height", e.target.value)} placeholder="২-৩ ফুট" />
+              <Input
+                className="font-bn"
+                value={form.height}
+                onChange={(e) => set("height", e.target.value)}
+                placeholder="২-৩ ফুট"
+              />
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
               <Label className="font-bn">বয়স</Label>
-              <Input className="font-bn" value={form.age} onChange={(e) => set("age", e.target.value)} placeholder="১ বছর" />
+              <Input
+                className="font-bn"
+                value={form.age}
+                onChange={(e) => set("age", e.target.value)}
+                placeholder="১ বছর"
+              />
             </div>
             <div>
               <Label className="font-bn">পরিচর্যা</Label>
-              <select value={form.careLevel} onChange={(e) => set("careLevel", e.target.value as Product["careLevel"])} className="font-bn h-9 w-full rounded-md border border-input bg-background px-3 text-sm">
+              <select
+                value={form.careLevel}
+                onChange={(e) => set("careLevel", e.target.value as Product["careLevel"])}
+                className="font-bn h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+              >
                 <option value="সহজ">সহজ</option>
                 <option value="মাঝারি">মাঝারি</option>
                 <option value="এক্সপার্ট">এক্সপার্ট</option>
@@ -140,7 +179,11 @@ export function ProductFormDialog({
             </div>
             <div>
               <Label className="font-bn">সূর্যালোক</Label>
-              <select value={form.sunlight} onChange={(e) => set("sunlight", e.target.value as Product["sunlight"])} className="font-bn h-9 w-full rounded-md border border-input bg-background px-3 text-sm">
+              <select
+                value={form.sunlight}
+                onChange={(e) => set("sunlight", e.target.value as Product["sunlight"])}
+                className="font-bn h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+              >
                 <option value="পূর্ণ রোদ">পূর্ণ রোদ</option>
                 <option value="আংশিক ছায়া">আংশিক ছায়া</option>
                 <option value="ইনডোর উজ্জ্বল">ইনডোর উজ্জ্বল</option>
@@ -150,11 +193,20 @@ export function ProductFormDialog({
 
           <div>
             <Label className="font-bn">সংক্ষিপ্ত বিবরণ</Label>
-            <Input className="font-bn" value={form.shortDescription} onChange={(e) => set("shortDescription", e.target.value)} />
+            <Input
+              className="font-bn"
+              value={form.shortDescription}
+              onChange={(e) => set("shortDescription", e.target.value)}
+            />
           </div>
           <div>
             <Label className="font-bn">বিস্তারিত বিবরণ</Label>
-            <Textarea className="font-bn" rows={3} value={form.description} onChange={(e) => set("description", e.target.value)} />
+            <Textarea
+              className="font-bn"
+              rows={3}
+              value={form.description}
+              onChange={(e) => set("description", e.target.value)}
+            />
           </div>
 
           <div className="flex items-center gap-6">
@@ -166,6 +218,29 @@ export function ProductFormDialog({
               <Switch checked={form.potIncluded} onCheckedChange={(v) => set("potIncluded", v)} />
               <span className="font-bn text-sm">পাত্র অন্তর্ভুক্ত</span>
             </label>
+            <label className="flex items-center gap-2">
+              <Switch
+                checked={form.freeDelivery ?? false}
+                onCheckedChange={(v) => set("freeDelivery", v)}
+              />
+              <span className="font-bn text-sm">ফ্রি ডেলিভারি</span>
+            </label>
+          </div>
+
+          <div>
+            <Label className="font-bn">কাস্টম ডেলিভারি চার্জ (৳, ঐচ্ছিক)</Label>
+            <Input
+              type="number"
+              disabled={form.freeDelivery}
+              value={form.customDeliveryCharge ?? ""}
+              onChange={(e) =>
+                set("customDeliveryCharge", e.target.value ? Number(e.target.value) : undefined)
+              }
+              placeholder="খালি রাখলে সাধারণ ডেলিভারি চার্জ প্রযোজ্য হবে"
+            />
+            <p className="font-bn mt-1 text-xs text-muted-foreground">
+              শুধু তখনই কাজ করবে যদি এটি সাধারণ ডেলিভারি চার্জের চেয়ে বেশি হয়।
+            </p>
           </div>
 
           <div>

@@ -7,7 +7,6 @@ import { useWishlist } from "@/context/WishlistContext";
 import { ThemeToggle } from "./ThemeToggle";
 import { SearchOverlay } from "./SearchOverlay";
 import { cn } from "@/lib/utils";
-import { site } from "@/data/site";
 import { useCategories } from "@/hooks/useCatalog";
 import { SmartImage } from "@/components/common/SmartImage";
 import { toBnDigits } from "@/lib/format";
@@ -40,14 +39,18 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => { setOpen(false); }, [pathname]);
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   return (
     <>
       {/* Top promo bar */}
       <div className="hidden bg-primary-dark text-primary-foreground sm:block">
         <div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-2 text-xs sm:px-6 lg:px-8">
-          <p className="font-bn font-medium tracking-wide opacity-90">৳{toBnDigits(site.shipping.freeAbove)}+ অর্ডারে ফ্রি ডেলিভারি · ৬৪ জেলায় ক্যাশ অন ডেলিভারি</p>
+          <p className="font-bn font-medium tracking-wide opacity-90">
+            সারা বাংলাদেশে ডেলিভারি · ৬৪ জেলায় ক্যাশ অন ডেলিভারি
+          </p>
         </div>
       </div>
 
@@ -84,7 +87,11 @@ export function Navbar() {
           </button>
 
           <Link to="/" className="flex items-center justify-center">
-            <img src={logoFull} alt="Abid Nursery and Plants" className="h-14 w-auto object-contain" />
+            <img
+              src={logoFull}
+              alt="Abid Nursery and Plants"
+              className="h-14 w-auto object-contain"
+            />
           </Link>
 
           <div className="flex items-center justify-end gap-0.5">
@@ -96,7 +103,11 @@ export function Navbar() {
             >
               <Search className="size-5" />
             </button>
-            <Link to="/cart" aria-label="কার্ট" className="relative grid size-10 place-items-center rounded-xl text-foreground">
+            <Link
+              to="/cart"
+              aria-label="কার্ট"
+              className="relative grid size-10 place-items-center rounded-xl text-foreground"
+            >
               <ShoppingBag className="size-5" />
               {cart.totalQty > 0 && (
                 <span className="absolute right-1 top-1 grid size-4 place-items-center rounded-full bg-gold text-[9px] font-bold text-gold-foreground">
@@ -111,9 +122,12 @@ export function Navbar() {
         <div className="mx-auto hidden max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-3 sm:gap-4 sm:px-6 lg:grid lg:px-8">
           {/* Logo */}
           <Link to="/" className="flex min-w-0 items-center">
-            <img src={logoFull} alt="Abid Nursery and Plants" className="h-12 w-auto object-contain" />
+            <img
+              src={logoFull}
+              alt="Abid Nursery and Plants"
+              className="h-12 w-auto object-contain"
+            />
           </Link>
-
 
           {/* Desktop nav */}
           <nav className="flex items-center justify-center gap-1" aria-label="মূল নেভিগেশন">
@@ -164,18 +178,34 @@ export function Navbar() {
                                   params={{ slug: c.slug }}
                                   className="group flex items-center gap-3 rounded-2xl border border-transparent bg-card/40 p-2 transition hover:-translate-y-0.5 hover:border-border hover:shadow-soft"
                                 >
-                                  <SmartImage src={c.image} alt={c.name} aspect="square" className="size-14 shrink-0 rounded-xl" />
+                                  <SmartImage
+                                    src={c.image}
+                                    alt={c.name}
+                                    aspect="square"
+                                    className="size-14 shrink-0 rounded-xl"
+                                  />
                                   <div className="min-w-0">
-                                    <div className="font-bn truncate text-sm font-semibold text-foreground group-hover:text-primary">{c.name}</div>
-                                    <div className="font-bn truncate text-[11px] text-muted-foreground">{c.nameBn}</div>
-                                    <div className="font-bn text-[11px] text-primary/80">{toBnDigits(c.count)}টি জাত</div>
+                                    <div className="font-bn truncate text-sm font-semibold text-foreground group-hover:text-primary">
+                                      {c.name}
+                                    </div>
+                                    <div className="font-bn truncate text-[11px] text-muted-foreground">
+                                      {c.nameBn}
+                                    </div>
+                                    <div className="font-bn text-[11px] text-primary/80">
+                                      {toBnDigits(c.count)}টি জাত
+                                    </div>
                                   </div>
                                 </Link>
                               ))}
                             </div>
                             <div className="font-bn mt-4 flex items-center justify-between border-t border-border pt-4 text-xs text-muted-foreground">
                               <span>প্রিমিয়াম গ্রাফটিং চারা · ৭ দিনের গ্যারান্টি</span>
-                              <Link to="/categories" className="font-semibold text-primary hover:underline">সব বিভাগ দেখুন →</Link>
+                              <Link
+                                to="/categories"
+                                className="font-semibold text-primary hover:underline"
+                              >
+                                সব বিভাগ দেখুন →
+                              </Link>
                             </div>
                           </div>
                         </motion.div>
@@ -198,7 +228,11 @@ export function Navbar() {
               <Search className="size-4" />
             </button>
             <ThemeToggle />
-            <Link to="/wishlist" aria-label="ইচ্ছার তালিকা" className="relative grid size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent">
+            <Link
+              to="/wishlist"
+              aria-label="ইচ্ছার তালিকা"
+              className="relative grid size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:bg-accent"
+            >
               <Heart className="size-4" />
               {wish.slugs.length > 0 && (
                 <span className="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
@@ -206,7 +240,11 @@ export function Navbar() {
                 </span>
               )}
             </Link>
-            <Link to="/cart" aria-label="কার্ট" className="relative grid size-10 place-items-center rounded-full gradient-primary text-primary-foreground shadow-soft transition hover:shadow-elegant">
+            <Link
+              to="/cart"
+              aria-label="কার্ট"
+              className="relative grid size-10 place-items-center rounded-full gradient-primary text-primary-foreground shadow-soft transition hover:shadow-elegant"
+            >
               <ShoppingBag className="size-4" />
               {cart.totalQty > 0 && (
                 <span className="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-gold text-[10px] font-bold text-gold-foreground">
@@ -215,9 +253,7 @@ export function Navbar() {
               )}
             </Link>
           </div>
-
         </div>
-
 
         {/* Mobile menu */}
         <AnimatePresence>
@@ -248,7 +284,10 @@ export function Navbar() {
                 <div className="mt-2 flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => { setOpen(false); setSearchOpen(true); }}
+                    onClick={() => {
+                      setOpen(false);
+                      setSearchOpen(true);
+                    }}
                     className="font-bn flex flex-1 items-center gap-2 rounded-2xl border border-border px-4 py-3 text-sm"
                   >
                     <Search className="size-4" /> গাছ খুঁজুন

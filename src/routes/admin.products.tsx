@@ -7,6 +7,7 @@ import { friendlyError } from "@/lib/errorMessage";
 import { useProducts, useCategories } from "@/hooks/useCatalog";
 import { useDeleteProduct } from "@/hooks/useAdmin";
 import { ProductFormDialog } from "@/components/admin/ProductFormDialog";
+import { DeliveryChargeCard } from "@/components/admin/DeliveryChargeCard";
 import { AdminPageHeader } from "@/components/admin/AdminShell";
 import { AdminPagination, usePagination } from "@/components/admin/AdminPagination";
 import {
@@ -23,8 +24,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { Product } from "@/data/products";
 
 export const Route = createFileRoute("/admin/products")({
@@ -60,7 +74,9 @@ function AdminProducts() {
 
   const { pageItems, page: currentPage, totalPages } = usePagination(filtered, PAGE_SIZE, page);
 
-  useEffect(() => { setPage(1); }, [q, categoryFilter]);
+  useEffect(() => {
+    setPage(1);
+  }, [q, categoryFilter]);
 
   const handleDelete = async () => {
     if (!toDelete) return;
@@ -80,11 +96,19 @@ function AdminProducts() {
         title="পণ্য"
         subtitle={`মোট ${toBnDigits(products.length)}টি পণ্য`}
         actions={
-          <Button onClick={() => { setEditing(null); setDialogOpen(true); }} className="font-bn">
+          <Button
+            onClick={() => {
+              setEditing(null);
+              setDialogOpen(true);
+            }}
+            className="font-bn"
+          >
             <Plus /> নতুন পণ্য
           </Button>
         }
       />
+
+      <DeliveryChargeCard />
 
       <Card>
         <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
@@ -102,9 +126,13 @@ function AdminProducts() {
               <SelectValue placeholder="বিভাগ নির্বাচন" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all" className="font-bn">সব বিভাগ</SelectItem>
+              <SelectItem value="all" className="font-bn">
+                সব বিভাগ
+              </SelectItem>
               {categories.map((c) => (
-                <SelectItem key={c.slug} value={c.slug} className="font-bn">{c.name}</SelectItem>
+                <SelectItem key={c.slug} value={c.slug} className="font-bn">
+                  {c.name}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -134,27 +162,57 @@ function AdminProducts() {
                 <TableRow key={p.slug}>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <img src={p.image} alt="" className="size-10 shrink-0 rounded-lg object-cover" />
+                      <img
+                        src={p.image}
+                        alt=""
+                        className="size-10 shrink-0 rounded-lg object-cover"
+                      />
                       <div className="min-w-0">
                         <div className="font-bn truncate font-medium">{p.name}</div>
-                        <div className="font-bn truncate text-xs text-muted-foreground">{p.nameBn}</div>
+                        <div className="font-bn truncate text-xs text-muted-foreground">
+                          {p.nameBn}
+                        </div>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="font-bn text-muted-foreground">
-                    {categoryNameBySlug.get(p.category) ?? p.category}
+                    <div>{categoryNameBySlug.get(p.category) ?? p.category}</div>
+                    {p.freeDelivery ? (
+                      <div className="text-xs text-primary">ফ্রি ডেলিভারি</div>
+                    ) : p.customDeliveryCharge != null ? (
+                      <div className="text-xs text-gold-foreground">
+                        কাস্টম চার্জ: {formatBDT(p.customDeliveryCharge)}
+                      </div>
+                    ) : null}
                   </TableCell>
-                  <TableCell className="font-bn text-right font-semibold">{formatBDT(p.price)}</TableCell>
+                  <TableCell className="font-bn text-right font-semibold">
+                    {formatBDT(p.price)}
+                  </TableCell>
                   <TableCell className="text-center">
                     {p.inStock ? (
-                      <Badge variant="secondary" className="font-bn bg-primary/10 text-primary hover:bg-primary/10">স্টকে আছে</Badge>
+                      <Badge
+                        variant="secondary"
+                        className="font-bn bg-primary/10 text-primary hover:bg-primary/10"
+                      >
+                        স্টকে আছে
+                      </Badge>
                     ) : (
-                      <Badge variant="destructive" className="font-bn">শেষ</Badge>
+                      <Badge variant="destructive" className="font-bn">
+                        শেষ
+                      </Badge>
                     )}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="inline-flex gap-1">
-                      <Button variant="ghost" size="icon" onClick={() => { setEditing(p); setDialogOpen(true); }} aria-label="এডিট">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          setEditing(p);
+                          setDialogOpen(true);
+                        }}
+                        aria-label="এডিট"
+                      >
                         <Pencil className="size-3.5" />
                       </Button>
                       <Button
@@ -181,7 +239,12 @@ function AdminProducts() {
         />
       </Card>
 
-      <ProductFormDialog open={dialogOpen} onOpenChange={setDialogOpen} product={editing} categories={categories} />
+      <ProductFormDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        product={editing}
+        categories={categories}
+      />
 
       <AlertDialog open={!!toDelete} onOpenChange={(open) => !open && setToDelete(null)}>
         <AlertDialogContent>
@@ -193,7 +256,12 @@ function AdminProducts() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="font-bn">বাতিল</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="font-bn bg-destructive hover:bg-destructive/90">মুছুন</AlertDialogAction>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="font-bn bg-destructive hover:bg-destructive/90"
+            >
+              মুছুন
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -14,6 +14,7 @@ import {
   updateOrderStatus,
   upsertLandingPage,
   deleteLandingPage,
+  updateDefaultDeliveryCharge,
   type ProductInput,
   type CategoryInput,
   type OrderStatus,
@@ -136,5 +137,13 @@ export function useRemoveAdmin() {
   return useMutation({
     mutationFn: (userId: string) => removeAdmin({ data: { userId } }),
     onSuccess: () => qc.invalidateQueries({ queryKey: adminKeys.admins() }),
+  });
+}
+
+export function useUpdateDefaultDeliveryCharge() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (amount: number) => updateDefaultDeliveryCharge(amount),
+    onSuccess: () => qc.invalidateQueries({ queryKey: catalogKeys.defaultDeliveryCharge() }),
   });
 }

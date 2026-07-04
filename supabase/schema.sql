@@ -129,12 +129,32 @@ create table if not exists public.products (
   care_level text check (care_level in ('সহজ', 'মাঝারি', 'এক্সপার্ট')),
   sunlight text check (sunlight in ('পূর্ণ রোদ', 'আংশিক ছায়া', 'ইনডোর উজ্জ্বল')),
   water text check (water in ('কম', 'মাঝারি', 'বেশি')),
+  free_delivery boolean not null default false,
+  custom_delivery_charge numeric(10, 2),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
+alter table public.products add column if not exists free_delivery boolean not null default false;
+alter table public.products add column if not exists custom_delivery_charge numeric(10, 2);
+
 create index if not exists products_category_idx on public.products(category);
 create index if not exists products_slug_idx on public.products(slug);
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- site_settings: single-row key-value table for site-wide config (e.g. the
+-- default delivery charge), editable from the admin dashboard instead of
+-- being hardcoded in the frontend.
+-- ─────────────────────────────────────────────────────────────────────────
+create table if not exists public.site_settings (
+  key text primary key,
+  value jsonb not null,
+  updated_at timestamptz not null default now()
+);
+
+insert into public.site_settings (key, value)
+values ('default_delivery_charge', '120')
+on conflict (key) do nothing;
 
 create or replace view public.category_counts as
   select category as slug, count(*)::int as count
@@ -295,7 +315,7 @@ do $$
 declare
   t text;
 begin
-  foreach t in array array['profiles','categories','products','blog_posts','addresses','orders','landing_pages']
+  foreach t in array array['profiles','categories','products','blog_posts','addresses','orders','landing_pages','site_settings']
   loop
     execute format('drop trigger if exists set_updated_at on public.%I', t);
     execute format('create trigger set_updated_at before update on public.%I for each row execute function public.set_updated_at()', t);
@@ -316,6 +336,7 @@ alter table public.wishlists enable row level security;
 alter table public.orders enable row level security;
 alter table public.order_items enable row level security;
 alter table public.landing_pages enable row level security;
+alter table public.site_settings enable row level security;
 
 -- profiles
 drop policy if exists "profiles_select_own_or_admin" on public.profiles;
@@ -337,6 +358,12 @@ drop policy if exists "products_public_read" on public.products;
 create policy "products_public_read" on public.products for select using (true);
 drop policy if exists "products_admin_write" on public.products;
 create policy "products_admin_write" on public.products for all
+  using (public.is_admin()) with check (public.is_admin());
+
+drop policy if exists "site_settings_public_read" on public.site_settings;
+create policy "site_settings_public_read" on public.site_settings for select using (true);
+drop policy if exists "site_settings_admin_write" on public.site_settings;
+create policy "site_settings_admin_write" on public.site_settings for all
   using (public.is_admin()) with check (public.is_admin());
 
 drop policy if exists "blog_posts_public_read" on public.blog_posts;

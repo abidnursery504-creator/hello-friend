@@ -30,11 +30,15 @@ function toProductRow(p: ProductInput) {
     care_level: p.careLevel,
     sunlight: p.sunlight,
     water: p.water,
+    free_delivery: p.freeDelivery ?? false,
+    custom_delivery_charge: p.customDeliveryCharge ?? null,
   };
 }
 
 export async function upsertProduct(p: ProductInput) {
-  const { error } = await getSupabaseBrowserClient().from("products").upsert(toProductRow(p), { onConflict: "slug" });
+  const { error } = await getSupabaseBrowserClient()
+    .from("products")
+    .upsert(toProductRow(p), { onConflict: "slug" });
   if (error) throw error;
 }
 
@@ -57,7 +61,9 @@ function toCategoryRow(c: CategoryInput) {
 }
 
 export async function upsertCategory(c: CategoryInput) {
-  const { error } = await getSupabaseBrowserClient().from("categories").upsert(toCategoryRow(c), { onConflict: "slug" });
+  const { error } = await getSupabaseBrowserClient()
+    .from("categories")
+    .upsert(toCategoryRow(c), { onConflict: "slug" });
   if (error) throw error;
 }
 
@@ -69,7 +75,10 @@ export async function deleteCategory(slug: string) {
 export type OrderStatus = "processing" | "shipped" | "delivered" | "cancelled";
 
 export async function updateOrderStatus(orderId: string, status: OrderStatus, orderNumber: string) {
-  const { error } = await getSupabaseBrowserClient().from("orders").update({ status }).eq("id", orderId);
+  const { error } = await getSupabaseBrowserClient()
+    .from("orders")
+    .update({ status })
+    .eq("id", orderId);
   if (error) throw error;
   pushStatusToSheet({ data: { orderNumber, status } }).catch(() => {});
 }
@@ -119,3 +128,9 @@ export async function deleteLandingPage(id: string) {
   if (error) throw error;
 }
 
+export async function updateDefaultDeliveryCharge(amount: number) {
+  const { error } = await getSupabaseBrowserClient()
+    .from("site_settings")
+    .upsert({ key: "default_delivery_charge", value: amount }, { onConflict: "key" });
+  if (error) throw error;
+}

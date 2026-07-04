@@ -27,6 +27,8 @@ type ProductRow = {
   care_level: Product["careLevel"];
   sunlight: Product["sunlight"];
   water: Product["water"];
+  free_delivery: boolean;
+  custom_delivery_charge: number | null;
 };
 
 function mapProduct(row: ProductRow): Product {
@@ -51,6 +53,9 @@ function mapProduct(row: ProductRow): Product {
     careLevel: row.care_level,
     sunlight: row.sunlight,
     water: row.water,
+    freeDelivery: row.free_delivery,
+    customDeliveryCharge:
+      row.custom_delivery_charge != null ? Number(row.custom_delivery_charge) : undefined,
   };
 }
 
@@ -112,7 +117,9 @@ export async function fetchCategories(): Promise<Category[]> {
   ]);
   if (error) throw error;
   if (countErr) throw countErr;
-  const countMap = new Map((counts as { slug: string; count: number }[]).map((c) => [c.slug, c.count]));
+  const countMap = new Map(
+    (counts as { slug: string; count: number }[]).map((c) => [c.slug, c.count]),
+  );
   return (rows as CategoryRow[]).map((r) => mapCategory(r, countMap.get(r.slug) ?? 0));
 }
 
@@ -127,7 +134,14 @@ export async function fetchCategoryBySlug(slug: string): Promise<Category | unde
   return mapCategory(row as CategoryRow, (countRow as { count: number } | null)?.count ?? 0);
 }
 
-type TestimonialRow = { name: string; role: string; city: string; rating: number; text: string; avatar: string };
+type TestimonialRow = {
+  name: string;
+  role: string;
+  city: string;
+  rating: number;
+  text: string;
+  avatar: string;
+};
 
 export async function fetchTestimonials(): Promise<Testimonial[]> {
   const { data, error } = await getSupabaseBrowserClient()
@@ -157,7 +171,11 @@ function mapBlogPost(row: BlogPostRow): BlogPost {
     excerpt: row.excerpt,
     cover: row.cover,
     author: row.author,
-    date: new Date(row.published_at).toLocaleDateString("bn-BD", { year: "numeric", month: "long", day: "numeric" }),
+    date: new Date(row.published_at).toLocaleDateString("bn-BD", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }),
     readTime: row.read_time,
     category: row.category,
     content: row.content,
@@ -325,5 +343,21 @@ export async function fetchFaqs() {
     .select("*")
     .order("sort_order", { ascending: true });
   if (error) throw error;
-  return (data as { question: string; answer: string }[]).map((f) => ({ q: f.question, a: f.answer }));
+  return (data as { question: string; answer: string }[]).map((f) => ({
+    q: f.question,
+    a: f.answer,
+  }));
+}
+
+const DEFAULT_DELIVERY_CHARGE_FALLBACK = 120;
+
+export async function fetchDefaultDeliveryCharge(): Promise<number> {
+  const { data, error } = await getSupabaseBrowserClient()
+    .from("site_settings")
+    .select("value")
+    .eq("key", "default_delivery_charge")
+    .maybeSingle();
+  if (error) throw error;
+  const value = data?.value;
+  return typeof value === "number" ? value : DEFAULT_DELIVERY_CHARGE_FALLBACK;
 }

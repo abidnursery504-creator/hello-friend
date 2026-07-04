@@ -19,10 +19,6 @@ export const site = {
     youtube: "https://youtube.com/@abidnursery?si=EXC7_KaRMIQ0R8iy",
   },
   currency: "৳",
-  shipping: {
-    freeAbove: 1500,
-    flatFee: 120,
-  },
   trustBadges: [
     { label: "ক্যাশ অন ডেলিভারি", labelBn: "ক্যাশ অন ডেলিভারি", icon: "wallet" },
     { label: "স্বাস্থ্যকর গাছ", labelBn: "স্বাস্থ্যকর গাছ", icon: "leaf" },
@@ -102,8 +98,7 @@ export const posts: BlogPost[] = [
   {
     slug: "rooftop-mango-guide",
     title: "ছাদে আম চাষের সম্পূর্ণ গাইড — বাংলাদেশের জন্য",
-    excerpt:
-      "জাত নির্বাচন, পাত্রের আকার, পানি নিষ্কাশন এবং যে ৩টি ভুলে ৮০% ছাদ আম গাছ মরে যায়।",
+    excerpt: "জাত নির্বাচন, পাত্রের আকার, পানি নিষ্কাশন এবং যে ৩টি ভুলে ৮০% ছাদ আম গাছ মরে যায়।",
     cover: "https://images.unsplash.com/photo-1591735026282-bb24fd6c0451?w=1600&q=80",
     author: "মো. ইমরান",
     date: "১২ জুন, ২০২৬",
@@ -115,8 +110,7 @@ export const posts: BlogPost[] = [
   {
     slug: "monsoon-plant-care",
     title: "বর্ষায় গাছের পরিচর্যা — ভারী বৃষ্টিতে টিকে থাকার উপায়",
-    excerpt:
-      "পানি নিষ্কাশনের কৌশল, ছত্রাক প্রতিরোধ এবং ফলের গাছকে এ মৌসুমে কখন সার দেবেন।",
+    excerpt: "পানি নিষ্কাশনের কৌশল, ছত্রাক প্রতিরোধ এবং ফলের গাছকে এ মৌসুমে কখন সার দেবেন।",
     cover: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=1600&q=80",
     author: "সুমাইয়া করিম",
     date: "০২ জুন, ২০২৬",
@@ -128,8 +122,7 @@ export const posts: BlogPost[] = [
   {
     slug: "indoor-plants-beginners",
     title: "৫টি ইনডোর গাছ যেগুলো সহজে মরবে না",
-    excerpt:
-      "স্নেক প্ল্যান্ট, জেডজেড, পথোস — নতুন গাছপ্রেমীদের জন্য নির্ভরযোগ্য শুরুর তালিকা।",
+    excerpt: "স্নেক প্ল্যান্ট, জেডজেড, পথোস — নতুন গাছপ্রেমীদের জন্য নির্ভরযোগ্য শুরুর তালিকা।",
     cover: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=1600&q=80",
     author: "নুসরাত জাহান",
     date: "২২ মে, ২০২৬",
